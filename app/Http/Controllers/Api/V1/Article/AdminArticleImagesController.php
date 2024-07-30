@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Article;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Product\StoreProductImagesRequest;
+use App\Http\Requests\Api\Article\StoreArticleImagesRequest;
 use App\Http\Resources\Article\ArticleImageResource;
 use App\Models\Article;
 use App\Models\ArticleImage;
@@ -32,7 +32,7 @@ class AdminArticleImagesController extends Controller
         return $this->successGet($images);
     }
 
-    public function store(StoreProductImagesRequest $request)
+    public function store(StoreArticleImagesRequest $request)
     {
         $this->permissionService->check('full');
 

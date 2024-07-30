@@ -54,9 +54,9 @@ class AdminArticleController extends Controller
         try {
             $this->permissionService->check('full');
 
-            $article             = new Article();
-            $article->total_view = 0;
-            $article->admin_id   = request()->user()->id;
+            $article                = new Article();
+            $article->total_view    = 0;
+            $article->category_id   = $request->category_id;
 
             $article->fill($request->validated());
 
@@ -91,6 +91,8 @@ class AdminArticleController extends Controller
             $this->permissionService->check('full');
 
             $article->fill($request->validated());
+
+            $article->category_id = $request->category_id;
 
             if ($request->image) {
                 $this->deleteImage($article);

@@ -1,0 +1,30 @@
+body {
+  display: block;
+  margin-right: 120px;
+  margin-left: 120px;
+}
+
+.title {
+  margin: auto;
+  width: 75%;
+  text-align: center;
+}
+
+.title hr {
+  width: 250px;
+}
+
+.risk, .disclaimer, .regist {
+  padding: 30px;
+  margin-bottom: 30px;
+}
+.container-flex {
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.items-flex > :is(p,) {
+  display: inline;
+  width: 50%;
+}
+

@@ -18,14 +18,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return 'Copyright © ' . date('Y') . ' Watered Body Care';
+    return 'Copyright © ' . date('Y') . ' Bali Boat';
 });
-
-Route::post('/stripe-webhook', WebhookOrderController::class);
-
-Route::get('/complete-order', [OrderResponseController::class, 'complete']);
-Route::get('/cancel-order/{order}', [OrderResponseController::class, 'cancel']);
-
-Route::get('/images/agent-identity/{image_name}', [AgentIdentityPictureController::class, 'get']);
-
-Route::get('/order/export-excel/{token}', [OrderExportExcelController::class, 'export']);

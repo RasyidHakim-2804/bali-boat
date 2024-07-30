@@ -15,7 +15,7 @@ class Article extends Model
 
     protected $fillable = [
         'title',
-        'category',
+        'category_id',
     ];
 
     public function getSlugOptions() : SlugOptions
@@ -30,14 +30,9 @@ class Article extends Model
         return 'slug';
     }
 
-    public function author()
+    public function category()
     {
-        return $this->belongsTo(Admin::class, 'admin_id', 'id');
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(ArticleComment::class, 'article_id', 'id');
+        return $this->belongsTo(ArticleCategory::class, 'category_id', 'id');
     }
 
     public function bodyTranslations()

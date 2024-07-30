@@ -25,20 +25,15 @@ class StoreArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'     => 'required|min:1',
-            'body'      => 'required|array',
-            'body.en'   => 'required|min:1',
-            'body.id'   => 'required|min:1',
-            'body.de'   => 'required|min:1',
-            'body.ja'   => 'required|min:1',
-            'body.zh'   => 'required|min:1',
-            'meta'      => 'required|array',
-            'meta.en'   => 'required|min:1',
-            'meta.id'   => 'required|min:1',
-            'meta.de'   => 'required|min:1',
-            'meta.ja'   => 'required|min:1',
-            'meta.zh'   => 'required|min:1',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,svg|max:2000',
+            'title'         => 'required|min:1',
+            'category_id'   => 'required|exists:article_categories,id',
+            'body'          => 'required|array',
+            'body.en'       => 'required|min:1',
+            'body.id'       => 'required|min:1',
+            'meta'          => 'required|array',
+            'meta.en'       => 'required|min:1',
+            'meta.id'       => 'required|min:1',
+            'thumbnail'     => 'required|image|mimes:jpeg,png,jpg,svg|max:2000',
         ];
     }
 }

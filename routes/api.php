@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Article\AdminArticleController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleImagesController;
 use App\Http\Controllers\Api\V1\Article\ArticleCommentController;
 use App\Http\Controllers\Api\V1\Article\ArticleController;
+use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +57,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             // Admin - Article
             Route::resource('/articles', AdminArticleController::class);
             Route::post('/article-images', [AdminArticleImagesController::class, 'store']);
+
+            // Admin - Article Category
+            Route::resource('/article-categories', AdminArticleCategoryController::class);
 
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);

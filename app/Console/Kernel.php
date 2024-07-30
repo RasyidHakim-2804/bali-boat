@@ -23,9 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->call(function () { (new VerifyExpiredOrderCronJobService)->verify(); })->everyMinute();
-
-        $schedule->call(function () { (new VerifyExpiredOrderRefundCronJobService)->verify(); })->everyMinute();
+        
     }
 
     /**

@@ -20,7 +20,7 @@ class AdminArticleCategoryController extends Controller
 
     public function __construct()
     {
-        $this->permissionService = (new AdminPermissionService('article'));
+        // $this->permissionService = (new AdminPermissionService('article'));
     }
 
     public function index()
@@ -30,7 +30,7 @@ class AdminArticleCategoryController extends Controller
 
     public function show(ArticleCategory $articleCategory)
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         $articleCategory = new AdminArticleResource($articleCategory);
     
@@ -41,7 +41,7 @@ class AdminArticleCategoryController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->permissionService->check('full');
+            // $this->permissionService->check('full');
 
             $article = new ArticleCategory();
 
@@ -61,7 +61,7 @@ class AdminArticleCategoryController extends Controller
 
     public function destroy(Article $article)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $article->delete();
 

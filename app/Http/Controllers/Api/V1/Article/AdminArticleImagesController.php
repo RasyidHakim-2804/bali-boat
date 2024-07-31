@@ -20,12 +20,12 @@ class AdminArticleImagesController extends Controller
 
     public function __construct()
     {
-        $this->permissionService = (new AdminPermissionService('product'));
+        // $this->permissionService = (new AdminPermissionService('product'));
     }
 
     public function index(Article $article)
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         $images = ArticleImageResource::collection($article->images()->orderBy('position', 'ASC')->get());
     
@@ -34,7 +34,7 @@ class AdminArticleImagesController extends Controller
 
     public function store(StoreArticleImagesRequest $request)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $articleImage = new ArticleImage();
         $articleImage = $this->saveImages($articleImage, $request->image);
@@ -46,7 +46,7 @@ class AdminArticleImagesController extends Controller
 
     protected function saveImages($articleImage, $uploadedImage)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $image = (new ImageService($articleImage->imagePath(), $uploadedImage));
 

@@ -22,7 +22,7 @@ class AdminArticleController extends Controller
 
     public function __construct()
     {
-        $this->permissionService = (new AdminPermissionService('article'));
+        // $this->permissionService = (new AdminPermissionService('article'));
     }
 
     public function index()
@@ -41,7 +41,7 @@ class AdminArticleController extends Controller
 
     public function show(Article $article)
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         $article = new AdminArticleResource($article);
     

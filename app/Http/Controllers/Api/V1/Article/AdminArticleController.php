@@ -34,7 +34,7 @@ class AdminArticleController extends Controller
         //     $this->saveArticleTranslation($article->id, 'meta', 'en', $article->meta);
         // }
 
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         return AdminArticleResource::collection(Article::latest()->with(['bodyTranslations', 'metaTranslations'])->paginate(25));
     }
@@ -124,7 +124,7 @@ class AdminArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $article->delete();
 

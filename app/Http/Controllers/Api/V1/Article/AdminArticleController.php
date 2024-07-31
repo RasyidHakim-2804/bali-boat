@@ -52,7 +52,7 @@ class AdminArticleController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->permissionService->check('full');
+            // $this->permissionService->check('full');
 
             $article                = new Article();
             $article->total_view    = 0;
@@ -88,7 +88,7 @@ class AdminArticleController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->permissionService->check('full');
+            // $this->permissionService->check('full');
 
             $article->fill($request->validated());
 

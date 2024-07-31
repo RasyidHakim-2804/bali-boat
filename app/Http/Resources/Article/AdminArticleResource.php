@@ -10,7 +10,6 @@ class AdminArticleResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'author'        => $this->author->first_name . ' ' . $this->author->last_name,
             'slug'          => $this->slug,
             'title'         => $this->title,
             'body'          => ArticleTranslationResource::collection($this->bodyTranslations),

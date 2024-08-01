@@ -12,7 +12,7 @@ class AdminListArticleResource extends JsonResource
             'id'            => $this->id,
             'slug'          => $this->slug,
             'title'         => $this->title,
-            'category'      => $this->category,
+            'type'          => $this->type,
             'meta'          => $this->meta,
             'total_view'    => $this->total_view,
             'image'         => $this->imageUrl('image'),

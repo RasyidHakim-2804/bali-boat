@@ -91,8 +91,6 @@ class AdminArticleController extends Controller
 
             $article->fill($request->validated());
 
-            $article->category_id = $request->category_id;
-
             if ($request->image) {
                 $this->deleteImage($article);
 

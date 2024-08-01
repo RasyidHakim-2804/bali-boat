@@ -31,10 +31,9 @@ class ArticleController extends Controller
         return $this->successGet($article);
     }
 
-    public function top($request)
+    public function top()
     {
-        return $request;
-        
+
         return ListArticleResource::collection(Article::orderBy('total_view', 'DESC')->with(['metaTranslations' => function($translation) {
             $translation->where('field', 'meta')->where('language', config('app.locale'));
         }])->limit(3)->get());

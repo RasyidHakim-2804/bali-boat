@@ -13,6 +13,7 @@ class ListArticleResource extends JsonResource
             'slug'          => $this->slug,
             'title'         => $this->title,
             'type'          => $this->type,
+            'tag'           => $this->tag,
             'meta'          => $this->metaTranslations[0]->translation,
             'total_view'    => $this->total_view,
             'image'         => $this->imageUrl('image'),

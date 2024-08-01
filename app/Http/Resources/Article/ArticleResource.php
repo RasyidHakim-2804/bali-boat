@@ -13,6 +13,7 @@ class ArticleResource extends JsonResource
             'slug'          => $this->slug,
             'title'         => $this->title,
             'type'          => $this->type,
+            'tag'           => $this->tag,
             'body'          => ArticleTranslationResource::collection($this->bodyTranslations),
             'meta'          => ArticleTranslationResource::collection($this->metaTranslations),
             'total_view'    => $this->total_view,

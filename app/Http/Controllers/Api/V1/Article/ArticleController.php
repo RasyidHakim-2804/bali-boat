@@ -15,6 +15,7 @@ class ArticleController extends Controller
 
     public function index()
     {
+        Article::where('type', null)->update(['type' => 'travel']);
         return ListArticleResource::collection(Article::latest()->with(['metaTranslations' => function($translation) {
             $translation->where('field', 'meta')->where('language', config('app.locale'));
         }])->paginate(15));

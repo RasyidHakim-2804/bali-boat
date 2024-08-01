@@ -56,7 +56,6 @@ class AdminArticleController extends Controller
 
             $article                = new Article();
             $article->total_view    = 0;
-            $article->category_id   = $request->category_id;
 
             $article->fill($request->validated());
 

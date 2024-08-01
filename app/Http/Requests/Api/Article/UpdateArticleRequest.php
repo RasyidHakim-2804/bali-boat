@@ -26,6 +26,7 @@ class UpdateArticleRequest extends FormRequest
         return [
             'title'         => 'required|min:1',
             'type'          => 'required|in:travel,about_bali',
+            'tag'           => 'required|min:1',
             'body'          => 'required|array',
             'body.en'       => 'required|min:1',
             'body.id'       => 'required|min:1',

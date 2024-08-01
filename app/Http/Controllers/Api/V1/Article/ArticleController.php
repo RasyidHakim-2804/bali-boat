@@ -33,7 +33,8 @@ class ArticleController extends Controller
 
     public function top()
     {
-
+        return request()->query('type');
+        
         return ListArticleResource::collection(Article::orderBy('total_view', 'DESC')->with(['metaTranslations' => function($translation) {
             $translation->where('field', 'meta')->where('language', config('app.locale'));
         }])->limit(3)->get());

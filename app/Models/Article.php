@@ -15,7 +15,7 @@ class Article extends Model
 
     protected $fillable = [
         'title',
-        'category_id',
+        'type',
     ];
 
     public function getSlugOptions() : SlugOptions

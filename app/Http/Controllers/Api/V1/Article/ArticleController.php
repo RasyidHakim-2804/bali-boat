@@ -33,10 +33,14 @@ class ArticleController extends Controller
 
     public function top()
     {
-        return request()->query('type');
-        
+        $type = request()->query('type');
+
+        if (!$type) $type = 'travel';
+
+        if (($type != 'travel') || ($type != 'about_bali')) $type = 'travel';
+
         return ListArticleResource::collection(Article::orderBy('total_view', 'DESC')->with(['metaTranslations' => function($translation) {
             $translation->where('field', 'meta')->where('language', config('app.locale'));
-        }])->limit(3)->get());
+        }])->where('type', $type)->limit(3)->get());
     }
 }

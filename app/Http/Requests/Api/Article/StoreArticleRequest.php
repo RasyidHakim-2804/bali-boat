@@ -26,7 +26,7 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title'         => 'required|min:1',
-            'category_id'   => 'required|exists:article_categories,id',
+            'type'          => 'required|in:travel,about_bali',
             'body'          => 'required|array',
             'body.en'       => 'required|min:1',
             'body.id'       => 'required|min:1',

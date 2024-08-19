@@ -19,26 +19,10 @@ class AdminSeeder extends Seeder
             'first_name'        => 'Master',
             'last_name'         => 'Administration',
             'uuid'              => Str::random(12),
-            'email'             => 'info@admin.com',
+            'email'             => 'info@baliboat.id',
             'email_verified_at' => now(),
-            'password'          => bcrypt('admin#2022!'),
+            'password'          => bcrypt('Bestboat@55677gs!'),
             'is_active'         => 1
-        ]);
-
-        \DB::table('admins')->insert([
-            'first_name'    => 'Second',
-            'last_name'     => 'Administration',
-            'uuid'          => Str::random(12),
-            'email'         => 'second@admin.com',
-            'password'      => bcrypt('admin#2022!'),
-        ]);
-
-        \DB::table('admins')->insert([
-            'first_name'    => 'Third',
-            'last_name'     => 'Administration',
-            'uuid'          => Str::random(12),
-            'email'         => 'third@admin.com',
-            'password'      => bcrypt('admin#2022!'),
         ]);
     }
 }

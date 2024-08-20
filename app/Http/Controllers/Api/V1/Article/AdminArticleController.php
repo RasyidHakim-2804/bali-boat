@@ -91,7 +91,7 @@ class AdminArticleController extends Controller
 
             $article->fill($request->validated());
 
-            if ($request->image) {
+            if ($request->thumbnail) {
                 $this->deleteImage($article);
 
                 $article = $this->saveThumbnail($article, $request->thumbnail);

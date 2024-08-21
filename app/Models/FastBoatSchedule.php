@@ -10,12 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 #[ObservedBy([AdminActionObserver::class])]
 class FastBoatSchedule extends Model
 {
-    use HasFactory, HasEagerLimit;
+    use HasFactory;
 
     public function fastBoat(): BelongsTo
     {

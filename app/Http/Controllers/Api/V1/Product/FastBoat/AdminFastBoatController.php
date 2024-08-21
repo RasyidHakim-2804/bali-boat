@@ -22,7 +22,7 @@ class AdminFastBoatController extends Controller
 
     public function index()
     {
-        $fastBoat = FastBoat::with([
+        return $fastBoat = FastBoat::with([
             'topSchedules',
         ])->withCount('schedules')->paginate(25);
 

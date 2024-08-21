@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ArticleSeeder extends Seeder
@@ -21,7 +22,7 @@ class ArticleSeeder extends Seeder
             $title = $faker->sentence(2);
             $slug  = strtolower(str_replace(" ", "-", $title));
 
-            \DB::table('articles')->insert(
+            DB::table('articles')->insert(
                 [
                     'title'             => $title,
                     'slug'              => $slug,
@@ -29,6 +30,7 @@ class ArticleSeeder extends Seeder
                     'category'          => $faker->sentence(1),
                     'meta'              => $faker->sentence(5),
                     'total_view'        => $faker->numberBetween(0, 100),
+                    'category_id'       => 1,
                     'image'             => 'https://source.unsplash.com/random/?Banner&Skincare',
                     'created_at'        => now(),
                     'updated_at'        => now()

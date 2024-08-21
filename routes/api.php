@@ -1,16 +1,33 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\AdminController;
-use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
-use App\Http\Controllers\Api\V1\Admin\AuthAdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
 use App\Http\Controllers\Api\V1\Admin\AdminFeatureController;
+use App\Http\Controllers\Api\V1\Admin\AuthAdminController;
 use App\Http\Controllers\Api\V1\Admin\ForgetAdminPasswordController;
+use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleImagesController;
 use App\Http\Controllers\Api\V1\Article\ArticleCommentController;
+use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
+use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
+use App\Http\Controllers\Api\V1\Profile\UserProfileController;
+
 use App\Http\Controllers\Api\V1\Article\ArticleController;
-use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
+use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
+use App\Http\Controllers\Api\V1\Harbor\HarborController;
+use App\Http\Controllers\Api\V1\Location\AdminLocationController;
+use App\Http\Controllers\Api\V1\Location\LocationController;
+use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
+use App\Http\Controllers\Api\V1\Product\FastBoat\AdminScheduleController;
+use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatController;
+use App\Http\Controllers\Api\V1\Product\PrivateBoat\AdminPrivateBoatController;
+use App\Http\Controllers\Api\V1\Product\PrivateBoat\AdminPrivateBoatImageController;
+use App\Http\Controllers\Api\V1\Product\PrivateBoat\PrivateBoatController;
+use App\Http\Controllers\Api\V1\Product\Activity\AdminActivityController;
+use App\Http\Controllers\Api\V1\Product\Activity\AdminActivityImageController;
+use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
+use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,9 +67,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/logout', [AuthAdminController::class, 'logout']);
 
             // Admin - Profile
-            Route::get('/profile', [AdminProfileController::class, 'index']);
-            Route::put('/profile', [AdminProfileController::class, 'update']);
-            Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
+            // Route::get('/profile', [AdminProfileController::class, 'index']);
+            // Route::put('/profile', [AdminProfileController::class, 'update']);
+            // Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
 
             // Admin - Article
             Route::resource('/articles', AdminArticleController::class);
@@ -60,6 +77,68 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             // Admin - Article Category
             Route::resource('/article-categories', AdminArticleCategoryController::class);
+
+            // Admin - Harbor
+            Route::get('/harbors', [AdminHarborController::class, 'index']);
+            Route::post('/harbors', [AdminHarborController::class, 'store']);
+            Route::get('/harbors-all', [AdminHarborController::class, 'all']);
+            Route::get('/harbors/{harbor}', [AdminHarborController::class, 'show']);
+            Route::put('/harbors/{harbor}', [AdminHarborController::class, 'update']);
+            Route::delete('/harbors/{harbor}', [AdminHarborController::class, 'destroy']);
+
+            // Admin - Location
+            Route::get('/locations', [AdminLocationController::class, 'index']);
+            Route::post('/locations', [AdminLocationController::class, 'store']);
+            Route::get('/locations-all', [AdminLocationController::class, 'all']);
+            Route::get('/locations/{location}', [AdminLocationController::class, 'show']);
+            Route::put('/locations/{location}', [AdminLocationController::class, 'update']);
+            Route::delete('/locations/{location}', [AdminLocationController::class, 'destroy']);
+
+            // Admin - Tag
+            Route::get('/tags', [AdminTagController::class, 'index']);
+            Route::get('/tags-all', [AdminTagController::class, 'all']);
+            Route::get('/tags/{tag}', [AdminTagController::class, 'show']);
+            Route::post('/tags', [AdminTagController::class, 'store']);
+            Route::put('/tags/{tag}', [AdminTagController::class, 'update']);
+            Route::delete('/tags/{tag}', [AdminTagController::class, 'destroy']);
+
+            // Admin - FastBoat
+            Route::get('/fast-boats', [AdminFastBoatController::class, 'index']);
+            Route::post('/fast-boats', [AdminFastBoatController::class, 'store']);
+            Route::get('/fast-boats/{fastBoat:slug}', [AdminFastBoatController::class, 'show']);
+            Route::put('/fast-boats/{fastBoat:slug}', [AdminFastBoatController::class, 'update']);
+            Route::delete('/fast-boats/{fastBoat:slug}', [AdminFastBoatController::class, 'destroy']);
+
+            // Admin - FastBoat Schedule
+            Route::get('/fast-boats/{fastBoat:slug}/schedules', [AdminScheduleController::class, 'index']);
+            Route::get('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'show']);
+            Route::post('/fast-boats/{fastBoat:slug}/schedules', [AdminScheduleController::class, 'store']);
+            Route::put('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'update'])->scopeBindings();
+            Route::delete('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'destroy'])->scopeBindings();
+
+            // Admin - PrivateBoat
+            Route::get('/private-boats', [AdminPrivateBoatController::class, 'index']);
+            Route::post('/private-boats', [AdminPrivateBoatController::class, 'store']);
+            Route::get('/private-boats/{privateBoat:slug}', [AdminPrivateBoatController::class, 'show']);
+            Route::put('/private-boats/{privateBoat:slug}', [AdminPrivateBoatController::class, 'update']);
+            Route::delete('/private-boats/{privateBoat:slug}', [AdminPrivateBoatController::class, 'destroy']);
+
+            // Admin - PrivateBoat Image
+            Route::get('/private-boats/{privateBoat}/images', [AdminPrivateBoatImageController::class, 'index']);
+            Route::post('/private-boats/{privateBoat}/images', [AdminPrivateBoatImageController::class,'store']);
+            Route::post('/private-boats/{privateBoat}/save-images', [AdminPrivateBoatImageController::class, 'saveImages']);
+
+            // Admin - Activity
+            Route::get('/activities', [AdminActivityController::class, 'index']);
+            Route::post('/activities', [AdminActivityController::class, 'store']);
+            Route::get('/activities/{activity:slug}', [AdminActivityController::class, 'show']);
+            Route::put('/activities/{activity:slug}', [AdminActivityController::class, 'update']);
+            Route::delete('/activities/{activity:slug}', [AdminActivityController::class, 'destroy']);
+
+            // Admin - Activity Image
+            Route::get('/activities/{activity}/images', [AdminActivityImageController::class, 'index']);
+            Route::post('/activities/{activity}/images', [AdminActivityImageController::class,'store']);
+            Route::post('/activities/{activity}/save-images', [AdminActivityImageController::class, 'saveImages']);
 
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);
@@ -71,5 +150,63 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::put('/{admin}', [AdminController::class, 'update']);
             Route::delete('/{admin}', [AdminController::class, 'destroy']);
         });
+    });
+    
+    //User routes
+    Route::prefix('users')->middleware('language')->group(function(){
+
+        //Authentication
+        Route::post('/register', [UserAuthController::class,'register']);
+        Route::post('/email-verify/confirm/{token}', [UserAuthController::class, 'verifyEmail']);
+        Route::post('/email-verify/resend', [UserAuthController::class, 'resendEmailVerification']);
+        Route::post('/sign-in', [UserAuthController::class, 'login']);
+
+        //password controller
+        Route::post('/password/forget', [UserPasswordController::class, 'forgetPassword']);
+        Route::post('/password/forget/verify-otp', [UserPasswordController::class, 'verifyOtp']);
+        Route::post('/password/reset/', [UserPasswordController::class, 'resetPassword']);
+        Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
+    
+
+        Route::middleware(['auth:sanctum','verified', 'ability:is_user'])->group(function(){
+
+            //Authentication
+            Route::post('/logout', [UserAuthController::class, 'logout']);
+
+            //password controller
+            Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
+
+            //User Profile
+            Route::get('/profile', [UserProfileController::class,'show']);
+            Route::put('/profile', [UserProfileController::class, 'update']);
+        });
+    });
+    
+    // Public
+
+    Route::middleware('verifyLanguage')->group(function(){
+        
+        // Article
+        Route::get('/top-articles', [ArticleController::class, 'top']);
+        Route::resource('/articles', ArticleController::class, ['only' => ['index', 'show']]);
+        Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store']);
+
+        // Public - FastBoat 
+        Route::get('/search-fast-boats', [FastBoatController::class, 'search']);
+        Route::get('/list-fast-boats', [FastBoatController::class, 'list']);
+
+        // Public - PrivateBoat
+        Route::get('/private-boats', [PrivateBoatController::class, 'search']);
+        Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
+
+        // Public - Activity
+        Route::get('/activities', [ActivityController::class, 'search']);
+        Route::get('/activities/{activity:slug}', [ActivityController::class, 'show']);
+
+        // Public - Harbor
+        Route::get('/harbors', [HarborController::class, 'index']);
+
+        // Public - Location
+        Route::get('/locations', [LocationController::class, 'index']);
     });
 });

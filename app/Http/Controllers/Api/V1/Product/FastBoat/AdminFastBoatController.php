@@ -24,7 +24,7 @@ class AdminFastBoatController extends Controller
     {
         return $fastBoat = FastBoat::with([
             'topSchedules'
-        ])->withCount('schedules')->paginate(25);
+        ])->paginate(25);
 
         return AdminFastBoatResource::collection($fastBoat);
     }

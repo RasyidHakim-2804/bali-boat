@@ -41,7 +41,7 @@ class FastBoat extends Model
 
     public function topSchedules(): HasMany
     {
-        return $this->schedules->take(3)->get();
+        return $this->schedules()->take(3)->get();
     }
 
     public function scopeActive(Builder $query, bool $active = true)

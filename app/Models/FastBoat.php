@@ -13,12 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 #[ObservedBy([AdminActionObserver::class])]
 class FastBoat extends Model
 {
-    use HasFactory, ImageStorageTrait, HasSlug, HasEagerLimit;
+    use HasFactory, ImageStorageTrait, HasSlug;
 
     protected $imageSetting = [
         'folder' => 'fast_boats',

@@ -11,9 +11,9 @@ class ListArticleResource extends JsonResource
         return [
             'id'            => $this->id,
             'slug'          => $this->slug,
-            'title'         => $this->title_translation[0]?->translation,
+            'title'         => $this->title_translations[0]?->translation,
             'type'          => $this->type,
-            'tag'           => $this->tag_translation[0]?->translation,
+            'tag'           => $this->tag_translations[0]?->translation,
             'meta'          => $this->meta_translations[0]?->translation,
             'total_view'    => $this->total_view,
             'image'         => $this->imageUrl('image'),

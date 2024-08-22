@@ -13,6 +13,7 @@ use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class AdminArticleController extends Controller
 {
@@ -48,7 +49,7 @@ class AdminArticleController extends Controller
         return $this->successGet($article);
     }
 
-    public function store($request)
+    public function store(Request $request)
     {
         return 'test';
         DB::beginTransaction();

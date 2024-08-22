@@ -41,8 +41,10 @@ class ArticleController extends Controller
 
         if (($type != 'travel') || ($type != 'about_bali')) $type = 'travel';
 
-        return ListArticleResource::collection(Article::orderBy('total_view', 'DESC')->with(['metaTranslations' => function($translation) {
-            $translation->where('field', 'meta')->where('language', config('app.locale'));
-        }])->where('type', $type)->limit(3)->get());
+        return ListArticleResource::collection(Article::orderBy('total_view', 'DESC')->with([
+            'metaTranslations'  => fn($translation) => $translation->where('language', config('app.locale')),
+            'titleTranslations' => fn($translation) => $translation->where('language', config('app.locale')),
+            'tagTranslations'   => fn($translation) => $translation->where('language', config('app.locale')),
+        ])->where('type', $type)->limit(3)->get());
     }
 }

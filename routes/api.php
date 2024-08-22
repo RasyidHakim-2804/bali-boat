@@ -55,7 +55,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
 
             // Admin - Article
-            Route::post('/articles/{article}', [AdminArticleController::class, 'store']);
+            Route::post('/articles', [AdminArticleController::class, 'store']);
             // Route::resource('/articles', AdminArticleController::class)->except('store');
             Route::post('/article-images', [AdminArticleImagesController::class, 'store']);
 

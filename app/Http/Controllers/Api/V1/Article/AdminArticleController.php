@@ -48,7 +48,7 @@ class AdminArticleController extends Controller
         return $this->successGet($article);
     }
 
-    public function store(StoreArticleRequest $request)
+    public function store($request)
     {
         return 'test';
         DB::beginTransaction();

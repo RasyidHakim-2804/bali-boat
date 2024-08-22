@@ -15,11 +15,11 @@ class ArticleController extends Controller
 
     public function index()
     {
-        return ListArticleResource::collection(Article::latest()->with([
+        return Article::latest()->with([
             'metaTranslations'  => fn($translation) => $translation->where('language', config('app.locale')),
             'titleTranslations' => fn($translation) => $translation->where('language', config('app.locale')),
             'tagTranslations'   => fn($translation) => $translation->where('language', config('app.locale')),
-        ])->paginate(15));
+        ])->paginate(15);
     }
 
     public function show(Article $article)

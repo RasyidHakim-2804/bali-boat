@@ -56,7 +56,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             // Admin - Article
             Route::post('/articles/{article}', [AdminArticleController::class, 'store']);
-            Route::resource('/articles', AdminArticleController::class)->except('store');
+            // Route::resource('/articles', AdminArticleController::class)->except('store');
             Route::post('/article-images', [AdminArticleImagesController::class, 'store']);
 
             // Admin - Article Category

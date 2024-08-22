@@ -13,6 +13,7 @@ use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class AdminArticleController extends Controller
 {
@@ -48,8 +49,9 @@ class AdminArticleController extends Controller
         return $this->successGet($article);
     }
 
-    public function store(StoreArticleRequest $request)
+    public function store(Request $request)
     {
+        return 'test';
         DB::beginTransaction();
         try {
             // $this->permissionService->check('full');
@@ -62,6 +64,14 @@ class AdminArticleController extends Controller
             $article = $this->saveThumbnail($article, $request->thumbnail);
 
             $article->save();
+
+            foreach ($request->title as $lang => $title) {
+                $this->saveArticleTranslation($article->id, 'title', $lang, $title);
+            }
+
+            foreach ($request->tag as $lang => $tag) {
+                $this->saveArticleTranslation($article->id, 'tag', $lang, $tag);
+            }
 
             foreach ($request->body as $lang => $body) {
                 $this->saveArticleTranslation($article->id, 'body', $lang, $body);
@@ -98,6 +108,8 @@ class AdminArticleController extends Controller
             }
 
             $article->save();
+
+            
 
             foreach ($request->body as $lang => $body) {
                 $this->saveArticleTranslation($article->id, 'body', $lang, $body);

@@ -15,7 +15,7 @@ class ArticleController extends Controller
 
     public function index()
     {
-        return ListArticleResource::collection(Article::latest()->with([
+        return Article::latest()->with([
             'metaTranslations' => function($translation) {
                 $translation->where('language', config('app.locale'));
             },
@@ -23,7 +23,7 @@ class ArticleController extends Controller
             'tagTranslations' => function($translation) {
                 $translation->where('language', config('app.locale'));
             },
-        ])->paginate(15));
+        ])->paginate(15);
     }
 
     public function show(Article $article)

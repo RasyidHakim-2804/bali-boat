@@ -50,7 +50,6 @@ class AdminArticleController extends Controller
 
     public function store(StoreArticleRequest $request)
     {
-        return 'test';
         DB::beginTransaction();
         try {
             // $this->permissionService->check('full');

@@ -34,6 +34,16 @@ class Article extends Model
         return $this->belongsTo(ArticleCategory::class, 'category_id', 'id');
     }
 
+    public function titleTranslations()
+    {
+        return $this->hasMany(ArticleTranslation::class, 'article_id', 'id')->where('field', 'title');
+    }
+
+    public function tagTranslations()
+    {
+        return $this->hasMany(ArticleTranslation::class, 'article_id', 'id')->where('field', 'tag');
+    }
+
     public function bodyTranslations()
     {
         return $this->hasMany(ArticleTranslation::class, 'article_id', 'id')->where('field', 'body');

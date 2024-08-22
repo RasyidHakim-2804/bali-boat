@@ -63,6 +63,14 @@ class AdminArticleController extends Controller
 
             $article->save();
 
+            foreach ($request->title as $lang => $title) {
+                $this->saveArticleTranslation($article->id, 'title', $lang, $title);
+            }
+
+            foreach ($request->tag as $lang => $tag) {
+                $this->saveArticleTranslation($article->id, 'tag', $lang, $tag);
+            }
+
             foreach ($request->body as $lang => $body) {
                 $this->saveArticleTranslation($article->id, 'body', $lang, $body);
             }
@@ -98,6 +106,14 @@ class AdminArticleController extends Controller
             }
 
             $article->save();
+
+            foreach ($request->title as $lang => $title) {
+                $this->saveArticleTranslation($article->id, 'title', $lang, $title);
+            }
+
+            foreach ($request->tag as $lang => $tag) {
+                $this->saveArticleTranslation($article->id, 'tag', $lang, $tag);
+            }
 
             foreach ($request->body as $lang => $body) {
                 $this->saveArticleTranslation($article->id, 'body', $lang, $body);

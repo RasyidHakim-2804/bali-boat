@@ -35,7 +35,7 @@ class AdminArticleController extends Controller
         // }
 
         // $this->permissionService->check('view');
-
+        return 'test';
         return AdminArticleResource::collection(Article::latest()->with(['bodyTranslations', 'metaTranslations'])->paginate(25));
     }
 

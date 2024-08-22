@@ -14,7 +14,6 @@ class Article extends Model
     use HasFactory, ImageStorageTrait, HasSlug;
 
     protected $fillable = [
-        'title',
         'type'
     ];
 

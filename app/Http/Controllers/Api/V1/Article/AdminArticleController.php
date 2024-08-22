@@ -106,6 +106,8 @@ class AdminArticleController extends Controller
                 $article = $this->saveThumbnail($article, $request->thumbnail);
             }
 
+            $article->title = $request->title['en'];
+            
             $article->save();
 
             foreach ($request->title as $lang => $title) {

@@ -55,6 +55,7 @@ class AdminArticleController extends Controller
             // $this->permissionService->check('full');
 
             $article                = new Article();
+            $article->title         = $request->title['en'];
             $article->total_view    = 0;
 
             $article->fill($request->validated());

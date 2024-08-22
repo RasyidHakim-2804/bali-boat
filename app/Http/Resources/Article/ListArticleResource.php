@@ -11,10 +11,10 @@ class ListArticleResource extends JsonResource
         return [
             'id'            => $this->id,
             'slug'          => $this->slug,
-            'title'         => $this->title_translations,
+            'title'         => $this->title,
             'type'          => $this->type,
-            'tag'           => $this->tag_translations,
-            'meta'          => $this->meta_translations,
+            'tag'           => $this->tag,
+            'meta'          => $this->metaTranslations[0]->translation,
             'total_view'    => $this->total_view,
             'image'         => $this->imageUrl('image'),
             'created_at'    => date("d F Y", strtotime($this->created_at)),

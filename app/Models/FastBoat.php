@@ -13,11 +13,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 #[ObservedBy([AdminActionObserver::class])]
 class FastBoat extends Model
 {
-    use HasFactory, ImageStorageTrait, HasSlug;
+    use HasFactory, ImageStorageTrait, HasSlug, HasEagerLimit;
 
     protected $imageSetting = [
         'folder' => 'fast_boats',
@@ -37,11 +38,6 @@ class FastBoat extends Model
     public function schedules(): HasMany
     {
         return $this->hasMany(FastBoatSchedule::class, 'fast_boat_id', 'id');
-    }
-
-    public function topSchedules(): HasMany
-    {
-        return $this->schedules()->take(3)->get();
     }
 
     public function scopeActive(Builder $query, bool $active = true)

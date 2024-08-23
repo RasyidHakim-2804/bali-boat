@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\Profile\ResetPasswordAdminProfileRequest;
 use App\Http\Requests\Api\Admin\Profile\UpdateAdminProfileRequest;
-use App\Http\Requests\Api\User\Profile\SetPasswordUserProfileRequest;
 use App\Http\Resources\Admin\AdminProfileResource;
 use App\Mail\Admin\AdminEmailChangesVerificationMail;
 use App\Models\Admin;
@@ -60,17 +59,6 @@ class AdminProfileController extends Controller
         if (Hash::check($request->password, $admin->password)) {
             return $this->errorValidationResponse('password', 'New password must be different with old password.');
         }
-
-        $admin->password = bcrypt($request->password);
-
-        $admin->save();
-
-        return $this->successStore();
-    }
-
-    public function setPassword(SetPasswordUserProfileRequest $request)
-    {
-        $admin = Admin::where('id', request()->user()->id)->firstOrFail();
 
         $admin->password = bcrypt($request->password);
 

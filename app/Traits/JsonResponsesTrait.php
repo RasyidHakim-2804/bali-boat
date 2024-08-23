@@ -12,7 +12,7 @@ Trait JsonResponsesTrait
     {
         return response()->json([
             'status' => 'success',
-        ], Response::HTTP_ACCEPTED);
+        ], Response::HTTP_OK);
     }
 
     public function successResponseMessage($message)
@@ -20,7 +20,7 @@ Trait JsonResponsesTrait
         return response()->json([
             'status'  => 'success',
             'message' => $message,
-        ], Response::HTTP_ACCEPTED);
+        ], Response::HTTP_OK);
     }
 
     public function successGet($data)

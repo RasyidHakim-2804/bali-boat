@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
 use App\Http\Controllers\Api\V1\Admin\AdminFeatureController;
+use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
 use App\Http\Controllers\Api\V1\Admin\AuthAdminController;
 use App\Http\Controllers\Api\V1\Admin\ForgetAdminPasswordController;
 use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
@@ -91,9 +92,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/logout', [AuthAdminController::class, 'logout']);
 
             // Admin - Profile
-            // Route::get('/profile', [AdminProfileController::class, 'index']);
-            // Route::put('/profile', [AdminProfileController::class, 'update']);
-            // Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
+            Route::get('/profile', [AdminProfileController::class, 'index']);
+            Route::put('/profile', [AdminProfileController::class, 'update']);
+            Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
 
             // Admin - Promo
             Route::resource('/promos', AdminPromoController::class);

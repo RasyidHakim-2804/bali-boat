@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 #[ObservedBy([AdminActionObserver::class])]
 class FastBoatSchedule extends Model
 {
-    use HasFactory;
+    use HasFactory, HasEagerLimit;
 
     public function fastBoat(): BelongsTo
     {
@@ -45,13 +46,11 @@ class FastBoatSchedule extends Model
 
     public function scopeDepartureTime($query, $time = 'morning')
     {
-        if ($time == 'afternoon') {
-            $operator = '>=';
-        } else {
-            $operator = '<=';
-        }
+        $operator = '<=';
 
-        return $query->where('departure_time',$operator, '12:00');
+        if ($time == 'afternoon') $operator = '>=';
+
+        return $query->where('departure_time', $operator, '12:00');
     }
 
     public function scopeSelectDate($query, $date)

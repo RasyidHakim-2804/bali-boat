@@ -27,6 +27,8 @@ use App\Http\Controllers\Api\V1\Product\PrivateBoat\PrivateBoatController;
 use App\Http\Controllers\Api\V1\Product\Activity\AdminActivityController;
 use App\Http\Controllers\Api\V1\Product\Activity\AdminActivityImageController;
 use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
+use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
+use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,7 +45,29 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
-    // Article
+    // Public
+
+    // Public - FastBoat
+    Route::get('/fast-boats', [FastBoatController::class, 'index']);
+
+    // Public - PrivateBoat
+    Route::get('/private-boats', [PrivateBoatController::class, 'search']);
+    Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
+
+    // Public - FastBoat Schedule
+    Route::get('/fast-boat-schedules', [FastBoatScheduleController::class, 'index']);
+
+    // Public - Activity
+    Route::get('/activities', [ActivityController::class, 'search']);
+    Route::get('/activities/{activity:slug}', [ActivityController::class, 'show']);
+
+    // Public - Harbor
+    Route::get('/harbors', [HarborController::class, 'index']);
+
+    // Public - Location
+    Route::get('/locations', [LocationController::class, 'index']);
+
+    // Public - Article
     Route::get('/top-articles', [ArticleController::class, 'top']);
     Route::resource('/articles', ArticleController::class, ['only' => ['index', 'show']]);
     Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store']);
@@ -70,6 +94,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             // Route::get('/profile', [AdminProfileController::class, 'index']);
             // Route::put('/profile', [AdminProfileController::class, 'update']);
             // Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
+
+            // Admin - Promo
+            Route::resource('/promos', AdminPromoController::class);
 
             // Admin - Article
             Route::resource('/articles', AdminArticleController::class);
@@ -180,33 +207,5 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/profile', [UserProfileController::class,'show']);
             Route::put('/profile', [UserProfileController::class, 'update']);
         });
-    });
-    
-    // Public
-
-    Route::middleware('verifyLanguage')->group(function(){
-        
-        // Article
-        Route::get('/top-articles', [ArticleController::class, 'top']);
-        Route::resource('/articles', ArticleController::class, ['only' => ['index', 'show']]);
-        Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store']);
-
-        // Public - FastBoat 
-        Route::get('/search-fast-boats', [FastBoatController::class, 'search']);
-        Route::get('/list-fast-boats', [FastBoatController::class, 'list']);
-
-        // Public - PrivateBoat
-        Route::get('/private-boats', [PrivateBoatController::class, 'search']);
-        Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
-
-        // Public - Activity
-        Route::get('/activities', [ActivityController::class, 'search']);
-        Route::get('/activities/{activity:slug}', [ActivityController::class, 'show']);
-
-        // Public - Harbor
-        Route::get('/harbors', [HarborController::class, 'index']);
-
-        // Public - Location
-        Route::get('/locations', [LocationController::class, 'index']);
     });
 });

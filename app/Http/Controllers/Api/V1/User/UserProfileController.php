@@ -15,7 +15,7 @@ class UserProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function index()
     {
         $user = auth()->user();
 

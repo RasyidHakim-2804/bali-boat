@@ -185,6 +185,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     //User routes
     Route::prefix('users')->group(function(){
 
+        //User Profile
+        Route::get('/profile', [UserProfileController::class, 'index']);
+        Route::put('/profile', [UserProfileController::class, 'update']);
+
         //Authentication
         Route::post('/register', [AuthUserController::class,'register']);
         Route::post('/email-verify/confirm/{token}', [AuthUserController::class, 'verifyEmail']);
@@ -205,10 +209,6 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
                 //password controller
                 Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
-
-                //User Profile
-                Route::get('/profile', [UserProfileController::class, 'index']);
-                Route::put('/profile', [UserProfileController::class, 'update']);
 
                 // Order
                 Route::post('/orders/{order}/cancel', [UserOrderController::class, 'cancel']);

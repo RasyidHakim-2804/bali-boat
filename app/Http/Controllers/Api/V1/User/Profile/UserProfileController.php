@@ -17,7 +17,7 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        return $user = auth()->user();
 
         return new UserProfileResource($user);
     }

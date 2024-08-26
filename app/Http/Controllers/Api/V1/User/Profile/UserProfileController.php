@@ -17,9 +17,9 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        return $user = auth()->user();
+        $user = new UserProfileResource(User::where('id', request()->user()->id)->firstOrFail());
 
-        return new UserProfileResource($user);
+        return $this->successGet($user);
     }
 
     /**

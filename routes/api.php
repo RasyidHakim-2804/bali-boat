@@ -187,7 +187,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::post('/register', [UserAuthController::class,'register']);
         Route::post('/email-verify/confirm/{token}', [UserAuthController::class, 'verifyEmail']);
         Route::post('/email-verify/resend', [UserAuthController::class, 'resendEmailVerification']);
-        Route::post('/sign-in', [UserAuthController::class, 'login']);
+        Route::post('/login', [UserAuthController::class, 'login']);
 
         //password controller
         Route::post('/password/forget', [UserPasswordController::class, 'forgetPassword']);

@@ -204,7 +204,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         });
     
         Route::prefix('/{user}')->scopeBindings()->group(function () {
-            Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){
+            Route::middleware(['auth:api_user'])->group(function(){
 
                 //Authentication
                 Route::post('/logout', [AuthUserController::class, 'logout']);

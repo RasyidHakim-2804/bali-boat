@@ -197,24 +197,25 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::post('/password/reset/', [UserPasswordController::class, 'resetPassword']);
         Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
     
+        Route::prefix('/{user}')->scopeBindings()->group(function () {
+            Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){
 
-        Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){
+                //Authentication
+                Route::post('/logout', [AuthUserController::class, 'logout']);
 
-            //Authentication
-            Route::post('/logout', [AuthUserController::class, 'logout']);
+                //password controller
+                Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
 
-            //password controller
-            Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
+                //User Profile
+                Route::get('/profile', [UserProfileController::class, 'index']);
+                Route::put('/profile', [UserProfileController::class, 'update']);
 
-            //User Profile
-            Route::get('/profile', [UserProfileController::class, 'index']);
-            Route::put('/profile', [UserProfileController::class, 'update']);
-
-            // Order
-            Route::post('/orders/{order}/cancel', [UserOrderController::class, 'cancel']);
-            Route::post('/orders/{order}/refund', [UserOrderController::class, 'refund']);
-            Route::get('/orders/{order}/refund-channels', [UserOrderController::class, 'refundChanel']);
-            Route::resource('/orders', UserOrderController::class)->only(['index', 'show', 'store']);
+                // Order
+                Route::post('/orders/{order}/cancel', [UserOrderController::class, 'cancel']);
+                Route::post('/orders/{order}/refund', [UserOrderController::class, 'refund']);
+                Route::get('/orders/{order}/refund-channels', [UserOrderController::class, 'refundChanel']);
+                Route::resource('/orders', UserOrderController::class)->only(['index', 'show', 'store']);
+            });
         });
     });
 });

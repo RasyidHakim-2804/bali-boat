@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Order;
+namespace App\Http\Controllers\Api\V1\FastBoatOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Order\StoreUserOrderRequest;
 use App\Http\Resources\Order\ListOrderResource;

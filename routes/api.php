@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
+use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -184,10 +185,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::prefix('users')->middleware('language')->group(function(){
 
         //Authentication
-        Route::post('/register', [UserAuthController::class,'register']);
-        Route::post('/email-verify/confirm/{token}', [UserAuthController::class, 'verifyEmail']);
-        Route::post('/email-verify/resend', [UserAuthController::class, 'resendEmailVerification']);
-        Route::post('/login', [UserAuthController::class, 'login']);
+        Route::post('/register', [AuthUserController::class,'register']);
+        Route::post('/email-verify/confirm/{token}', [AuthUserController::class, 'verifyEmail']);
+        Route::post('/email-verify/resend', [AuthUserController::class, 'resendEmailVerification']);
+        Route::post('/login', [AuthUserController::class, 'login']);
 
         //password controller
         Route::post('/password/forget', [UserPasswordController::class, 'forgetPassword']);
@@ -199,7 +200,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::middleware(['auth:sanctum','verified', 'ability:is_user'])->group(function(){
 
             //Authentication
-            Route::post('/logout', [UserAuthController::class, 'logout']);
+            Route::post('/logout', [AuthUserController::class, 'logout']);
 
             //password controller
             Route::post('/password/change', [UserPasswordController::class, 'changePassword']);

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api\Order;
+namespace App\Http\Requests\Api\FastBoatOrder;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class RefundOrderRequest extends FormRequest
+class UpdateAdminFastBoatOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,7 @@ class RefundOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'pin' => 'required|min:6|max:6'
+            'note' => 'required|min:1',
         ];
     }
 }

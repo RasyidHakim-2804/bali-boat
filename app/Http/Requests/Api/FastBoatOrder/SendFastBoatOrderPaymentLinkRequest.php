@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api\Order;
+namespace App\Http\Requests\Api\FastBoatOrder;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class RefundUserOrderRequest extends FormRequest
+class SendFastBoatOrderPaymentLinkRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +25,7 @@ class RefundUserOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'channel_type'           => 'required|in:bank,ewallet',
-            'channel_code'           => 'required|min:1',
-            'channel_holder_name'    => 'required|min:1',
-            'channel_account_number' => 'required|min:1',
+            'send' => 'boolean|required',
         ];
     }
 }

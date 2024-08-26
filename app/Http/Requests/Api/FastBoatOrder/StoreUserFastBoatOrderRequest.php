@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Api\Order;
+namespace App\Http\Requests\Api\FastBoatOrder;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\RequiredIf;
 
-class StoreOrderRequest extends FormRequest
+class StoreUserFastBoatOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,13 +26,14 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'         => 'required|email:rfc,dns',
-            'first_name'    => 'required|min:1',
-            'last_name'     => 'required|min:1',
-            'phone'         => 'required|min:1',
-            'activity_date' => 'required|date|after:yesterday',
-            'products'      => 'required|array',
-            'products.*.id' => [
+            'activity_date'         => 'required|date|after:yesterday',
+            'emergency_name'        => 'required|min:1',
+            'emergency_language'    => 'required|min:1',
+            'emergency_relation'    => 'required|min:1',
+            'emergency_phone_number'=> 'required|min:1',
+            'pickup_address'        => 'nullable|min:1',
+            'products'              => 'required|array',
+            'products.*.id'         => [
                 'required',
                 function ($attr, $value, $fail) {
                     $count = collect($this->input('products'))
@@ -52,7 +53,7 @@ class StoreOrderRequest extends FormRequest
                 Rule::exists('products', 'id')->where('is_saleable', 1)->whereNull('deleted_at'),
             ],
             'products.*.variant_id' => [
-                'nullable',
+                'required',
                 function ($attr, $value, $fail) {
                     $count = collect($this->input('products'))
                         ->reject(function ($product) {
@@ -68,10 +69,10 @@ class StoreOrderRequest extends FormRequest
                 
                 Rule::exists('product_variants', 'id')->where('product_id', $this->input('products.*.id'))->whereNull('deleted_at'),
             ],
-            'products.*.quantity'   => 'required|integer|gt:0',
+            'products.*.quantity'       => 'required|integer|gt:0',
 
-            'additionals'           => 'array',
-            'additionals.*.id'      => [
+            'additionals'            => 'array',
+            'additionals.*.id'       => [
                 'required',
                 function ($attr, $value, $fail) {
                     $count = collect($this->input('additionals'))
@@ -87,7 +88,7 @@ class StoreOrderRequest extends FormRequest
                 },
                 Rule::exists('product_additionals', 'id'),
             ],
-            'additionals.*.quantity'    => 'required|integer|gt:0',
+            'additionals.*.quantity'        => 'required|integer|gt:0',
 
             'forms'                     => 'required|array',
             'forms.*.product_id'        => ['required',
@@ -114,11 +115,19 @@ class StoreOrderRequest extends FormRequest
                 },
                 Rule::exists('product_variants', 'id')->where('product_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
             ],
-            'forms.*.name'              => 'required|string|min:1',
-            'forms.*.age'               => 'required|integer|gte:1|lte:200',
-            'forms.*.phone'             => 'required_if:forms.*.is_pic,1|string|min:1',
-            'forms.*.email'             => 'required_if:forms.*.is_pic,1|email:dns,rfc',
-            'forms.*.is_pic'            => 'required|in:1,0',
+            'forms.*.name'                  => 'required|string|min:1',
+            'forms.*.date_of_birth'         => 'required|date|before:today',
+            'forms.*.gender'                => 'required|in:male,female,other',
+            'forms.*.nationality'           => 'required|min:1',
+            'forms.*.email'                 => 'required|email:dns,rfc',
+            'forms.*.phone'                 => 'required|min:1',
+            'forms.*.pickup_address'        => 'nullable|min:1',
+            'forms.*.diet_restriction'      => 'nullable|min:1',
+            'forms.*.shoes_size'            => 'nullable|numeric',
+            'forms.*.certification_level'   => 'nullable|min:1',
+            'forms.*.diving_association_number' => 'nullable|min:1',
+            'forms.*.last_dive'             => 'nullable|date|before:today',
+            'forms.*.is_pic'                => 'required|in:1,0',
         ];
     }
 }

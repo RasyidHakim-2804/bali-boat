@@ -12,7 +12,6 @@ use App\Http\Controllers\Api\V1\Article\AdminArticleImagesController;
 use App\Http\Controllers\Api\V1\Article\ArticleCommentController;
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
-use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
 use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
@@ -32,6 +31,7 @@ use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
+use App\Http\Controllers\Api\V1\User\Profile\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*

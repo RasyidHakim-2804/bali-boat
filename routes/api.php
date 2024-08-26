@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
-use App\Http\Controllers\Api\V1\Order\UserFastBoatOrderController;
+use App\Http\Controllers\Api\V1\FastBoatOrder\UserFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Order\UserOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminScheduleController;

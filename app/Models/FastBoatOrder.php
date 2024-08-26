@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 
-class Order extends Model
+class FastBoatOrder extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -21,38 +21,33 @@ class Order extends Model
 
     public function details()
     {
-        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
+        return $this->hasMany(FastBoatOrderDetail::class, 'order_id', 'id');
     }
 
-    public function additionals()
-    {
-        return $this->hasMany(OrderAdditional::class, 'order_id', 'id');
-    }
-
-    public function review()
-    {
-        return $this->hasOne(OrderReview::class, 'order_id', 'id');
-    }
+    // public function review()
+    // {
+    //     return $this->hasOne(OrderReview::class, 'order_id', 'id');
+    // }
 
     public function payment()
     {
        return $this->hasOne(XenditPayment::class, 'order_id', 'id');
     }
 
-    public function payout()
-    {
-        return $this->hasOne(XenditPayout::class, 'order_id', 'id');
-    }
+    // public function payout()
+    // {
+    //     return $this->hasOne(XenditPayout::class, 'order_id', 'id');
+    // }
 
-    public function refunds()
-    {
-        return $this->hasMany(OrderRefund::class, 'order_id', 'id');
-    }
+    // public function refunds()
+    // {
+    //     return $this->hasMany(OrderRefund::class, 'order_id', 'id');
+    // }
 
-    public function decline()
-    {
-        return $this->hasOne(OrderDecline::class, 'order_id', 'id');
-    }
+    // public function decline()
+    // {
+    //     return $this->hasOne(OrderDecline::class, 'order_id', 'id');
+    // }
 
     public function user()
     {
@@ -62,11 +57,6 @@ class Order extends Model
     public function forms()
     {
         return $this->hasMany(OrderForm::class, 'order_id', 'id');
-    }
-
-    public function emergencyContact()
-    {
-        return $this->hasOne(EmergencyContact::class, 'order_id', 'id');
     }
 
     // public function paymentHistories()

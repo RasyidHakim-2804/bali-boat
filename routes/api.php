@@ -182,7 +182,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     });
     
     //User routes
-    Route::prefix('users')->middleware('language')->group(function(){
+    Route::prefix('users')->group(function(){
 
         //Authentication
         Route::post('/register', [AuthUserController::class,'register']);

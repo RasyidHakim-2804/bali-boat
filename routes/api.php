@@ -183,11 +183,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     });
     
     //User routes
-    Route::prefix('users')->group(function(){
-
-        //User Profile
-        Route::get('/profile', [UserProfileController::class, 'index']);
-        Route::put('/profile', [UserProfileController::class, 'update']);
+    Route::prefix('/users')->group(function(){
 
         //Authentication
         Route::post('/register', [AuthUserController::class,'register']);
@@ -200,6 +196,12 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::post('/password/forget/verify-otp', [UserPasswordController::class, 'verifyOtp']);
         Route::post('/password/reset/', [UserPasswordController::class, 'resetPassword']);
         Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
+
+        Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){
+            //User Profile
+            Route::get('/profile', [UserProfileController::class, 'index']);
+            Route::put('/profile', [UserProfileController::class, 'update']);
+        });
     
         Route::prefix('/{user}')->scopeBindings()->group(function () {
             Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){

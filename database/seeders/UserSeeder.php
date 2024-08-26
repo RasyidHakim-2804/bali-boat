@@ -66,11 +66,7 @@ class UserSeeder extends Seeder
                 'email'             => 'test@email.com',
                 'email_verified_at' => now(),
                 'password'          => bcrypt('user#2022!'),
-                'profile_picture'   => null,
-                'country'           => $faker->country(),
-                'city'              => $faker->city(),
-                'phone'             => $faker->phoneNumber(),
-                'is_active'         => 1,
+                'active'            => 1,
                 'created_at'        => now(),
                 'updated_at'        => now()
             ]

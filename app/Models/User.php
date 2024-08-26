@@ -11,12 +11,14 @@ use Laravel\Passport\HasApiTokens;
 use App\Models\Image\UserProfileImage;
 use App\Service\Contracts\Model\CanUploadImage;
 use App\Service\Traits\HasImage;
+use App\Traits\ImageStorageTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, ImageStorageTrait, HasFactory, Notifiable, SoftDeletes;
 
     protected $imageUrlColumn = 'profile_image_url';
     protected $format         = 'webp';
@@ -52,7 +54,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
     public function profileImageUrl(): Attribute

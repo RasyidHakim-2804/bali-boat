@@ -206,7 +206,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
 
             //User Profile
-            Route::get('/profile', [UserProfileController::class,'show']);
+            Route::get('/profile', [UserProfileController::class, 'index']);
             Route::put('/profile', [UserProfileController::class, 'update']);
         });
     });

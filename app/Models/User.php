@@ -3,78 +3,108 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Services\Logs\AdminLogService;
+use App\Services\Logs\UserLogService;
+use App\Traits\ImageStorageTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use App\Models\Image\UserProfileImage;
-use App\Service\Contracts\Model\CanUploadImage;
-use App\Service\Traits\HasImage;
-use App\Traits\ImageStorageTrait;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
     use HasApiTokens, ImageStorageTrait, HasFactory, Notifiable, SoftDeletes;
 
-    protected $imageUrlColumn = 'profile_image_url';
-    protected $format         = 'webp';
-    protected $disk           = 'public';
-    protected $dirPath        = 'upload/images/profile/user/';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'profile_image_url'
+        'first_name',
+        'last_name',
+        'country',
+        'city',
+        'phone',
+        'is_active'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    protected $imageSetting = [
+        'folder' => 'user',
+        'field'  => [
+            'profile_picture',
+        ],
+    ];
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    public function profileImageUrl(): Attribute
+    public function getRouteKeyName()
     {
-        return new Attribute(
-            get: function ($value = null) {
-                if ($value == null) {
-                    return null;
-                }
-                return  config('app.frontend_url') . 'storage/' . $value;
-            }
-        );
+        return 'uuid';
     }
 
-    public function resetPassword():HasOne
+    public function emailVerifications()
     {
-        return $this->hasOne(UserResetPassword::class);
+        return $this->hasMany(UserEmailVerificationToken::class, 'user_id', 'id');
     }
 
-    public function verifyEmail():HasOne
+    // public function forgetPasswordResets()
+    // {
+    //     return $this->hasMany(ForgetUserPasswordReset::class, 'user_id', 'id');
+    // }
+
+    // public function addresses()
+    // {
+    //     return $this->hasMany(Address::class, 'user_id', 'id');
+    // }
+
+    // public function cart()
+    // {
+    //     return $this->hasOne(Cart::class, 'user_id', 'id');
+    // }
+
+    public function orders()
     {
-        return $this->hasOne(UserVerifyEmail::class);
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+    // public function orderReviews()
+    // {
+    //     return $this->hasMany(OrderReview::class, 'user_id', 'id');
+    // }
+
+    public function scopeSearch(Builder $query, $search): Builder
+    {
+        return $query->where('uuid', 'LIKE','%' . $search . '%')->orWhere('first_name', 'LIKE','%' . $search . '%')->orWhere('last_name', 'LIKE','%' . $search . '%');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        $logService = new UserLogService;
+
+        if (auth()->guard('api_admin')->check()) {
+            $logService = new AdminLogService;
+        }
+  
+        static::created(function($data) use($logService) {
+            $logService->store('create', 'user', $data->id);
+        });
+  
+        if (request()->path() != 'api/v1/user/reset-password') {
+            static::updated(function($data) use($logService) {  
+                if ($logService) $logService->store('update', 'user', $data->id);
+            });
+        }
+        
+        static::deleted(function($data) use($logService) { 
+            if ($logService) $logService->store('delete', 'user', $data->id);
+        });
     }
 }

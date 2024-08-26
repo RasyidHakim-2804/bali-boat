@@ -17,6 +17,9 @@ class VerifyLanguage
      */
     public function handle(Request $request, Closure $next)
     {
+
+        app()->setLocale('en');
+
         if (in_array($request->lang, Language::code())) {
             
             app()->setLocale($request->lang);

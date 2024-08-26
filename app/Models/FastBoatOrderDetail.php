@@ -8,7 +8,7 @@ use App\Traits\ImageStorageTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderDetail extends Model
+class FastBoatOrderDetail extends Model
 {
     use HasFactory, ImageStorageTrait;
 
@@ -35,17 +35,17 @@ class OrderDetail extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class, 'order_id', 'id');
+        return $this->belongsTo(FastBoatOrder::class, 'order_id', 'id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id')->withTrashed();
+        return $this->belongsTo(FastBoatSchedule::class, 'fast_boat_id', 'id')->withTrashed();
     }
 
     public function variant()
     {
-        return $this->belongsTo(ProductVariant::class, 'variant_id', 'id');
+        return $this->belongsTo(FastBoatScheduleVariant::class, 'fast_boat_variant_id', 'id');
     }
 
     public static function boot()

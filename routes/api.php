@@ -198,7 +198,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
     
 
-        Route::middleware(['auth:api_admin', 'scopes:user'])->group(function(){
+        Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){
 
             //Authentication
             Route::post('/logout', [AuthUserController::class, 'logout']);

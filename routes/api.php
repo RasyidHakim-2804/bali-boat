@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
+use App\Http\Controllers\Api\V1\Order\UserOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminScheduleController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatController;
@@ -208,6 +209,12 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             //User Profile
             Route::get('/profile', [UserProfileController::class, 'index']);
             Route::put('/profile', [UserProfileController::class, 'update']);
+
+            // Order
+            Route::post('/orders/{order}/cancel', [UserOrderController::class, 'cancel']);
+            Route::post('/orders/{order}/refund', [UserOrderController::class, 'refund']);
+            Route::get('/orders/{order}/refund-channels', [UserOrderController::class, 'refundChanel']);
+            Route::resource('/orders', UserOrderController::class)->only(['index', 'show', 'store']);
         });
     });
 });

@@ -20,11 +20,11 @@ class AdminFastBoatResource extends JsonResource
             'slug'              => $this->slug,
             'image'             => $this->imageUrl('image'),
             'active'            => $this->active,
-            'rating'              => $this->rating,
+            'rating'            => $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'schedules_count'   => $this->schedules_count,
-            'schedules'     => ScheduleResource::collection($this->whenLoaded('schedules'))
+            'schedules'         => ScheduleResource::collection($this->whenLoaded('schedules'))
         ];
     }
 }

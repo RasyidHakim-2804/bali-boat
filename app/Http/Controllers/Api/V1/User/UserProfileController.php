@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Profile;
+namespace App\Http\Controllers\Api\V1\User\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Profile\User\UserUpdateRequest;
 use App\Http\Resources\Api\V1\Common\SuccessResource;
 use App\Http\Resources\Api\V1\Profile\UserProfileResource;
 use App\Models\User;
-use App\Service\Services\ImageServices\ImageService;
+use App\Services\Images\ImageService;
 use Illuminate\Support\Facades\DB;
 
 class UserProfileController extends Controller

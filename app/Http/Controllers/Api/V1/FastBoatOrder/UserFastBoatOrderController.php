@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\FastBoatOrder;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Order\StoreUserFastBoatOrderRequest;
+use App\Http\Requests\Api\FastBoatOrder\StoreUserFastBoatOrderRequest;
 use App\Http\Resources\Order\ListOrderResource;
 use App\Http\Resources\Order\OrderResource;
 use App\Models\FastBoatOrder;

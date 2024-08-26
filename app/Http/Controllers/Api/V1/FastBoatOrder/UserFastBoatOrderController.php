@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\FastBoatOrder;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Order\StoreUserOrderRequest;
+use App\Http\Requests\Api\Order\StoreUserFastBoatOrderRequest;
 use App\Http\Resources\Order\ListOrderResource;
 use App\Http\Resources\Order\OrderResource;
 use App\Models\FastBoatOrder;
@@ -10,7 +10,6 @@ use App\Models\FastBoatSchedule;
 use App\Models\FastBoatScheduleVariant;
 use App\Models\Promo;
 use App\Models\User;
-use App\Notifications\Order\OrderCreated;
 use App\Notifications\Order\OrderCreatedNotification;
 use App\Services\Order\OrderDetailService;
 use App\Services\Order\OrderRefundService;
@@ -45,7 +44,7 @@ class UserFastBoatOrderController extends Controller
         return $this->successGet($order);
     }
     
-    public function store(StoreUserOrderRequest $request, User $user)
+    public function store(StoreUserFastBoatOrderRequest $request, User $user)
     {
         $user = request()->user();
 

@@ -2,24 +2,26 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Language;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Symfony\Component\HttpFoundation\Response;
 
 class VerifyLanguage
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next)
     {
-        $language = request()->lang ?? null;
+        if (in_array($request->lang, Language::code())) {
+            
+            app()->setLocale($request->lang);
+        }
 
-        if ($language) app()->setLocale($language);
-        
         return $next($request);
     }
 }

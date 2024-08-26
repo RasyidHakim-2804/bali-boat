@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Observers\AdminActionObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[ObservedBy([AdminActionObserver::class])]
 class Activity extends Model
 {
     use HasFactory, HasSlug;
@@ -41,29 +38,19 @@ class Activity extends Model
         return $this->hasMany(ActivityTranslation::class);
     }
 
-    public function highlightTranslations(): HasMany
+    public function includes(): BelongsToMany
     {
-        return $this->hasMany(ActivityTranslation::class, 'activity_id', 'id')->where('field', '=', 'highlight');
+        return $this->belongsToMany(ProductInclude::class, 'pivot_activity_includes', 'activity_id', 'include_id');
     }
 
-    public function descriptionTranslations()
+    public function excludes(): BelongsToMany
     {
-        return $this->hasMany(ActivityTranslation::class, 'activity_id', 'id')->where('field', 'description');
+        return $this->belongsToMany(ProductExclude::class, 'pivot_activity_excludes', 'activity_id', 'exclude_id');
     }
 
-    public function includes(): HasMany
+    public function itineraries(): BelongsToMany
     {
-        return $this->hasMany(ActivityInclude::class, 'activity_id', 'id');
-    }
-
-    public function excludes(): HasMany
-    {
-        return $this->hasMany(ActivityExclude::class, 'activity_id', 'id');
-    }
-
-    public function itinararies(): HasMany
-    {
-        return $this->hasMany(ActivityItinerary::class, 'activity_id', 'id');
+        return $this->belongsToMany(ProductItinerary::class, 'pivot_activity_itineraries', 'activity_id', 'itinerary_id');
     }
 
     public function images(): HasMany
@@ -88,7 +75,7 @@ class Activity extends Model
         ));
     }
 
-    public function scopePerson($query, $person)
+    public function scopePeopleCount($query, $person)
     {
         $query->where('max_person', '>=', $person);
     }

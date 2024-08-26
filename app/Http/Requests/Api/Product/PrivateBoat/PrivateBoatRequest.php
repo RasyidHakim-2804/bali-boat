@@ -37,18 +37,19 @@ class PrivateBoatRequest extends FormRequest
             'active'            => 'required|boolean',
             'pickup_harbor_id'  => 'required|exists:harbors,id',
             'tags'              => 'required|array',
-            'tags.*'            => 'required|exists:tags,id',
             'is_rented'         => 'required|boolean',
+            'is_promo'          => 'required|boolean',
+
+            'tags'              => 'required|array',
+            'tags.*'            => 'required|exists:tags,id',
+            'includes'          => 'required|array',
+            'includes.*'        => 'required|exists:product_includes,id',
 
             'highlight'         => ['required',$arrayLanguage],
             'highlight.*'       => ['required','string'],
 
             'meta'              => ['required',$arrayLanguage],
             'meta.*'            => ['required','string'],
-
-            'includes'          => 'required|array',
-            'includes.*'        => ['required', $arrayLanguage],
-            'includes.*.*'      => 'required|string',
 
             'specification'             => ['required', $arrayLanguage],
             'specification.*.model'     => 'required|string',
@@ -61,7 +62,6 @@ class PrivateBoatRequest extends FormRequest
 
         foreach (Language::code() as $lang) {
             $rule['specification.' . $lang] = 'required';
-            $rule['includes.*.' . $lang]    = 'required';
             $rule['highlight.' . $lang]     = 'required';
             $rule['meta.' . $lang]          = 'required';
         }

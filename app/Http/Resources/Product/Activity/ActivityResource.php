@@ -2,8 +2,11 @@
 
 namespace App\Http\Resources\Product\Activity;
 
+use App\Http\Resources\Exclude\ListExcludeResource;
+use App\Http\Resources\Include\ListIncludeResource;
+use App\Http\Resources\Itinerary\ListItineraryResource;
 use App\Http\Resources\Location\LocationResource;
-use App\Http\Resources\Tag\TagResource;
+use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +17,7 @@ class ActivityResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray( $request): array
     {
         return [
             'id'                => $this->id,
@@ -27,20 +30,23 @@ class ActivityResource extends JsonResource
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
 
-            'tags'           => TagResource::collection($this->whenLoaded('tags')),
+            'tags'           => ListTagResource::collection($this->whenLoaded('tags')),
 
-            'highlights'     => $this->whenLoaded('highlightTranslations', function(){
-                return $this->highlightTranslations->first()->translation;
-            }),
+            'highlight' => $this->whenLoaded(
+                'translations',
+                fn() => $this->translations->where('field','highlight')->first()->translation
+            ),
+
+            'description' => $this->whenLoaded(
+                'translations',
+                fn() => $this->translations->where('field','description')->first()->translation
+            ),
             
-            'description'    => $this->whenLoaded('descriptionTranslations', function(){
-                return $this->descriptionTranslations->first()->translation;
-            }),
-            
-            'includes'        => ActivityExcludeIncludeResource::collection($this->whenLoaded('includes')),
-            'excludes'        => ActivityExcludeIncludeResource::collection($this->whenLoaded('excludes')),
-            'itinararies'     => ActivityItinararyResource::collection($this->whenLoaded('itinararies')),
-            'thumbnail_image' => new ActivityImageResource($this->whenLoaded('thumbnailImage'))
+            'includes'        => ListIncludeResource::collection($this->whenLoaded('includes')),
+            'excludes'        => ListExcludeResource::collection($this->whenLoaded('excludes')),
+            'itinararies'     => ListItineraryResource::collection($this->whenLoaded('itinararies')),
+            'thumbnail_image' => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
+            'images'          => ActivityImageResource::collection($this->whenLoaded('images')),
         ];
     }
 }

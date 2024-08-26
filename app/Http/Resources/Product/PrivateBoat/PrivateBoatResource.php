@@ -3,7 +3,8 @@
 namespace App\Http\Resources\Product\PrivateBoat;
 
 use App\Http\Resources\Habor\HarborResource;
-use App\Http\Resources\Tag\TagResource;
+use App\Http\Resources\Include\ListIncludeResource;
+use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,13 +15,14 @@ class PrivateBoatResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray( $request): array
     {
         return [
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
             'is_rented'         => $this->is_rented,
+            'is_promo'          => $this->is_promo,
             'active'            => $this->active,
             'pickup_harbor'     => new HarborResource($this->whenLoaded('pickupHarbor')),
             'price'             => $this->defaultVariant->price,
@@ -28,21 +30,24 @@ class PrivateBoatResource extends JsonResource
             'updated_at'        => $this->updated_at,
             'images'            => PrivateBoatImageResource::collection($this->whenLoaded('images')),
 
-            'tags'           => TagResource::collection($this->whenLoaded('tags')),
+            'tags'           => ListTagResource::collection($this->whenLoaded('tags')),
 
-            'highlights'     => $this->whenLoaded('highlightTranslations', function(){
-                return $this->highlightTranslations->first()->translation;
-            }),
+            'highlight' => $this->whenLoaded(
+                'translations',
+                fn() => $this->translations->where('field','highlight')->first()->translation
+            ),
             
-            'meta'           => $this->whenLoaded('metaTranslations', function(){
-                return $this->metaTranslations->first()->translation;
-            }),
+            'meta' => $this->whenLoaded(
+                'translations',
+                fn() => $this->translations->where('field','meta')->first()->translation
+            ),
             
-            'specifications' => new PrivateBoatSpecificationResource($this->whenLoaded('specifications', function(){
-                return $this->specifications->first();
-            })),
+            'specifications' => new PrivateBoatSpecificationResource($this->whenLoaded(
+                'specifications',
+                fn() => $this->specifications->first()
+            )),
             
-            'includes'        => $this->whenLoaded('includes'),
+            'includes'        => ListIncludeResource::collection($this->whenLoaded('includes')),
             'thumbnail_image' => new PrivateBoatImageResource($this->whenLoaded('thumbnailImage'))
         ];
     }

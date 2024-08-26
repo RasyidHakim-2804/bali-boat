@@ -6,21 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class FastBoatRequest extends FormRequest
 {
-    private $ruleImage = 'required|mimes:png,jpg|max:2048';
-
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
-    }
-
-    protected function prepareForValidation()
-    {
-        if (strtolower($this->method()) == 'put') {
-            $this->ruleImage = 'nullable|mimes:png,jpg|max:2048';
-        }
     }
 
     /**
@@ -30,11 +21,17 @@ class FastBoatRequest extends FormRequest
      */
     public function rules(): array
     {
+        if (strtolower($this->method()) == 'put') {
+            $ruleImage = 'required|mimes:png,jpg|max:2048';
+        } else {
+            $ruleImage = 'nullable|mimes:png,jpg|max:2048';
+        }
+        
         return [
             'name'   => 'required|string|max:255',
             'active' => 'required|boolean',
             'rating' => 'required|numeric|min:0|max:5',
-            'image'  => $this->ruleImage,
+            'image'  => $ruleImage,
         ];
     }
 }

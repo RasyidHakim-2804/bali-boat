@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\PrivateBoat\PrivateBoatResource;
 use App\Models\PrivateBoat;
+use App\Traits\JsonResponsesTrait;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PrivateBoatController extends Controller
 {
+    use JsonResponsesTrait;
+
     public function search()
     {
         $privateBoats = QueryBuilder::for(PrivateBoat::class)
@@ -22,7 +25,10 @@ class PrivateBoatController extends Controller
             AllowedSort::field('price')
         ])
         ->with([
-            'tags','thumbnailImage', 'defaultVariant', 'pickupHarbor'
+            'tags.translations'     => fn($query) => $query->language(),
+            'thumbnailImage',
+            'defaultVariant',
+            'pickupHarbor'
         ])
         ->selectVariantPrice()
         ->paginate(25);
@@ -33,17 +39,32 @@ class PrivateBoatController extends Controller
     public function show(PrivateBoat $privateBoat)
     {
         $privateBoat = $privateBoat->load([
-            'tags',
             'pickupHarbor',
-            'highlightTranslations' => fn($query) => $query->where('language', app()->getLocale()),
-            'metaTranslations'      => fn($query) => $query->where('language', app()->getLocale()),
-            'includes'              => fn($query) => $query->where('language', app()->getLocale()),
-            'specifications'        => fn($query) => $query->where('language', app()->getLocale()),
+            'tags.translations'     => fn($query) => $query->language(),
+            'includes'              => fn($query) => $query->orderBy('position', 'ASC'),
+            'translations'          => fn($query) => $query->language(),
+            'includes.translations' => fn($query) => $query->language(),
+            'specifications'        => fn($query) => $query->language(),
             'images',
         ]);
 
-        return new SuccessResource(
-            data: new PrivateBoatResource($privateBoat)
+        return $this->successGet(
+            new PrivateBoatResource($privateBoat)
         );
+    }
+
+    public function top()
+    {
+        $privateBoats = PrivateBoat::with([
+            'tags.translations'     => fn($query) => $query->language(),
+            'thumbnailImage',
+            'defaultVariant',
+            'pickupHarbor'
+        ])
+        ->orderBy('order_count', 'DESC')
+        ->limit(4)
+        ->get();
+
+        return PrivateBoatResource::collection($privateBoats);
     }
 }

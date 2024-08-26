@@ -12,12 +12,12 @@ class ActivityTranslationsResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray( $request): array
     {
         return [
             'id'          => $this->id,
             'language'    => $this->language,
-            'value'       => $this->translation,
+            'translation' => $this->translation,
             'created_at'  => $this->created_at,
             'updated_at'  => $this->updated_at
         ];

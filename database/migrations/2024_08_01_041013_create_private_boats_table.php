@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('slug');
             $table->unsignedBigInteger('pickup_harbor_id');
             $table->boolean('is_rented');
+            $table->boolean('is_promo')->default(0);
+            $table->unsignedBigInteger('order_count')->default(0);
             $table->boolean('active')->default(0);
             $table->timestamps();
             

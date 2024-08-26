@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Observers\AdminActionObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-#[ObservedBy([AdminActionObserver::class])]
 class PrivateBoat extends Model
 {
     use HasFactory, HasSlug;
@@ -41,19 +38,9 @@ class PrivateBoat extends Model
         return $this->hasMany(PrivateBoatTranslation::class);
     }
 
-    public function highlightTranslations(): HasMany
+    public function includes(): BelongsToMany
     {
-        return $this->hasMany(PrivateBoatTranslation::class, 'private_boat_id', 'id')->where('field', '=', 'highlight');
-    }
-
-    public function metaTranslations()
-    {
-        return $this->hasMany(PrivateBoatTranslation::class, 'private_boat_id', 'id')->where('field', 'meta');
-    }
-
-    public function includes(): HasMany
-    {
-        return $this->hasMany(PrivateBoatInclude::class, 'private_boat_id', 'id');
+        return $this->belongsToMany(ProductInclude::class, 'pivot_private_boat_includes', 'private_boat_id', 'include_id');
     }
 
     public function specifications(): HasMany

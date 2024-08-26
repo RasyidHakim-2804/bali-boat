@@ -13,18 +13,45 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        $names = [
-            'Private tour', '8 - 10 hours', 'Free lunch', 'Pickup Add-on Available'
+        $tags = [
+            [
+                'en' => 'Private tour',
+                'id' => 'Tur pribadi',
+            ],
+            [
+                'en' => '8 - 10 hours',
+                'id' => '8 - 10 jam',
+            ],
+            [
+                'en' => 'Free lunch',
+                'id' => 'Makan siang gratis',
+            ],
+            [
+                'en' => 'Pickup Add-on Available',
+                'id' => 'Tambahan penjemputan tersedia',
+            ],
         ];
 
         $id = 1;
-        foreach ($names as $name) {
+
+        foreach ($tags as $tag) {
             DB::table('tags')->insert([
                 'id'         => $id,
-                'name'       => $name,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
+
+            foreach ($tag as $lang => $value) {
+                DB::table('tag_translations')->insert([
+                    'field'         => 'name',
+                    'translation'   => $value,
+                    'language'      => $lang,
+                    'tag_id'        => $id,
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]);
+            }
+
             $id++;
         }
     }

@@ -44,29 +44,20 @@ class ActivityRequest extends FormRequest
             'highlight'         => ['required', $arrayLanguage],
             'highlight.*'       => 'required|string',
 
-            'description'         => ['required', $arrayLanguage],
-            'description.*'       => 'required|string',
+            'description'       => ['required', $arrayLanguage],
+            'description.*'     => 'required|string',
 
             'includes'          => 'required|array',
-            'includes.*'        => ['required', $arrayLanguage],
-            'includes.*.*'      => 'required|string',
+            'includes.*'        => 'required|exists:product_includes,id',
 
             'excludes'          => 'required|array',
-            'excludes.*'        => ['required', $arrayLanguage],
-            'excludes.*.*'      => 'required|string',
+            'excludes.*'        => 'required|exists:product_excludes,id',
 
-            'itinararies'                   => 'required|array',
-            'itinararies.*'                 => ['required', $arrayLanguage],
-            'itinararies.*.*'               => 'required|array:type,title,description',
-            'itinararies.*.*.type'          => ['required','string', Rule::in(ActivityItinerary::TYPE)],
-            'itinararies.*.*.title'         => 'required|string',
-            'itinararies.*.*.description'   => 'required|string',
+            'itineraries'       => 'required|array',
+            'itineraries.*'     => 'required|exists:product_itineraries,id',
         ];
 
         foreach (Language::code() as $lang) {
-            $rule['includes.*.' . $lang]    = 'required';
-            $rule['excludes.*.' . $lang]    = 'required';
-            $rule['itinararies.*.' . $lang] = 'required';
             $rule['highlight.' . $lang]     = 'required';
             $rule['description.' . $lang]   = 'required';
         }

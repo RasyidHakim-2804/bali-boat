@@ -4,74 +4,100 @@ namespace App\Http\Controllers\Api\V1\Tag;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tag\TagRequest;
-use App\Http\Resources\Common\SuccessResource;
-use App\Http\Resources\Tag\TagResource;
+use App\Http\Resources\Tag\AdminDetailTagResource;
+use App\Http\Resources\Tag\ListTagResource;
 use App\Models\Tag;
-use App\Services\Admin\AdminPermissionService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminTagController extends Controller
 {
-    private $permissionService;
+    use JsonResponsesTrait;
+
+    protected $permissionService;
 
     public function __construct()
     {
-        $this->permissionService = new AdminPermissionService('tag');
+        // $this->permissionService = (new AdminPermissionService('article'));
     }
 
     public function index()
     {
-        return TagResource::collection(Tag::paginate(25));
+        $tags = Tag::with([
+            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+        ])->paginate(25);
+
+        return ListTagResource::collection($tags);
     }
 
     public function all()
     {
-        return TagResource::collection(Tag::all());
+        return ListTagResource::collection(Tag::all());
     }
 
     public function show(Tag $tag)
     {
-        return new SuccessResource(
-            data: new TagResource($tag)
+        $tag->load('translations');
+
+        return $this->successGet(
+            new AdminDetailTagResource($tag)
         );
     }
 
     public function store(TagRequest $request)
     {
-        $tag       = new Tag();
-        $tag->name = $request->name;
-        $tag->save();
+        DB::transaction(function() use ($request) {
 
-        return new SuccessResource(201);
+            $tag = new Tag();
+            $tag->save();
+            
+            foreach ($request->validated('name') as $lang => $name) {
+                $this->setTranslations($tag, $lang, 'name', $name);
+            }
+        });
+
+        return $this->successStore();
     }
 
-    public function update(TagRequest $request, Tag $tag)
+    public function update(Tag $tag, TagRequest $request)
     {
-        $tag->name = $request->name;
-        $tag->save();
+        DB::transaction(function() use ($request, $tag) {
+            
+            $tag->save();
+            
+            $this->setTranslation($tag, $request->validated());
+        });
 
-        return new SuccessResource();
+        return $this->successResponse();
     }
 
     public function destroy(Tag $tag)
     {
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
-            
-            $tag->rentals()->detach();
+        
+            $tag->privateBoats()->detach();
+            $tag->activities()->detach();
             $tag->delete();
-            
+
             DB::commit();
 
-            return new SuccessResource();
-        
         } catch (\Throwable $th) {
-            
-            DB::rollBack();
-
             throw $th;
         }
+    }
 
+    // Private function
+
+    protected function setTranslations(Tag $tag, $lang, $field, $translation)
+    {
+        $tagTranslation = $tag->translations()->where('language',$lang)->where('field', $field)->firstOrNew();
+
+        $tagTranslation->tag_id   = $tag->id;
+        $tagTranslation->language     = $lang;
+        $tagTranslation->field        = $field;
+        $tagTranslation->translation  = $translation;
+        $tagTranslation->save();
     }
 }
-

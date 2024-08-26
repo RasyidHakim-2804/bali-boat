@@ -9,9 +9,8 @@ use App\Http\Requests\Api\Admin\ForgetPassword\VerifyForgetAdminPasswordPinReque
 use App\Mail\Admin\ForgetAdminPasswordMail;
 use App\Models\Admin;
 use App\Models\ForgetAdminPasswordReset;
+use App\Notifications\Admin\ForgetAdminPasswordNotification;
 use App\Traits\JsonResponsesTrait;
-use Illuminate\Support\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -44,7 +43,8 @@ class ForgetAdminPasswordController extends Controller
 
             $forgetPasswordReset->save();
 
-            $this->sendEmail($admin, $pin);
+            // $this->sendEmail($admin, $pin);
+            $admin->notify(new ForgetAdminPasswordNotification($admin->first_name, $pin));
 
             DB::commit();
 

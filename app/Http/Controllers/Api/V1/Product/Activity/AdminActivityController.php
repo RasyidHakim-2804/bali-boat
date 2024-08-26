@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Api\V1\Product\Activity;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Product\Activity\ActivityRequest;
 use App\Http\Resources\Common\SuccessResource;
-use App\Http\Resources\Product\Activity\AdminActivityResource;
+use App\Http\Resources\Product\Activity\AdminActivityDetailResource;
+use App\Http\Resources\Product\Activity\AdminActivityListResource;
 use App\Models\Activity;
 use App\Services\Admin\AdminPermissionService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminActivityController extends Controller
 {
+    use JsonResponsesTrait;
+
     protected $permissionService;
 
     public function __construct()
@@ -25,24 +29,23 @@ class AdminActivityController extends Controller
             'defaultVariant'
         ])->paginate(25);
 
-        return AdminActivityResource::collection($activities);
+        return AdminActivityListResource::collection($activities);
     }
 
     public function show(Activity $activity)
     {
         $activity = $activity->load([
-            'tags',
-            'location', 
-            'highlightTranslations',
-            'descriptionTranslations',
-            'includes',
-            'excludes',
-            'itinararies',
+            'location',
+            'translations',
+            'tags.translations'         => fn($query) => $query->language(),
+            'includes.translations'     => fn($query) => $query->language(),
+            'excludes.translations'     => fn($query) => $query->language(),
+            'itineraries.translations'  => fn($query) => $query->field('title')->language(),
             'defaultVariant'
         ]);
-
-        return new SuccessResource(
-            data: new AdminActivityResource($activity)
+        
+        return $this->successGet(
+            new AdminActivityDetailResource($activity)
         );
     }
 
@@ -59,11 +62,11 @@ class AdminActivityController extends Controller
             $activity->save();
 
             $activity->tags()->attach($request->tags);
+            $activity->includes()->attach($this->generatePosition($request->includes));
+            $activity->excludes()->attach($this->generatePosition($request->excludes));
+            $activity->itineraries()->attach($this->generatePosition($request->itineraries));
 
-            $this->setInclude($request->includes, $activity);
-            $this->setExclude($request->excludes, $activity);
             $this->setPrice($activity, $request);
-            $this->setItineraries($activity, $request->itinararies);
             
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -75,7 +78,7 @@ class AdminActivityController extends Controller
 
             DB::commit();
 
-            return new SuccessResource(201);
+            return $this->successStore();
 
         } catch (\Throwable $th) {
             
@@ -97,11 +100,11 @@ class AdminActivityController extends Controller
             $activity->save();
 
             $activity->tags()->sync($request->tags);
+            $activity->includes()->sync($this->generatePosition($request->includes));
+            $activity->excludes()->sync($this->generatePosition($request->excludes));
+            $activity->itineraries()->sync($this->generatePosition($request->itineraries));
 
-            $this->setInclude($request->includes, $activity);
-            $this->setExclude($request->excludes, $activity);
             $this->setPrice($activity, $request);
-            $this->setItineraries($activity, $request->itinararies);
             
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -113,7 +116,7 @@ class AdminActivityController extends Controller
 
             DB::commit();
 
-            return new SuccessResource();
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             
@@ -132,58 +135,16 @@ class AdminActivityController extends Controller
     // protected function //
     ////////////////////////
 
-    protected function setInclude($includesRequest, Activity $activity)
+    private function generatePosition($attributes)
     {
         $position = 1;
-        foreach ($includesRequest as $array) {
-            foreach ($array as $lang => $value) {
-                $include = $activity->includes()->language($lang)->where('position', '=', $position)->firstOrNew();
-                $include->activity_id = $activity->id;
-                $include->position    = $position;
-                $include->value       = $value;
-                $include->language    = $lang;
-                $include->save();
-            }
+
+        foreach ($attributes as $attribute_id) {
+            $result[$attribute_id] = [ 'position' => $position];
             $position++;
         }
-        $activity->includes()->where('position', '>', $position)->delete();
-    }
 
-    protected function setExclude($excludesRequest, Activity $activity)
-    {
-        $position = 1;
-        foreach ($excludesRequest as $array) {
-            foreach ($array as $lang => $value) {
-                $exclude = $activity->excludes()->language($lang)->where('position', '=', $position)->firstOrNew();
-                $exclude->activity_id = $activity->id;
-                $exclude->position    = $position;
-                $exclude->value       = $value;
-                $exclude->language    = $lang;
-                $exclude->save();
-            }
-            $position++;
-        }
-        $activity->excludes()->where('position', '>', $position)->delete();
-    }
-
-    protected function setItineraries(Activity $activity, $itinerariesRequest)
-    {
-        $position = 1;
-        foreach ($itinerariesRequest as $array) {
-            foreach ($array as $lang => $value) {
-                $itinerary = $activity->itinararies()->language($lang)->where('position', '=', $position)->firstOrNew();
-                $itinerary->activity_id = $activity->id;
-                $itinerary->language    = $lang;
-                $itinerary->position    = $position;
-                $itinerary->type        = $value['type'];
-                $itinerary->title       = $value['title'];
-                $itinerary->description = $value['description'];
-                $itinerary->save();
-
-            }
-            $position++;
-        }
-        $activity->itinararies()->where('position', '>', $position)->delete();
+        return $result;
     }
 
     protected function setTranslations(Activity $activity, $lang, $field, $translation)

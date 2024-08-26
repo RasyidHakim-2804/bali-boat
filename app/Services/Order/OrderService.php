@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Services\Order;
+
+use App\Models\Order;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
+class OrderService
+{
+    public function create($request, $products, $variants, $user, $promo)
+    {
+        $promoAmount    = 0;
+        $totalPurchased = $this->calculateTotalPurchased($request, $variants);
+
+        if ($promo) $promoAmount = $this->calculatePromoAmount($totalPurchased, $promo);
+
+        $totalPurchasedAfterPromo = $promoAmount - $promoAmount;
+
+        if ($totalPurchasedAfterPromo < 0) $totalPurchasedAfterPromo = 0;
+
+        $grandTotalPurchased = $totalPurchasedAfterPromo;
+
+        $order                                  = new Order();
+        $order->user_id                         = $user->id;
+        $order->uuid                            = $this->generateUuid();
+        $order->promo_amount                    = $promoAmount;
+        $order->promo_id                        = $promo->id;
+        $order->total_purchased                 = $totalPurchased['idr'];
+        $order->grand_total_purchased           = $grandTotalPurchased;
+        $order->status                          = 'waiting_for_payment';
+
+        $order->save();
+
+        Log::channel('order')->info(PHP_EOL . '' . PHP_EOL .'New Order'. PHP_EOL .'' . $order);
+
+        return $order;
+    }
+
+    protected function calculateTotalPurchased($request, $variantsData)
+    {
+        $totalPurchased = $totalUsdPurchased = $totalEurPurchased = $totalJpyPurchased = $totalCnyPurchased = 0;
+
+        foreach ($request->products as $key => $product) {
+            $totalPurchased     = $totalPurchased + ($product['quantity'] * $variantsData[$key]->price);
+            $totalUsdPurchased  = $totalUsdPurchased + ($product['quantity'] * $variantsData[$key]->usd_price);
+            $totalEurPurchased  = $totalEurPurchased + ($product['quantity'] * $variantsData[$key]->eur_price);
+            $totalJpyPurchased  = $totalJpyPurchased + ($product['quantity'] * $variantsData[$key]->jpy_price);
+            $totalCnyPurchased  = $totalCnyPurchased + ($product['quantity'] * $variantsData[$key]->cny_price);
+        }
+
+        return [
+            'idr'   => $totalPurchased,
+            'usd'   => $totalUsdPurchased,
+            'eur'   => $totalEurPurchased,
+            'jpy'   => $totalJpyPurchased,
+            'cny'   => $totalCnyPurchased
+        ];
+    }
+
+    protected function calculateTotalAdditionalPurchased($request, $additionalsData)
+    {
+        $totalPurchased = $totalUsdPurchased = $totalEurPurchased = $totalJpyPurchased = $totalCnyPurchased = 0;
+
+        if (isset($request->additionals)) {
+            foreach ($request->additionals as $key => $additional) {
+                $additionalData  = $additionalsData[$key]->additionalData;
+
+                $totalPurchased     = $totalPurchased + ($additional['quantity'] * $additionalData->price);
+                $totalUsdPurchased  = $totalUsdPurchased + ($additional['quantity'] * $additionalData->usd_price);
+                $totalEurPurchased  = $totalEurPurchased + ($additional['quantity'] * $additionalData->eur_price);
+                $totalJpyPurchased  = $totalJpyPurchased + ($additional['quantity'] * $additionalData->jpy_price);
+                $totalCnyPurchased  = $totalCnyPurchased + ($additional['quantity'] * $additionalData->cny_price);
+            }
+        }
+
+        return [
+            'idr'   => $totalPurchased,
+            'usd'   => $totalUsdPurchased,
+            'eur'   => $totalEurPurchased,
+            'jpy'   => $totalJpyPurchased,
+            'cny'   => $totalCnyPurchased
+        ];
+    }
+
+    protected function calculatePromoAmount($totalPurchased, $promo)
+    {
+        $promoAmount = $promo->amount;
+
+        if ($promo->type == 'percentage') {
+            $promoAmount = ($totalPurchased * $promo->amount)/100;
+        }
+
+        if (($promo->type == 'fixed') && ($promo->amount > $totalPurchased))
+            $promoAmount = $totalPurchased;
+        
+        $promoAmount = floatval($promoAmount);
+
+        return $promoAmount;
+    }
+
+    protected function generateUuid()
+    {
+        $sameUuid = 1;
+
+        while ($sameUuid > 0) {
+            $uuid     = Str::random(15);
+            $sameUuid = Order::where('uuid', $uuid)->count();
+        }
+        
+        return $uuid;
+    }
+    
+}

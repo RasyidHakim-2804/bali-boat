@@ -1,0 +1,299 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Order;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Order\StoreUserOrderRequest;
+use App\Http\Resources\Order\ListOrderResource;
+use App\Http\Resources\Order\OrderResource;
+use App\Models\FastBoatSchedule;
+use App\Models\FastBoatScheduleVariant;
+use App\Models\Order;
+use App\Models\Promo;
+use App\Models\User;
+use App\Notifications\Order\OrderCreated;
+use App\Notifications\Order\OrderCreatedNotification;
+use App\Services\Order\OrderDetailService;
+use App\Services\Order\OrderRefundService;
+use App\Services\Order\OrderRegistrationService;
+use App\Services\Order\OrderService;
+use App\Services\Payment\PaymentService;
+use App\Traits\JsonResponsesTrait;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Request;
+
+class UserOrderController extends Controller
+{
+    use JsonResponsesTrait;
+
+    protected $products;
+
+    protected $variants;
+
+    protected $totalProductQuantity;
+
+    public function index(User $user)
+    {
+        return ListOrderResource::collection(Order::where('user_id', $user->id)->with('details')->latest()->paginate(25));
+    }
+    
+    public function show(User $user, Order $order)
+    {
+        $order = new OrderResource($order);
+
+        return $this->successGet($order);
+    }
+    
+    public function store(StoreUserOrderRequest $request, User $user)
+    {
+        $user = request()->user();
+
+        // Validation
+        $this->setGlobalVariable($request);
+
+        $this->checkProductAvailability($request);
+
+        $this->checkFormValidity($request);
+
+        $this->checkFormQuantity($request);
+
+        DB::beginTransaction();
+        try {
+            $promo = null;
+        
+            if (isset($request->promo_uuid)) $promo = Promo::where('uuid', $request->promo_uuid)->where('uuid', '!=', null)->first();
+            
+            if (!$this->verifyPromo($promo)) return $this->errorValidationResponse('promo', 'Promo already used.');
+
+            // Create order
+            $order = (new OrderService)->create($request, $this->products, $this->variants, $user, $promo);
+
+            (new OrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
+
+            (new OrderRegistrationService)->create($order->id, $request->forms);
+
+            $responseData = ['order_uuid' => $order->uuid];
+
+            (new PaymentService)->prepare()->pay($order);
+
+            $responseData['payment_url'] = $order->payment->url;
+
+            $this->sendEmail($order);
+
+            // Return result
+
+            DB::commit();
+
+            return $this->successStoreWithData($responseData);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::channel('order')->info(PHP_EOL . '' . PHP_EOL .'Error New Order (unlogged user)'. PHP_EOL .'' . $e->getMessage());
+
+            // return $e;
+            return $e;
+        }
+    }
+
+    public function cancel(User $user, Order $order)
+    {
+        DB::beginTransaction();
+        try {
+            if ($order->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+
+            $order->status = 'canceled';
+
+            $order->save();
+
+            (new PaymentService)->prepare()->expire($order);
+
+            DB::commit();
+
+            return $this->successStore();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+
+    public function refund(Request $request, User $user, Order $order)
+    {
+        if ($order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+
+        if (!$order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+
+        DB::beginTransaction();
+        try {
+            (new OrderRefundService)->refund($order, $request);
+
+            $order->status = 'refunding';
+
+            $order->save();
+
+            DB::commit();
+
+            return $this->successStore();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+    
+    protected function setGlobalVariable($request)
+    {
+        $this->totalProductQuantity = 0;
+        
+        foreach ($request->products as $key => $product) {
+            $this->products[$key] = FastBoatSchedule::where('id', $product['id'])->first();
+            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->first();
+
+            $this->totalProductQuantity = $this->totalProductQuantity + $product['quantity'];
+        }
+    }
+    
+    protected function checkProductAvailability($request)
+    {
+        foreach ($request->products as $key => $product) {
+            if (($this->products[$key]->is_varied == 1) && (!isset($this->variants[$key]))) {
+                if (config('app.locale') == 'id') return abort(422, "Varian produk " . $key + 1 . " wajib diisi.");
+
+                return abort(422, "The product variant " . ($key + 1) .  " is required.");
+            }
+    
+            $dataProduct = $this->products[$key];
+    
+            if (isset($this->variants[$key])) $dataProduct = $this->variants[$key];
+    
+            if ($dataProduct->min_order > $product['quantity']) {
+                if (config('app.locale') == 'id') return abort(422, "Jumlah produk " . $key + 1 . " dibawah dari minimum order.");
+
+                return abort(422, "The product " . ($key + 1) .  " quantity should exceeded min order.");
+            }
+        }
+    }
+
+    protected function checkFormQuantity($request)
+    {
+        foreach ($request->products as $key => $product) {
+            $countCheck = 0;
+
+            foreach ($request->forms as $key2 => $form) {
+                $check = 0;
+
+                if (isset($product['variant_id'])) {
+                    // $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['activity_date'] == $product['activity_date'])))
+                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])))
+                        ? 1 : 0;
+                } else {
+                    // $check = ($form['product_id'] == $product['id']  && (($form['activity_date'] == $product['activity_date'])))
+                    $check = ($form['product_id'] == $product['id'])
+                        ? 1 : 0;
+                }
+
+                $countCheck = $countCheck + $check;
+            }
+
+            $personQty = $this->products[$key]->person_qty;
+
+            if (isset($this->variants[$key])) $personQty = $this->variants[$key]->person_qty;
+
+            if ($countCheck != ($product['quantity'] * $personQty)) {
+                if (config('app.locale') == 'id') return abort(422, "Jumlah produk " . $key + 1 . " tidak sama dengan jumlah formulir terkait.");
+                
+                return abort(422, "The quantity of product " . ($key + 1) .  " not equal to the form quantity.");
+            }
+
+            // if ($countCheck != $product['quantity']) return abort(422, "The quantity of product " . ($key + 1) .  " not equal to the form quantity.");
+        }
+    }
+
+    protected function checkFormPic($request)
+    {
+        $checkCount = 0;
+
+        foreach ($request->forms as $key2 => $form) {
+            if ($form['is_pic'] == 1) $checkCount = $checkCount + 1;
+        }
+
+        if ($checkCount == 0) {
+            if (config('app.locale') == 'id') return abort(422, "PIC untuk formulir wajib diisi.");
+            
+            return abort(422, 'The pic form not found.');
+        }
+
+        if ($checkCount > 1) {
+            if (config('app.locale') == 'id') return abort(422, "PIC untuk formulir wajib hanya 1.");
+
+            return abort(422, 'The pic form is duplicated.');
+        }
+    }
+
+    protected function checkFormValidity($request)
+    {
+        foreach ($request->forms as $key => $form) {
+            $productParent = array_filter($request->products, function($product) use($form) {
+                return $product['id'] == $form['product_id'];
+            });
+
+            if ((isset($productParent[0]['variant_id'])) && (!isset($form['variant_id']))) {
+                if (config('app.locale') == 'id') return abort(422, "Varian produk pada formulir ' . $key + 1 . ' wajib diisi.");
+
+                return abort(422, 'The forms ' . $key + 1 . ' variant_id is required.');
+            }
+        }
+    }
+    
+    protected function calculateTotalPurchased($products)
+    {
+        $totalPurchased = 0;
+        
+        foreach ($products as $key => $product) {
+            $productPrice = $this->products[$key]->price;
+            if (isset($this->variants[$key]))  $productPrice = $this->variants[$key]->price;
+            $totalProductPurchased = ($product['quantity'] * $productPrice);
+            $totalPurchased        = $totalPurchased + $totalProductPurchased;
+        }
+        
+        return $totalPurchased;
+    }
+    
+    protected function sendEmail($order)
+    {
+        $user = request()->user();
+        
+        $data                   = [];
+        $data['language']       = $user->language;
+        $data['first_name']     = $user->first_name;
+        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
+        $data['payment_url']    = $order->payment->url;
+        
+        Notification::send(new OrderCreatedNotification($data));
+    }
+
+    // protected function sendAdminEmail($order)
+    // {
+    //     $email = env('MAIL_FROM_ADDRESS');
+        
+    //     $data                         = [];
+    //     $data['first_name']           = 'Admin';
+    //     $data['order_url']            = env('FRONTEND_URL') . '/admin/orders/' . $order->uuid . '/detail';
+        
+    //     Mail::to($email)->send((new OrderNeedAdminConfirmationNotificationMail($data)));
+    // }
+    
+    protected function verifyPromo($promo)
+    {
+        if (!$promo) return true;
+        
+        $orderPromoAppliedCounted = 0;
+        
+        if ($promo->duration == 'once') $orderPromoAppliedCounted = Order::where('user_id', auth()->user()->id)->where('promo_id', $promo->id)->count();
+        
+        if ($orderPromoAppliedCounted > 0) return false;
+        
+        return true;
+    }
+}

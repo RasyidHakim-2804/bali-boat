@@ -35,7 +35,7 @@ class FastBoat extends Model
         return $this->hasMany(FastBoatSchedule::class, 'fast_boat_id', 'id');
     }
 
-    public function scopeActive(Builder $query, bool $active = true)
+    public function scopeActive($query, bool $active = true)
     {
         $query->where('is_active', '=', $active);
     }

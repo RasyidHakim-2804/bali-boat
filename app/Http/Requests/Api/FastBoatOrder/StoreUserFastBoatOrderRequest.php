@@ -26,14 +26,12 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'activity_date'         => 'required|date|after:yesterday',
-            'emergency_name'        => 'required|min:1',
-            'emergency_language'    => 'required|min:1',
-            'emergency_relation'    => 'required|min:1',
-            'emergency_phone_number'=> 'required|min:1',
-            'pickup_address'        => 'nullable|min:1',
-            'products'              => 'required|array',
-            'products.*.id'         => [
+            'activity_date'     => 'required|date|after:yesterday',
+            'pic_name'          => 'required|min:1',
+            'pic_email'         => 'required|min:1',
+            'pic_phone_number'  => 'required|min:1',
+            'products'          => 'required|array',
+            'products.*.id'     => [
                 'required',
                 function ($attr, $value, $fail) {
                     $count = collect($this->input('products'))
@@ -50,7 +48,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     
                     if ($count > 1) $fail(__('validation.distinct'));
                 },
-                Rule::exists('products', 'id')->where('is_saleable', 1)->whereNull('deleted_at'),
+                Rule::exists('fast_boat_schedules', 'id')->where('is_saleable', 1)->whereNull('deleted_at'),
             ],
             'products.*.variant_id' => [
                 'required',
@@ -67,29 +65,11 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                     if ($count->count() > 0) $fail(__('validation.distinct'));
                 },
                 
-                Rule::exists('product_variants', 'id')->where('product_id', $this->input('products.*.id'))->whereNull('deleted_at'),
+                Rule::exists('fast_boat_schedule_variants', 'id')->where('product_id', $this->input('products.*.id'))->where('passenger_type', $this->input('products.*.passenger_type'))->whereNull('deleted_at'),
             ],
+            'products.*.passenger_type' => 'required|in:local,foreign',
+            'products.*.age_type'       => 'required|in:adult,child',
             'products.*.quantity'       => 'required|integer|gt:0',
-
-            'additionals'            => 'array',
-            'additionals.*.id'       => [
-                'required',
-                function ($attr, $value, $fail) {
-                    $count = collect($this->input('additionals'))
-                        ->reject(function ($product) {
-                            return (!isset($product['id']));
-                        })
-                        ->filter(function ($product) use ($value) {
-                            return ($product['id'] === $value);
-                        })
-                        ->count();
-    
-                    if ($count < 1) $fail(__('validation.in'));
-                },
-                Rule::exists('product_additionals', 'id'),
-            ],
-            'additionals.*.quantity'        => 'required|integer|gt:0',
-
             'forms'                     => 'required|array',
             'forms.*.product_id'        => ['required',
                 function ($attr, $value, $fail) {
@@ -115,19 +95,11 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                 },
                 Rule::exists('product_variants', 'id')->where('product_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
             ],
-            'forms.*.name'                  => 'required|string|min:1',
-            'forms.*.date_of_birth'         => 'required|date|before:today',
-            'forms.*.gender'                => 'required|in:male,female,other',
-            'forms.*.nationality'           => 'required|min:1',
-            'forms.*.email'                 => 'required|email:dns,rfc',
-            'forms.*.phone'                 => 'required|min:1',
-            'forms.*.pickup_address'        => 'nullable|min:1',
-            'forms.*.diet_restriction'      => 'nullable|min:1',
-            'forms.*.shoes_size'            => 'nullable|numeric',
-            'forms.*.certification_level'   => 'nullable|min:1',
-            'forms.*.diving_association_number' => 'nullable|min:1',
-            'forms.*.last_dive'             => 'nullable|date|before:today',
-            'forms.*.is_pic'                => 'required|in:1,0',
+            'forms.*.name'              => 'required|string|min:1',
+            'forms.*.nationality'       => 'required|min:1',
+            'forms.*.age_type'          => ['required','in:local,foreign', Rule::when($this->input('forms.*.nationality') == 'indonesia', ['same:local'])],
+            'forms.*.age_type'          => 'required|in:adult,child',
+            'forms.*.is_itas_holder'    => 'required|boolean',
         ];
     }
 }

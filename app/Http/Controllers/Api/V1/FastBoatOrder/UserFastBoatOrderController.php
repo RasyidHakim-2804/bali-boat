@@ -11,10 +11,9 @@ use App\Models\FastBoatScheduleVariant;
 use App\Models\Promo;
 use App\Models\User;
 use App\Notifications\Order\OrderCreatedNotification;
-use App\Services\Order\OrderDetailService;
-use App\Services\Order\OrderRefundService;
-use App\Services\Order\OrderRegistrationService;
-use App\Services\Order\OrderService;
+use App\Services\FastBoatOrder\FastBoatOrderDetailService;
+use App\Services\FastBoatOrder\FastBoatOrderRegistrationService;
+use App\Services\FastBoatOrder\FastBoatOrderService;
 use App\Services\Payment\PaymentService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
@@ -66,11 +65,11 @@ class UserFastBoatOrderController extends Controller
             if (!$this->verifyPromo($promo)) return $this->errorValidationResponse('promo', 'Promo already used.');
 
             // Create order
-            $order = (new OrderService)->create($request, $this->products, $this->variants, $user, $promo);
+            $order = (new FastBoatOrderService)->create($request, $this->products, $this->variants, $user, $promo);
 
-            (new OrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
+            (new FastBoatOrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
 
-            (new OrderRegistrationService)->create($order->id, $request->forms);
+            (new FastBoatOrderRegistrationService)->create($order->id, $request->forms);
 
             $responseData = ['order_uuid' => $order->uuid];
 
@@ -119,26 +118,26 @@ class UserFastBoatOrderController extends Controller
 
     public function refund(Request $request, User $user, FastBoatOrder $fast_boat_order)
     {
-        if ($fast_boat_order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        // if ($fast_boat_order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        if (!$fast_boat_order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        // if (!$fast_boat_order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
-        DB::beginTransaction();
-        try {
-            (new OrderRefundService)->refund($fast_boat_order, $request);
+        // DB::beginTransaction();
+        // try {
+        //     (new OrderRefundService)->refund($fast_boat_order, $request);
 
-            $fast_boat_order->status = 'refunding';
+        //     $fast_boat_order->status = 'refunding';
 
-            $fast_boat_order->save();
+        //     $fast_boat_order->save();
 
-            DB::commit();
+        //     DB::commit();
 
-            return $this->successStore();
-        } catch (\Exception $e) {
-            DB::rollBack();
+        //     return $this->successStore();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
 
-            return $this->errorServer($e->getMessage());
-        }
+        //     return $this->errorServer($e->getMessage());
+        // }
     }
     
     protected function setGlobalVariable($request)
@@ -147,7 +146,7 @@ class UserFastBoatOrderController extends Controller
         
         foreach ($request->products as $key => $product) {
             $this->products[$key] = FastBoatSchedule::where('id', $product['id'])->first();
-            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->first();
+            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->where('passenger_type', $product['passenger_type'])->where('age_type', $product['age_type'])->first();
 
             $this->totalProductQuantity = $this->totalProductQuantity + $product['quantity'];
         }
@@ -184,7 +183,7 @@ class UserFastBoatOrderController extends Controller
 
                 if (isset($product['variant_id'])) {
                     // $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['activity_date'] == $product['activity_date'])))
-                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])))
+                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['passenger_type'] == $product['passenger_type'])) && (($form['age_type'] == $product['age_type'])))
                         ? 1 : 0;
                 } else {
                     // $check = ($form['product_id'] == $product['id']  && (($form['activity_date'] == $product['activity_date'])))
@@ -206,27 +205,6 @@ class UserFastBoatOrderController extends Controller
             }
 
             // if ($countCheck != $product['quantity']) return abort(422, "The quantity of product " . ($key + 1) .  " not equal to the form quantity.");
-        }
-    }
-
-    protected function checkFormPic($request)
-    {
-        $checkCount = 0;
-
-        foreach ($request->forms as $key2 => $form) {
-            if ($form['is_pic'] == 1) $checkCount = $checkCount + 1;
-        }
-
-        if ($checkCount == 0) {
-            if (config('app.locale') == 'id') return abort(422, "PIC untuk formulir wajib diisi.");
-            
-            return abort(422, 'The pic form not found.');
-        }
-
-        if ($checkCount > 1) {
-            if (config('app.locale') == 'id') return abort(422, "PIC untuk formulir wajib hanya 1.");
-
-            return abort(422, 'The pic form is duplicated.');
         }
     }
 

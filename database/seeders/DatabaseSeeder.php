@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // (new LanguageSeeder)->run();
-        // (new AdminSeeder)->run();
-        // (new HarborSeeder)->run();
-        // (new LocationSeeder)->run();
-        // (new TagSeeder)->run();
+        (new LanguageSeeder)->run();
+        (new AdminSeeder)->run();
+        (new HarborSeeder)->run();
+        (new LocationSeeder)->run();
+        (new TagSeeder)->run();
 
         // Product Atribute
         (new ProductIncludeWithTranslationSeeder)->run();
@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
         (new ProductItineraryWithTranslationSeeder)->run();
         
         // FastBoat
-        // (new FastBoatSeeder)->run();
-        // (new FastBoatScheduleSeeder)->run();
-        // (new FastBoatScheduleVariantSeeder)->run();
+        (new FastBoatSeeder)->run();
+        (new FastBoatScheduleSeeder)->run();
+        (new FastBoatScheduleVariantSeeder)->run();
 
         // //PrivateBoat
         (new PrivateBoatSeeder)->run();

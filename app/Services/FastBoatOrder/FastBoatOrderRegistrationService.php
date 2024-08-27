@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\FastBoatOrder;
 
-use App\Models\OrderForm;
+use App\Models\FastBoatOrderForm;
 
-class OrderRegistrationService
+class FastBoatOrderRegistrationService
 {
     public function create($orderId, $registrations)
     {
         foreach ($registrations as $key => $registration) {
-            $orderRegistration           = new OrderForm();
+            $orderRegistration           = new FastBoatOrderForm();
             $orderRegistration->order_id = $orderId;
+
+            if ($registrations->nationality == 'indonesia')  $orderRegistration->is_local = 1;
 
             $orderRegistration->fill($registration);
             

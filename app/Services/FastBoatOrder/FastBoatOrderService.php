@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\FastBoatOrder;
 
+use App\Models\FastBoatOrder;
 use App\Models\Order;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
-class OrderService
+class FastBoatOrderService
 {
     public function create($request, $products, $variants, $user, $promo)
     {
@@ -21,7 +22,7 @@ class OrderService
 
         $grandTotalPurchased = $totalPurchasedAfterPromo;
 
-        $order                                  = new Order();
+        $order                                  = new FastBoatOrder();
         $order->user_id                         = $user->id;
         $order->uuid                            = $this->generateUuid();
         $order->promo_amount                    = $promoAmount;
@@ -105,7 +106,7 @@ class OrderService
 
         while ($sameUuid > 0) {
             $uuid     = Str::random(15);
-            $sameUuid = Order::where('uuid', $uuid)->count();
+            $sameUuid = FastBoatOrder::where('uuid', $uuid)->count();
         }
         
         return $uuid;

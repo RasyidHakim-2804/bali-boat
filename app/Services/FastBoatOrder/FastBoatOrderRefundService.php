@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Order;
+namespace App\Services\FastBoatOrder;
 
 use App\Models\OrderRefund;
 use App\Services\Payment\PaymentPayoutService;

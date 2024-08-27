@@ -183,7 +183,7 @@ class UserFastBoatOrderController extends Controller
 
                 if (isset($product['variant_id'])) {
                     // $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['activity_date'] == $product['activity_date'])))
-                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['passenger_type'] == $product['passenger_type'])) && (($form['age_type'] == $product['age_type'])))
+                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['passenger_type'] == $this->variants[$key]->passenger_type)) && (($form['age_type'] == $this->variants[$key]->age_type)))
                         ? 1 : 0;
                 } else {
                     // $check = ($form['product_id'] == $product['id']  && (($form['activity_date'] == $product['activity_date'])))

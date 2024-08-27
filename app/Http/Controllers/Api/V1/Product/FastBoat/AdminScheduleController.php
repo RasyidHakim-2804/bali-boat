@@ -57,7 +57,7 @@ class AdminScheduleController extends Controller
             $schedule->arrival_harbor_id     = $request->arrival_harbor_id;
             $schedule->departure_time        = $request->departure_time;
             $schedule->arrival_time          = $request->arrival_time;
-            $schedule->active                = $request->active;
+            $schedule->is_active             = $request->is_active;
             $schedule->save();
 
             $this->setVariant($schedule, $request);
@@ -87,7 +87,7 @@ class AdminScheduleController extends Controller
             $schedule->arrival_harbor_id     = $request->arrival_harbor_id;
             $schedule->departure_time        = $request->departure_time;
             $schedule->arrival_time          = $request->arrival_time;
-            $schedule->active                = $request->active;
+            $schedule->is_active             = $request->is_active;
             $schedule->save();
 
             $this->setVariant($schedule, $request);

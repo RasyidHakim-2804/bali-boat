@@ -46,11 +46,11 @@ class AdminFastBoatController extends Controller
         try {
             DB::beginTransaction();
 
-            $fastBoat         = new FastBoat();
-            $fastBoat->image  = $this->setImage($fastBoat, $request->image);
-            $fastBoat->name   = $request->name;
-            $fastBoat->active = $request->active;
-            $fastBoat->rating = $request->rating;
+            $fastBoat            = new FastBoat();
+            $fastBoat->image     = $this->setImage($fastBoat, $request->image);
+            $fastBoat->name      = $request->name;
+            $fastBoat->is_active = $request->is_active;
+            $fastBoat->rating    = $request->rating;
             $fastBoat->save();
 
             DB::commit();
@@ -70,9 +70,9 @@ class AdminFastBoatController extends Controller
         try {
             DB::beginTransaction();
 
-            $fastBoat->name   = $request->name;
-            $fastBoat->active = $request->active;
-            $fastBoat->rating = $request->rating;
+            $fastBoat->name      = $request->name;
+            $fastBoat->is_active = $request->is_active;
+            $fastBoat->rating    = $request->rating;
             
             if ($request->image != null) {
                 $fastBoat->image = $this->setImage($fastBoat, $request->image);

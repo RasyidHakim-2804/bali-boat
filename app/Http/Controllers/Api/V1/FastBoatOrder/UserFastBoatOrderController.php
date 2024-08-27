@@ -146,7 +146,7 @@ class UserFastBoatOrderController extends Controller
         
         foreach ($request->products as $key => $product) {
             $this->products[$key] = FastBoatSchedule::where('id', $product['id'])->first();
-            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->where('passenger_type', $product['passenger_type'])->where('age_type', $product['age_type'])->first();
+            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->first();
 
             $this->totalProductQuantity = $this->totalProductQuantity + $product['quantity'];
         }

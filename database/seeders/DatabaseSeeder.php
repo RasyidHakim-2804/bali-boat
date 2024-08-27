@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // (new AdminSeeder)->run();
         // (new HarborSeeder)->run();
         // (new LocationSeeder)->run();
-        (new TagSeeder)->run();
+        // (new TagSeeder)->run();
 
         // Product Atribute
         (new ProductIncludeWithTranslationSeeder)->run();

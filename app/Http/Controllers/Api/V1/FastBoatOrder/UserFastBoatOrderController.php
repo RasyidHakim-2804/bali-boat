@@ -50,8 +50,6 @@ class UserFastBoatOrderController extends Controller
         // Validation
         $this->setGlobalVariable($request);
 
-        return $this->variants;
-
         $this->checkProductAvailability($request);
 
         $this->checkFormValidity($request);
@@ -195,12 +193,8 @@ class UserFastBoatOrderController extends Controller
 
                 $countCheck = $countCheck + $check;
             }
-
-            $personQty = $this->products[$key]->person_qty;
-
-            if (isset($this->variants[$key])) $personQty = $this->variants[$key]->person_qty;
-
-            if ($countCheck != ($product['quantity'] * $personQty)) {
+            
+            if ($countCheck != $product['quantity']) {
                 if (config('app.locale') == 'id') return abort(422, "Jumlah produk " . $key + 1 . " tidak sama dengan jumlah formulir terkait.");
                 
                 return abort(422, "The quantity of product " . ($key + 1) .  " not equal to the form quantity.");

@@ -81,7 +81,13 @@ class AdminItineraryController extends Controller
 
             $itinerary->save();
             
-            $this->setTranslation($itinerary, $request->validated());
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($itinerary, $lang, 'description', $description);
+            }
+
+            foreach ($request->validated('title') as $lang => $title) {
+                $this->setTranslations($itinerary, $lang, 'title', $title);
+            }
         });
 
         return $this->successResponse();

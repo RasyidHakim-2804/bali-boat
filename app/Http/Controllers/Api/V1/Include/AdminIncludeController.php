@@ -65,7 +65,9 @@ class AdminIncludeController extends Controller
             
             $include->save();
             
-            $this->setTranslation($include, $request->validated());
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($include, $lang, 'description', $description);
+            }
         });
 
         return $this->successResponse();

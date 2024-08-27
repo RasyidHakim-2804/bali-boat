@@ -37,7 +37,7 @@ class FastBoat extends Model
 
     public function scopeActive(Builder $query, bool $active = true)
     {
-        $query->where('active', '=', $active);
+        $query->where('is_active', '=', $active);
     }
 
 }

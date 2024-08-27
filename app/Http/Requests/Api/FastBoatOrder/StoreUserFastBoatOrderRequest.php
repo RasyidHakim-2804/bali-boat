@@ -48,7 +48,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     
                     if ($count > 1) $fail(__('validation.distinct'));
                 },
-                Rule::exists('fast_boat_schedules', 'id')->where('active', 1),
+                Rule::exists('fast_boat_schedules', 'id')->where('is_saleable', 1)->whereNull('deleted_at'),
             ],
             'products.*.variant_id' => [
                 'required',
@@ -65,7 +65,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                     if ($count->count() > 0) $fail(__('validation.distinct'));
                 },
                 
-                Rule::exists('fast_boat_schedule_variants', 'id')->where('product_id', $this->input('products.*.id'))->where('passenger_type', $this->input('products.*.passenger_type')),
+                Rule::exists('fast_boat_schedule_variants', 'id')->where('fast_boat_schedule_id', $this->input('products.*.id'))->whereNull('deleted_at'),
             ],
             'products.*.quantity'       => 'required|integer|gt:0',
             'forms'                     => 'required|array',
@@ -91,7 +91,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
 
                     if ($count < 1) $fail(__('validation.in'));
                 },
-                Rule::exists('product_variants', 'id')->where('product_id', $this->input('forms.*.product_id')),
+                Rule::exists('fast_boat_schedule_variants', 'id')->where('fast_boat_schedule_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
             ],
             'forms.*.name'              => 'required|string|min:1',
             'forms.*.nationality'       => 'required|min:1',

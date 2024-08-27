@@ -28,10 +28,10 @@ class FastBoatRequest extends FormRequest
         }
         
         return [
-            'name'   => 'required|string|max:255',
-            'active' => 'required|boolean',
-            'rating' => 'required|numeric|min:0|max:5',
-            'image'  => $ruleImage,
+            'name'      => 'required|string|max:255',
+            'is_active' => 'required|boolean',
+            'rating'    => 'required|numeric|min:0|max:5',
+            'image'     => $ruleImage,
         ];
     }
 }

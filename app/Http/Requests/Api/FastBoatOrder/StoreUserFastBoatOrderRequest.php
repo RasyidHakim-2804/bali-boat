@@ -67,8 +67,6 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                 
                 Rule::exists('fast_boat_schedule_variants', 'id')->where('product_id', $this->input('products.*.id'))->where('passenger_type', $this->input('products.*.passenger_type'))->whereNull('deleted_at'),
             ],
-            'products.*.passenger_type' => 'required|in:local,foreign',
-            'products.*.age_type'       => 'required|in:adult,child',
             'products.*.quantity'       => 'required|integer|gt:0',
             'forms'                     => 'required|array',
             'forms.*.product_id'        => ['required',

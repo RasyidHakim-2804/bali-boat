@@ -22,14 +22,17 @@ class FastBoatOrderService
 
         $grandTotalPurchased = $totalPurchasedAfterPromo;
 
-        $order                                  = new FastBoatOrder();
-        $order->user_id                         = $user->id;
-        $order->uuid                            = $this->generateUuid();
-        $order->promo_amount                    = $promoAmount;
-        $order->promo_id                        = $promo?->id;
-        $order->total_purchased                 = $totalPurchased['idr'];
-        $order->grand_total_purchased           = $grandTotalPurchased;
-        $order->status                          = 'waiting_for_payment';
+        $order                          = new FastBoatOrder();
+        $order->user_id                 = $user->id;
+        $order->uuid                    = $this->generateUuid();
+        $order->promo_amount            = $promoAmount;
+        $order->promo_id                = $promo?->id;
+        $order->total_purchased         = $totalPurchased['idr'];
+        $order->grand_total_purchased   = $grandTotalPurchased;
+        $order->status                  = 'waiting_for_payment';
+        $order->pic_name                = $request->pic_name;
+        $order->pic_email               = $request->pic_email;
+        $order->pic_phone_number        = $request->pic_name;
 
         $order->save();
 

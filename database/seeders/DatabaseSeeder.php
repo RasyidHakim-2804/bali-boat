@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        (new LanguageSeeder)->run();
+        // (new LanguageSeeder)->run();
         // (new AdminSeeder)->run();
         // (new HarborSeeder)->run();
         // (new LocationSeeder)->run();

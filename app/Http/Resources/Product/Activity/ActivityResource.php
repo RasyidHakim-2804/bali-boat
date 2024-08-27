@@ -24,7 +24,7 @@ class ActivityResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'max_person'        => $this->max_person,
-            'active'            => $this->active,
+            'is_active'         => $this->is_active,
             'location'          => new LocationResource($this->whenLoaded('location')),
             'price'             => $this->defaultVariant->price,
             'created_at'        => $this->created_at,

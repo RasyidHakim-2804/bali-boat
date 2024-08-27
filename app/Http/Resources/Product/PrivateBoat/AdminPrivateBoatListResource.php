@@ -22,7 +22,7 @@ class AdminPrivateBoatListResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'is_rented'         => $this->is_rented,
-            'active'            => $this->active,
+            'is_active'         => $this->is_active,
             'is_promo'          => $this->is_promo,
             'order_count'       => $this->order_count,
             'price'             => $this->defaultVariant->price,

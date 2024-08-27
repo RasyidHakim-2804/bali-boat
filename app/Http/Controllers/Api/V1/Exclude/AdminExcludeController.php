@@ -65,7 +65,9 @@ class AdminExcludeController extends Controller
             
             $exclude->save();
             
-            $this->setTranslation($exclude, $request->validated());
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($exclude, $lang, 'description', $description);
+            }
         });
 
         return $this->successResponse();

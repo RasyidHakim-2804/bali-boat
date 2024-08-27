@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class AdminScheduleController extends Controller
 {
+    use JsonResponsesTrait;
+
     private $permissionService;
 
     public function __construct()
@@ -35,7 +37,9 @@ class AdminScheduleController extends Controller
     {
         $schedule = $schedule->load('variants');
 
-        return new ScheduleResource($schedule);
+        return $this->successGet(
+            new ScheduleResource($schedule)
+        );
     }
 
     /**
@@ -60,7 +64,7 @@ class AdminScheduleController extends Controller
 
             DB::commit();
 
-            return new SuccessResource(201);
+            return $this->successStore();
 
         } catch (\Throwable $th) {
             
@@ -90,7 +94,7 @@ class AdminScheduleController extends Controller
 
             DB::commit();
 
-            return new SuccessResource();
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             
@@ -105,12 +109,12 @@ class AdminScheduleController extends Controller
      */
     public function destroy(FastBoat $fastBoat, FastBoatSchedule $schedule)
     {
-        DB::transaction(function() use ($schedule) {
-            $schedule->variants()->delete();
-            $schedule->delete();
-        });
+        // DB::transaction(function() use ($schedule) {
+        //     $schedule->variants()->delete();
+        //     $schedule->delete();
+        // });
 
-        return new SuccessResource();
+        // return new SuccessResource();
     }
 
     public function setVariant(FastBoatSchedule $schedule, $request)

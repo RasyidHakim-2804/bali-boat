@@ -7,9 +7,20 @@ use App\Http\Requests\Api\Harbor\HarborRequest;
 use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Habor\HarborResource;
 use App\Models\Harbor;
+use App\Services\Admin\AdminPermissionService;
+use App\Traits\JsonResponsesTrait;
 
 class AdminHarborController extends Controller
 {
+    use JsonResponsesTrait;
+
+    protected $permissionService;
+
+    public function __construct()
+    {
+        // $this->permissionService = (new AdminPermissionService('article'));
+    }
+
     public function index()
     {
         $harbor = Harbor::paginate(25);
@@ -24,7 +35,9 @@ class AdminHarborController extends Controller
 
     public function show(Harbor $harbor)
     {
-        return new HarborResource($harbor);
+        return $this->successGet(
+            new HarborResource($harbor)
+        );
     }
 
     public function store(HarborRequest $request)
@@ -34,7 +47,7 @@ class AdminHarborController extends Controller
         
         $harbor->save();
 
-        return new SuccessResource(201);
+        return $this->successStore();
     }
 
     public function update(HarborRequest $request, Harbor $harbor)
@@ -43,7 +56,7 @@ class AdminHarborController extends Controller
 
         $harbor->save();
 
-        return new SuccessResource();
+        return $this->successResponse();
     }
 
     public function destroy(Harbor $harbor)

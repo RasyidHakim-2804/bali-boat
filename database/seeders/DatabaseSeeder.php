@@ -19,28 +19,33 @@ class DatabaseSeeder extends Seeder
         (new HarborSeeder)->run();
         (new LocationSeeder)->run();
         (new TagSeeder)->run();
+
+        // Product Atribute
+        (new ProductIncludeWithTranslationSeeder)->run();
+        (new ProductExcludeWithTranslationSeeder)->run();
+        (new ProductItineraryWithTranslationSeeder)->run();
         
         // FastBoat
         (new FastBoatSeeder)->run();
         (new FastBoatScheduleSeeder)->run();
         (new FastBoatScheduleVariantSeeder)->run();
 
-        //PrivateBoat
+        // //PrivateBoat
         (new PrivateBoatSeeder)->run();
-        (new PrivateBoatIncludeSeeder)->run();
+        (new PivotPrivateBoatIncludeSeeder)->run();
         (new PrivateBoatSpecificationSeeder)->run();
         (new PrivateBoatTranslationSeeder)->run();
         (new PrivateBoatVariantSeeder)->run();
         (new PivotTagPrivateBoatSeeder)->run();
 
-        //Activity
+        // //Activity
         (new ActivitySeeder)->run();
-        (new ActivityIncludeSeeder)->run();
-        (new ActivityExcludeSeeder)->run();
-        (new ActivityTranslationSeeder)->run();
         (new ActivityVariantSeeder)->run();
-        (new ActivityItinerarySeeder)->run();
+        (new ActivityTranslationSeeder)->run();
         (new PivotTagActivitySeeder)->run();
+        (new PivotActivityIncludeSeeder)->run();
+        (new PivotActivityExcludeSeeder)->run();
+        (new PivotActivityItinerarySeeder)->run();
 
         // (new ArticleCategorySeeder)->run();
         // (new ArticleSeeder)->run();

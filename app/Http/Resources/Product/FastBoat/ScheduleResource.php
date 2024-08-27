@@ -23,7 +23,7 @@ class ScheduleResource extends JsonResource
             'arrival_harbor_name'       => $this->arrivalHarbor->name,
             'departure_hartbor_name'    => $this->departureHarbor->name,
 
-            'fast_boat'     => new FastBoatResource($this->whenLoaded('fast_boat')),
+            'fast_boat'     => new FastBoatResource($this->whenLoaded('fastBoat')),
             'variants' => $this->whenLoaded('variants', function(){
                 return [
                     'local'   => ScheduleVariantResource::collection($this->variants->where('passenger_type', 'local')),

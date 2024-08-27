@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Tag;
 
+use App\Models\Language;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TagRequest extends FormRequest
@@ -21,8 +22,10 @@ class TagRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name'  =>'required|string|max:30'
-        ];
+        foreach (Language::code() as $lang) {
+            $rule['name.' . $lang]    = 'required|string|max:200';
+        }
+
+        return $rule;
     }
 }

@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Observers\AdminActionObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[ObservedBy([AdminActionObserver::class])]
 class Tag extends Model
 {
     use HasFactory;
 
+    public function translations(): HasMany
+    {
+        return $this->hasMany(TagTranslation::class, 'tag_id', 'id');
+    }
 }

@@ -14,8 +14,11 @@ use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 
 use App\Http\Controllers\Api\V1\Article\ArticleController;
+use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
+use App\Http\Controllers\Api\V1\Include\AdminIncludeController;
+use App\Http\Controllers\Api\V1\Itinerary\AdminItineraryController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\UserFastBoatOrderController;
@@ -42,8 +45,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
 |
 */
 
@@ -54,14 +57,11 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     // Public - FastBoat
     Route::get('/fast-boats', [FastBoatController::class, 'index']);
 
-    // Public - PrivateBoat
-    Route::get('/private-boats', [PrivateBoatController::class, 'search']);
-    Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
-
     // Public - FastBoat Schedule
     Route::get('/fast-boat-schedules', [FastBoatScheduleController::class, 'index']);
 
     // Public - Activity
+    Route::get('/top-activities', [ActivityController::class, 'top']);
     Route::get('/activities', [ActivityController::class, 'search']);
     Route::get('/activities/{activity:slug}', [ActivityController::class, 'show']);
 
@@ -76,7 +76,13 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::resource('/articles', ArticleController::class, ['only' => ['index', 'show']]);
     Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store']);
 
-    Route::prefix('/admins')->group(function () {
+    // Public - PrivateBoat
+    Route::get('/top-private-boats', [PrivateBoatController::class, 'top']);
+    Route::get('/private-boats', [PrivateBoatController::class, 'search']);
+    Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
+
+    //Admin routes
+    Route::prefix('admins')->middleware('verifyLanguage')->group(function (){
 
         // Admin - Login
         Route::post('/login', [AuthAdminController::class, 'login']);
@@ -124,6 +130,30 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/locations/{location}', [AdminLocationController::class, 'show']);
             Route::put('/locations/{location}', [AdminLocationController::class, 'update']);
             Route::delete('/locations/{location}', [AdminLocationController::class, 'destroy']);
+
+            // Admin - Include
+            Route::get('/includes', [AdminIncludeController::class, 'index']);
+            Route::post('/includes', [AdminIncludeController::class, 'store']);
+            Route::get('/includes-all', [AdminIncludeController::class, 'all']);
+            Route::get('/includes/{include}', [AdminIncludeController::class, 'show']);
+            Route::put('/includes/{include}', [AdminIncludeController::class, 'update']);
+            Route::delete('/includes/{include}', [AdminIncludeController::class, 'destroy']);
+
+            // Admin - Exclude
+            Route::get('/excludes', [AdminExcludeController::class, 'index']);
+            Route::post('/excludes', [AdminExcludeController::class, 'store']);
+            Route::get('/excludes-all', [AdminExcludeController::class, 'all']);
+            Route::get('/excludes/{exclude}', [AdminExcludeController::class, 'show']);
+            Route::put('/excludes/{exclude}', [AdminExcludeController::class, 'update']);
+            Route::delete('/excludes/{exclude}', [AdminExcludeController::class, 'destroy']);
+
+            // Admin - Itinerrary
+            Route::get('/itineraries', [AdminItineraryController::class, 'index']);
+            Route::post('/itineraries', [AdminItineraryController::class, 'store']);
+            Route::get('/itineraries-all', [AdminItineraryController::class, 'all']);
+            Route::get('/itineraries/{itinerary}', [AdminItineraryController::class, 'show']);
+            Route::put('/itineraries/{itinerary}', [AdminItineraryController::class, 'update']);
+            Route::delete('/itineraries/{itinerary}', [AdminItineraryController::class, 'destroy']);
 
             // Admin - Tag
             Route::get('/tags', [AdminTagController::class, 'index']);

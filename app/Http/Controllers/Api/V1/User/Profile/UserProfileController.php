@@ -17,44 +17,41 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        $user = new UserProfileResource(User::where('id', request()->user()->id)->firstOrFail());
 
-        return new UserProfileResource($user);
+        return $this->successGet($user);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UserUpdateRequest $request)
-    {
-        try {
-            DB::beginTransaction();
+    // public function update(UserUpdateRequest $request)
+    // {
+    //     try {
+    //         DB::beginTransaction();
 
-            /** @var User */
-            $user = auth()->user();
-            $user->first_name = $request->first_name;
-            $user->last_name  = $request->last_name;
+    //         /** @var User */
+    //         $user = auth()->user();
+    //         $user->first_name = $request->first_name;
+    //         $user->last_name  = $request->last_name;
             
-            if ($request->has('image')) {
-                $imageService = new ImageService($user);
-                $user->profile_image_url = $imageService->update($request->image)->path;
-            }
+    //         if ($request->has('image')) {
+    //             $imageService = new ImageService($user);
+    //             $user->profile_image_url = $imageService->update($request->image)->path;
+    //         }
             
-            $user->save();
+    //         $user->save();
             
-            DB::commit();
+    //         DB::commit();
 
-            return new SuccessResource();
+    //         return new SuccessResource();
 
-        } catch (\Throwable $th) {
+    //     } catch (\Throwable $th) {
             
-            DB::rollBack();
+    //         DB::rollBack();
 
-            if (isset($imageService)) {
-                $imageService->rollback();
-            }
+    //         if (isset($imageService)) {
+    //             $imageService->rollback();
+    //         }
 
-            throw $th;
-        }
-    }
+    //         throw $th;
+    //     }
+    // }
 }

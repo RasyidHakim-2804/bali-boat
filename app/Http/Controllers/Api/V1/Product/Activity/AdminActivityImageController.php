@@ -11,10 +11,13 @@ use App\Models\Activity;
 use App\Models\ActivityImage;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminActivityImageController extends Controller
 {
+    use JsonResponsesTrait;
+
     protected $permissionService;
 
     public function __construct()
@@ -45,8 +48,8 @@ class AdminActivityImageController extends Controller
 
             DB::commit();
 
-            return new SuccessResource(
-                data: new ActivityImageResource($activityImage)
+            return $this->successGet(
+                new ActivityImageResource($activityImage)
             );
 
         } catch (\Throwable $th) {
@@ -81,7 +84,7 @@ class AdminActivityImageController extends Controller
 
             DB::commit();            
 
-            return new SuccessResource();
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             

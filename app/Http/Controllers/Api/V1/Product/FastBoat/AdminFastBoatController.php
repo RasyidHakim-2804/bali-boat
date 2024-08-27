@@ -9,10 +9,13 @@ use App\Http\Resources\Product\FastBoat\AdminFastBoatResource;
 use App\Models\FastBoat;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminFastBoatController extends Controller
 {
+    use JsonResponsesTrait;
+
     protected $permissionService;
 
     public function __construct()
@@ -22,8 +25,8 @@ class AdminFastBoatController extends Controller
 
     public function index()
     {
-        return $fastBoat = FastBoat::with([
-            'schedules',
+        $fastBoat = FastBoat::with([
+            'schedules' => fn($query) => $query->limit(3),
         ])->withCount('schedules')->paginate(25);
 
         return AdminFastBoatResource::collection($fastBoat);
@@ -33,7 +36,9 @@ class AdminFastBoatController extends Controller
     {
         // $this->permissionService->check('view');
 
-        return new AdminFastBoatResource($fastBoat);
+        return $this->successGet(
+            new AdminFastBoatResource($fastBoat)
+        );
     }
 
     public function store(FastBoatRequest $request)
@@ -50,7 +55,7 @@ class AdminFastBoatController extends Controller
 
             DB::commit();
             
-            return new SuccessResource(201);
+            return $this->successStore();
 
         } catch (\Throwable $th) {
             
@@ -77,7 +82,7 @@ class AdminFastBoatController extends Controller
 
             DB::commit();
             
-            return new SuccessResource();
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             

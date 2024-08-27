@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use App\Observers\AdminActionObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[ObservedBy([AdminActionObserver::class])]
 class FastBoatScheduleVariant extends Model
 {
     use HasFactory;

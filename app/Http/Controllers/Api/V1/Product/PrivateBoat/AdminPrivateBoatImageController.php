@@ -11,10 +11,13 @@ use App\Models\PrivateBoat;
 use App\Models\PrivateBoatImage;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminPrivateBoatImageController extends Controller
 {
+    use JsonResponsesTrait;
+
     protected $permissionService;
 
     public function __construct()
@@ -45,8 +48,8 @@ class AdminPrivateBoatImageController extends Controller
 
             DB::commit();
 
-            return new SuccessResource(
-                data: new PrivateBoatImageResource($privateBoatImage)
+            return $this->successGet(
+                new PrivateBoatImageResource($privateBoatImage)
             );
 
         } catch (\Throwable $th) {
@@ -81,7 +84,7 @@ class AdminPrivateBoatImageController extends Controller
 
             DB::commit();            
 
-            return new SuccessResource();
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             

@@ -18,14 +18,14 @@ class AdminFastBoatOrderController extends Controller
 
     protected $permissionService;
 
-    public function __construct()
-    {
-        $this->permissionService = (new AdminPermissionService('order'));
-    }
+    // public function __construct()
+    // {
+    //     $this->permissionService = (new AdminPermissionService('order'));
+    // }
 
     public function index()
     {
-        $this->permissionService->check('order');
+        // $this->permissionService->check('order');
 
         return AdminListFastBoatOrderResource::collection(
             QueryBuilder::for(FastBoatOrder::class)
@@ -44,7 +44,7 @@ class AdminFastBoatOrderController extends Controller
 
     public function show(FastBoatOrder $order)
     {
-        $this->permissionService->check('order');
+        // $this->permissionService->check('order');
 
         $order = new AdminFastBoatOrderResource(FastBoatOrder::where('id', $order->id)->with('details', 'forms', 'payment')->first());
 
@@ -53,7 +53,7 @@ class AdminFastBoatOrderController extends Controller
 
     public function destroy(FastBoatOrder $order)
     {
-        $this->permissionService->check('order');
+        // $this->permissionService->check('order');
 
         $order->delete();
 

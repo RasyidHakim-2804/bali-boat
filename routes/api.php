@@ -172,7 +172,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             // Admin - FastBoat Schedule
             Route::get('/fast-boats/{fastBoat:slug}/schedules', [AdminScheduleController::class, 'index']);
-            Route::get('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'show']);
+            Route::get('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'show'])->scopeBindings();
             Route::post('/fast-boats/{fastBoat:slug}/schedules', [AdminScheduleController::class, 'store']);
             Route::put('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'update'])->scopeBindings();
             Route::delete('/fast-boats/{fastBoat:slug}/schedules/{schedule}', [AdminScheduleController::class, 'destroy'])->scopeBindings();

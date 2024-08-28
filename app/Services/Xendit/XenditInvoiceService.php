@@ -100,20 +100,18 @@ class XenditInvoiceService implements PaymentInterface
     {
         $user = $order->user;
         
-        if (!$user) $user = $order->agent;
-        
         $data = [
             "external_id"          => $order->uuid,
-            "description"          => 'Bali Visa Officials Invoice',
+            "description"          => 'Bali Boat Invoice',
             "amount"               => intval($order->grand_total_purchased),
             "currency"             => "IDR",
             "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid,
             "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid,
             "customer" => [
-                'given_names'   => ($user) ? $user->first_name : $order->guest_first_name,
-                'surname'       => ($user) ? $user->last_name : $order->guest_last_name,
-                'email'         => ($user) ? $user->email : $order->guest_email,
-                'mobile_number' => ($user) ? $user->first_name : $order->guest_mobile_number,
+                'given_names'   => $user->first_name,
+                'surname'       => $user->last_name,
+                'email'         => $user->email,
+                'mobile_number' => $user->first_name,
             ]
         ];
 

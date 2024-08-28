@@ -50,8 +50,6 @@ class UserFastBoatOrderController extends Controller
         // Validation
         $this->setGlobalVariable($request);
 
-        return $this->variants;
-
         $this->checkProductAvailability($request);
 
         $this->checkFormValidity($request);

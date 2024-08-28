@@ -16,7 +16,7 @@ class FastBoatOrderService
 
         if ($promo) $promoAmount = $this->calculatePromoAmount($totalPurchased, $promo);
 
-        $totalPurchasedAfterPromo = $promoAmount - $promoAmount;
+        $totalPurchasedAfterPromo = $totalPurchased - $promoAmount;
 
         if ($totalPurchasedAfterPromo < 0) $totalPurchasedAfterPromo = 0;
 
@@ -50,9 +50,7 @@ class FastBoatOrderService
             $totalPurchased = $totalPurchased + ($product['quantity'] * $variantsData[$key]->price);
         }
 
-        return [
-            'idr' => $totalPurchased,
-        ];
+        return $totalPurchased;
     }
 
     protected function calculateTotalAdditionalPurchased($request, $additionalsData)

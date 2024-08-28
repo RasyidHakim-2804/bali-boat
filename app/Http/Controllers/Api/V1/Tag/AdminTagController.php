@@ -32,7 +32,11 @@ class AdminTagController extends Controller
 
     public function all()
     {
-        return ListTagResource::collection(Tag::all());
+        $tags = Tag::with([
+            'translations' => fn($query) => $query->where('language', '=', 'id')
+        ])->get();
+
+        return ListTagResource::collection($tags);
     }
 
     public function show(Tag $tag)

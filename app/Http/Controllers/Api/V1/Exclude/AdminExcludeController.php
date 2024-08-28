@@ -32,7 +32,11 @@ class AdminExcludeController extends Controller
 
     public function all()
     {
-        return ListExcludeResource::collection(ProductExclude::all());
+        $excludes = ProductExclude::with([
+            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+        ])->get();
+
+        return ListExcludeResource::collection($excludes);
     }
 
     public function show(ProductExclude $exclude)
@@ -83,6 +87,8 @@ class AdminExcludeController extends Controller
             $exclude->delete();
 
             DB::commit();
+
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             throw $th;

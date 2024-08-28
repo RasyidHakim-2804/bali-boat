@@ -32,7 +32,11 @@ class AdminIncludeController extends Controller
 
     public function all()
     {
-        return ListIncludeResource::collection(ProductInclude::all());
+        $includes = ProductInclude::with([
+            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+        ])->get(25);
+
+        return ListIncludeResource::collection($includes);
     }
 
     public function show(ProductInclude $include)
@@ -84,6 +88,8 @@ class AdminIncludeController extends Controller
             $include->delete();
 
             DB::commit();
+
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             throw $th;

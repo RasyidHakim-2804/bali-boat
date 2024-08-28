@@ -26,8 +26,8 @@ class AdminScheduleController extends Controller
     public function index(FastBoat $fastBoat)
     {
         $schedules = FastBoatSchedule::with([
-            'arrivalHarbor:id,name',
-            'departureHarbor:id,name'
+            'arrivalHarbor',
+            'departureHarbor'
         ])->where('fast_boat_id', '=', $fastBoat->id)->paginate(25);
 
         return ScheduleResource::collection($schedules);
@@ -109,12 +109,12 @@ class AdminScheduleController extends Controller
      */
     public function destroy(FastBoat $fastBoat, FastBoatSchedule $schedule)
     {
-        // DB::transaction(function() use ($schedule) {
-        //     $schedule->variants()->delete();
-        //     $schedule->delete();
-        // });
+        DB::transaction(function() use ($schedule) {
+            $schedule->variants()->delete();
+            $schedule->delete();
+        });
 
-        // return new SuccessResource();
+        return new SuccessResource();
     }
 
     public function setVariant(FastBoatSchedule $schedule, $request)

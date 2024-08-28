@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\FastBoatOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FastBoatOrder\StoreUserFastBoatOrderRequest;
-use App\Http\Resources\Order\ListOrderResource;
-use App\Http\Resources\Order\OrderResource;
+use App\Http\Resources\FastBoatOrder\ListFastBoatOrderResource;
+use App\Http\Resources\Product\FastBoat\FastBoatResource;
 use App\Models\FastBoatOrder;
 use App\Models\FastBoatSchedule;
 use App\Models\FastBoatScheduleVariant;
@@ -18,7 +18,6 @@ use App\Services\Payment\PaymentService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Request;
 
 class UserFastBoatOrderController extends Controller
@@ -33,12 +32,12 @@ class UserFastBoatOrderController extends Controller
 
     public function index(User $user)
     {
-        return ListOrderResource::collection(FastBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
+        return ListFastBoatOrderResource::collection(FastBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
     }
     
-    public function show(User $user, FastBoatOrder $fast_boat_order)
+    public function show(User $user, FastBoatOrder $order)
     {
-        $order = new OrderResource($fast_boat_order);
+        $order = new FastBoatResource($order);
 
         return $this->successGet($order);
     }
@@ -94,17 +93,17 @@ class UserFastBoatOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, FastBoatOrder $fast_boat_order)
+    public function cancel(User $user, FastBoatOrder $order)
     {
         DB::beginTransaction();
         try {
-            if ($fast_boat_order->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+            if ($order->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-            $fast_boat_order->status = 'canceled';
+            $order->status = 'canceled';
 
-            $fast_boat_order->save();
+            $order->save();
 
-            (new PaymentService)->prepare()->expire($fast_boat_order);
+            (new PaymentService)->prepare()->expire($order);
 
             DB::commit();
 
@@ -116,19 +115,19 @@ class UserFastBoatOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, FastBoatOrder $fast_boat_order)
+    public function refund(Request $request, User $user, FastBoatOrder $order)
     {
-        // if ($fast_boat_order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        // if ($order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        // if (!$fast_boat_order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        // if (!$order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
         // DB::beginTransaction();
         // try {
-        //     (new OrderRefundService)->refund($fast_boat_order, $request);
+        //     (new OrderRefundService)->refund($order, $request);
 
-        //     $fast_boat_order->status = 'refunding';
+        //     $order->status = 'refunding';
 
-        //     $fast_boat_order->save();
+        //     $order->save();
 
         //     DB::commit();
 

@@ -26,8 +26,8 @@ class AdminScheduleController extends Controller
     public function index(FastBoat $fastBoat)
     {
         $schedules = FastBoatSchedule::with([
-            'arrivalHarbor:id,name',
-            'departureHarbor:id,name'
+            'arrivalHarbor',
+            'departureHarbor'
         ])->where('fast_boat_id', '=', $fastBoat->id)->paginate(25);
 
         return ScheduleResource::collection($schedules);

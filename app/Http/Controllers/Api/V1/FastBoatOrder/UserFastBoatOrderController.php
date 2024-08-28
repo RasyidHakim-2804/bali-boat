@@ -243,7 +243,7 @@ class UserFastBoatOrderController extends Controller
         $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
-        $order->notify(new OrderCreatedNotification($data));
+        $user->notify(new OrderCreatedNotification($data));
     }
 
     // protected function sendAdminEmail($order)

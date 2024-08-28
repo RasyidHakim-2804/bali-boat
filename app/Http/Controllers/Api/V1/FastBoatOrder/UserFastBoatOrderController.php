@@ -73,7 +73,7 @@ class UserFastBoatOrderController extends Controller
 
             $responseData = ['order_uuid' => $order->uuid];
 
-            return (new PaymentService)->prepare()->pay($order, 'fast_boat');
+            (new PaymentService)->prepare()->pay($order, 'fast_boat');
 
             $responseData['payment_url'] = $order->payment->url;
 

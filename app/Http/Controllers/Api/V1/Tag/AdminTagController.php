@@ -65,7 +65,10 @@ class AdminTagController extends Controller
             
             $tag->save();
             
-            $this->setTranslation($tag, $request->validated());
+            foreach ($request->validated('name') as $lang => $name) {
+                $this->setTranslations($tag, $lang, 'name', $name);
+            }
+            
         });
 
         return $this->successResponse();

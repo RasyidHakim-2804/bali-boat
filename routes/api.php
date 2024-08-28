@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 
 use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
+use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Include\AdminIncludeController;
@@ -200,6 +201,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/activities/{activity}/images', [AdminActivityImageController::class, 'index']);
             Route::post('/activities/{activity}/images', [AdminActivityImageController::class,'store']);
             Route::post('/activities/{activity}/save-images', [AdminActivityImageController::class, 'saveImages']);
+
+            // Admin - FastBoat Order
+            Route::get('/fast-boat-orders', [AdminFastBoatOrderController::class, 'index']);
+            Route::get('/fast-boat-orders/{order}', [AdminFastBoatOrderController::class, 'show']);
 
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);

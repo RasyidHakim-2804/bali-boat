@@ -34,7 +34,7 @@ class AdminIncludeController extends Controller
     {
         $includes = ProductInclude::with([
             'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-        ])->get(25);
+        ])->get();
 
         return ListIncludeResource::collection($includes);
     }

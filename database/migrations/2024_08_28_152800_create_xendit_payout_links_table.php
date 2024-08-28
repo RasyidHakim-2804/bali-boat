@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('account_holder_name')->nullable();
             $table->timestamp('claimed_at')->nullable();
             $table->timestamp('paid_at')->nullable();
-            $table->timestamp('expired_at');
+            $table->timestamp('expired_at')->nullable();
             $table->timestamps();
         });
     }

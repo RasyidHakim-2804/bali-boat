@@ -21,8 +21,8 @@ class ScheduleResource extends JsonResource
             'is_active'                 => $this->is_active,
             'arrival_time'              => $this->arrival_time,
             'departure_time'            => $this->departure_time,
-            'arrival_harbor_name'       => new HarborResource($this->arrivalHarbor),
-            'departure_hartbor_name'    => new HarborResource($this->departureHarbor),
+            'arrival_harbor'       => new HarborResource($this->arrivalHarbor),
+            'departure_hartbor'    => new HarborResource($this->departureHarbor),
 
             'fast_boat'     => new FastBoatResource($this->whenLoaded('fastBoat')),
             'variants' => $this->whenLoaded('variants', function(){

@@ -50,8 +50,6 @@ class UserFastBoatOrderController extends Controller
         // Validation
         $this->setGlobalVariable($request);
 
-        return $this->variants;
-
         $this->checkProductAvailability($request);
 
         $this->checkFormValidity($request);
@@ -67,7 +65,7 @@ class UserFastBoatOrderController extends Controller
             if (!$this->verifyPromo($promo)) return $this->errorValidationResponse('promo', 'Promo already used.');
 
             // Create order
-            $order = (new FastBoatOrderService)->create($request, $this->products, $this->variants, $user, $promo);
+            return $order = (new FastBoatOrderService)->create($request, $this->products, $this->variants, $user, $promo);
 
             (new FastBoatOrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
 

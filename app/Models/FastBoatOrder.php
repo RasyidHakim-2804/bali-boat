@@ -31,7 +31,7 @@ class FastBoatOrder extends Model
 
     public function payment()
     {
-       return $this->hasOne(XenditPayment::class, 'order_id', 'id');
+       return $this->hasOne(OrderPayment::class, 'fast_boat_order_id', 'id');
     }
 
     // public function payout()
@@ -56,7 +56,7 @@ class FastBoatOrder extends Model
 
     public function forms()
     {
-        return $this->hasMany(OrderForm::class, 'order_id', 'id');
+        return $this->hasMany(FastBoatOrderForm::class, 'order_id', 'id');
     }
 
     // public function paymentHistories()

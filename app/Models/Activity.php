@@ -80,4 +80,9 @@ class Activity extends Model
         $query->where('max_person', '>=', $person);
     }
 
+    public function scopeActive($query, bool $active = true)
+    {
+        $query->where('is_active', '=', $active);
+    }
+
 }

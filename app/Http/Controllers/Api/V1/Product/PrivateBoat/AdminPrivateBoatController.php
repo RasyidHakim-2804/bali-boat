@@ -55,7 +55,7 @@ class AdminPrivateBoatController extends Controller
 
             $privateBoat                   = new PrivateBoat();
             $privateBoat->name             = $request->name;
-            $privateBoat->active           = $request->active;
+            $privateBoat->is_active        = $request->is_active;
             $privateBoat->is_rented        = $request->is_rented;
             $privateBoat->is_promo         = $request->is_promo;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
@@ -93,7 +93,7 @@ class AdminPrivateBoatController extends Controller
             DB::beginTransaction();
 
             $privateBoat->name             = $request->name;
-            $privateBoat->active           = $request->active;
+            $privateBoat->is_active        = $request->is_active;
             $privateBoat->is_rented        = $request->is_rented;
             $privateBoat->is_promo         = $request->is_promo;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;

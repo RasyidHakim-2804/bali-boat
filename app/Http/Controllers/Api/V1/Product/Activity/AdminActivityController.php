@@ -56,7 +56,7 @@ class AdminActivityController extends Controller
 
             $activity               = new Activity();
             $activity->name         = $request->name;
-            $activity->active       = $request->active;
+            $activity->is_active    = $request->is_active;
             $activity->max_person   = $request->max_person;
             $activity->location_id  = $request->location_id;
             $activity->save();
@@ -94,7 +94,7 @@ class AdminActivityController extends Controller
             DB::beginTransaction();
 
             $activity->name         = $request->name;
-            $activity->active       = $request->active;
+            $activity->is_active    = $request->is_active;
             $activity->max_person   = $request->max_person;
             $activity->location_id  = $request->location_id;
             $activity->save();

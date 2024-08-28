@@ -69,4 +69,10 @@ class PrivateBoat extends Model
             "(select price from private_boat_variants where private_boat_id = private_boats.id order by price asc limit 1) as price"
         ));
     }
+
+    public function scopeActive($query, bool $active = true)
+    {
+        $query->where('is_active', '=', $active);
+    }
+
 }

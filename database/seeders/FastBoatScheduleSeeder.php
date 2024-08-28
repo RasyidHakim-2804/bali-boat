@@ -20,7 +20,7 @@ class FastBoatScheduleSeeder extends Seeder
                 'arrival_harbor_id'     => 2,
                 'departure_time'        => '07:00',
                 'arrival_time'          => '07:30',
-                'active'                => 1,
+                'is_active'                => 1,
             ]);
 
             DB::table('fast_boat_schedules')->insert([
@@ -29,7 +29,7 @@ class FastBoatScheduleSeeder extends Seeder
                 'arrival_harbor_id'     => 3,
                 'departure_time'        => '07:30',
                 'arrival_time'          => '08:00',
-                'active'                => 1,
+                'is_active'                => 1,
             ]);
 
             DB::table('fast_boat_schedules')->insert([
@@ -38,7 +38,7 @@ class FastBoatScheduleSeeder extends Seeder
                 'arrival_harbor_id'     => 4,
                 'departure_time'        => '08:00',
                 'arrival_time'          => '08:30',
-                'active'                => 1,
+                'is_active'                => 1,
             ]);
         }
     }

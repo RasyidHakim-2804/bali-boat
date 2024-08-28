@@ -4,7 +4,7 @@ namespace App\Http\Resources\Product\PrivateBoat;
 
 use App\Http\Resources\Habor\HarborResource;
 use App\Http\Resources\Include\ListIncludeResource;
-use App\Http\Resources\Tag\TagResource;
+use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,13 +25,13 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'is_rented'         => $this->is_rented,
             'is_promo'          => $this->is_promo,
             'order_count'       => $this->order_count,
-            'active'            => $this->active,
+            'is_active'         => $this->is_active,
             'pickup_harbor'     => new HarborResource($this->pickupHarbor),
             'price'             => $this->defaultVariant->price,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
 
-            'tags'           => TagResource::collection($this->tags),
+            'tags'           => ListTagResource::collection($this->tags),
 
             'highlight'     => PrivateBoatTranslationResource::collection(
                 $this->translations->where('field', 'highlight')

@@ -27,7 +27,7 @@ class ScheduleRequest extends FormRequest
             'arrival_harbor_id'   => 'required|exists:harbors,id|different:departure_harbor_id',
             'departure_time'      => 'required|date_format:H:i',
             'arrival_time'        => 'required|date_format:H:i|after:departure_time',
-            'active'              => 'required|boolean'
+            'is_active'           => 'required|boolean'
         ];
 
         foreach (FastBoatScheduleVariant::PASSENGER_TYPE as $passenger) {

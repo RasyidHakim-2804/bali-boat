@@ -17,7 +17,7 @@ class ScheduleResource extends JsonResource
         return [
             'id'                        => $this->id,
             'fast_boat_id'              => $this->fast_boat_id,
-            'active'                    => $this->active,
+            'is_active'                 => $this->is_active,
             'arrival_time'              => $this->arrival_time,
             'departure_time'            => $this->departure_time,
             'arrival_harbor_name'       => $this->arrivalHarbor->name,

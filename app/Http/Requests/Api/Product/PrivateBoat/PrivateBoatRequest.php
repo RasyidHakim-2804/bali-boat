@@ -34,7 +34,7 @@ class PrivateBoatRequest extends FormRequest
         $rule = [
             'name'              => 'required|string|max:100',
             'price'             => 'required|numeric|min:0',
-            'active'            => 'required|boolean',
+            'is_active'         => 'required|boolean',
             'pickup_harbor_id'  => 'required|exists:harbors,id',
             'tags'              => 'required|array',
             'is_rented'         => 'required|boolean',

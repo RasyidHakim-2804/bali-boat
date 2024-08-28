@@ -38,8 +38,7 @@ class FastBoatSchedule extends Model
     public function scopeFromTo($query, $from, $to)
     {
         return $query->where('departure_harbor_id', '=', $from)
-                      ->where('arrival_harbor_id', '=', $to)
-                      ->where('active', '=', true);
+                      ->where('arrival_harbor_id', '=', $to);
     }
 
     public function scopeDepartureTime($query, $time = 'morning')
@@ -67,13 +66,13 @@ class FastBoatSchedule extends Model
 
     public function scopeActive($query, bool $active = true)
     {
-        $query->where('active', '=', $active);
+        $query->where('is_active', '=', $active);
     }
 
     public function scopeBoatActive($query, bool $active = true)
     {
         $query->whereHas('fastBoat', function($query) use ($active) {
-            $query->where('active', '=', $active);
+            $query->where('is_active', '=', $active);
         });
     }
 

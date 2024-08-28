@@ -65,7 +65,7 @@ class UserFastBoatOrderController extends Controller
             if (!$this->verifyPromo($promo)) return $this->errorValidationResponse('promo', 'Promo already used.');
 
             // Create order
-            return $order = (new FastBoatOrderService)->create($request, $this->products, $this->variants, $user, $promo);
+            $order = (new FastBoatOrderService)->create($request, $this->products, $this->variants, $user, $promo);
 
             (new FastBoatOrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
 
@@ -73,7 +73,7 @@ class UserFastBoatOrderController extends Controller
 
             $responseData = ['order_uuid' => $order->uuid];
 
-            return (new PaymentService)->prepare()->pay($order, 'fast_boat');
+            (new PaymentService)->prepare()->pay($order, 'fast_boat');
 
             $responseData['payment_url'] = $order->payment->url;
 

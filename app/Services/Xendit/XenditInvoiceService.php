@@ -57,7 +57,7 @@ class XenditInvoiceService implements PaymentInterface
     public function pay($order, $type)
     {
         try {
-            return $data     = $this->generateRequestData($order);
+            $data     = $this->generateRequestData($order);
             $response = $this->invoiceApi->createInvoice($data);
 
             $this->createXenditPayment($order, $type, $response);

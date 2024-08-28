@@ -48,7 +48,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     
                     if ($count > 1) $fail(__('validation.distinct'));
                 },
-                Rule::exists('fast_boat_schedules', 'id')->where('active', 1)->whereNull('deleted_at'),
+                Rule::exists('fast_boat_schedules', 'id')->where('is_active', 1)->whereNull('deleted_at'),
             ],
             'products.*.variant_id' => [
                 'required',

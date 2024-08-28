@@ -12,7 +12,7 @@ class FastBoatOrderRegistrationService
             $orderRegistration           = new FastBoatOrderForm();
             $orderRegistration->order_id = $orderId;
 
-            if ($registrations->nationality == 'indonesia')  $orderRegistration->is_local = 1;
+            if ($registrations['nationality'] == 'indonesia')  $orderRegistration->is_local = 1;
 
             $orderRegistration->fill($registration);
             

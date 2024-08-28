@@ -25,10 +25,10 @@ class FastBoatOrderService
         $order                          = new FastBoatOrder();
         $order->user_id                 = $user->id;
         $order->uuid                    = $this->generateUuid();
-        $order->promo_amount            = $promoAmount;
+        $order->promo_amount            = number_format($promoAmount, 2, '.', '');
         $order->promo_id                = $promo?->id;
-        $order->total_purchased         = round($totalPurchased, 2);
-        $order->grand_total_purchased   = round($grandTotalPurchased, 2);
+        $order->total_purchased         = number_format($totalPurchased, 2, '.', '');
+        $order->grand_total_purchased   = number_format($grandTotalPurchased, 2, '.', '');
         $order->status                  = 'waiting_for_payment';
         $order->pic_name                = $request->pic_name;
         $order->pic_email               = $request->pic_email;

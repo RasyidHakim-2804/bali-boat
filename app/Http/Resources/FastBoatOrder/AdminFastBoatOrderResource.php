@@ -21,7 +21,7 @@ class AdminFastBoatOrderResource extends JsonResource
             'payment_url'                   => (isset($this->payment)) ? $this->payment->url : null,
             'payment_status'                => ($this->payment) ? $this->payment->status : 'not in system',
             'payment'                       => $this->payment,
-            'refund_status'                 => $this->refunds()?->orderBy('id', 'DESC')->first()?->status ?? null,
+            // 'refund_status'                 => $this->refunds()?->orderBy('id', 'DESC')->first()?->status ?? null,
             'status'                        => $this->status,
             'activity_date'                 => $this->activity_date,
             'details'                       => FastBoatOrderDetailResource::collection($this->details),

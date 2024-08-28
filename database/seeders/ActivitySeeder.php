@@ -31,7 +31,7 @@ class ActivitySeeder extends Seeder
                 'location_id'         => rand(1,3),
                 'pickup_available'    => 1,
                 'max_person'          => rand(5,9),
-                'active'              => 1,
+                'is_active'              => 1,
                 'created_at'          => now(),
                 'updated_at'          => now(),
             ]);

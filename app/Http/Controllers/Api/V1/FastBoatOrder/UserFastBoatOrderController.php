@@ -238,7 +238,7 @@ class UserFastBoatOrderController extends Controller
         $user = request()->user();
         
         $data                   = [];
-        $data['language']       = $user->language;
+        $data['language']       = 'en';
         $data['first_name']     = $user->first_name;
         $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;

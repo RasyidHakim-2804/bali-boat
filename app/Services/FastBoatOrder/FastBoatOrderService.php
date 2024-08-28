@@ -44,22 +44,14 @@ class FastBoatOrderService
 
     protected function calculateTotalPurchased($request, $variantsData)
     {
-        $totalPurchased = $totalUsdPurchased = $totalEurPurchased = $totalJpyPurchased = $totalCnyPurchased = 0;
+        $totalPurchased = 0;
 
         foreach ($request->products as $key => $product) {
-            $totalPurchased     = $totalPurchased + ($product['quantity'] * $variantsData[$key]->price);
-            $totalUsdPurchased  = $totalUsdPurchased + ($product['quantity'] * $variantsData[$key]->usd_price);
-            $totalEurPurchased  = $totalEurPurchased + ($product['quantity'] * $variantsData[$key]->eur_price);
-            $totalJpyPurchased  = $totalJpyPurchased + ($product['quantity'] * $variantsData[$key]->jpy_price);
-            $totalCnyPurchased  = $totalCnyPurchased + ($product['quantity'] * $variantsData[$key]->cny_price);
+            $totalPurchased = $totalPurchased + ($product['quantity'] * $variantsData[$key]->price);
         }
 
         return [
-            'idr'   => $totalPurchased,
-            'usd'   => $totalUsdPurchased,
-            'eur'   => $totalEurPurchased,
-            'jpy'   => $totalJpyPurchased,
-            'cny'   => $totalCnyPurchased
+            'idr' => $totalPurchased,
         ];
     }
 

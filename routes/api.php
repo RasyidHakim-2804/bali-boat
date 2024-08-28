@@ -249,10 +249,11 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
 
                 // Order
+                Route::get('/fast-boat-orders', [UserFastBoatOrderController::class, 'index']);
+                Route::get('/fast-boat-orders/{order}', [UserFastBoatOrderController::class, 'show']);
+                Route::post('/fast-boat-orders', [UserFastBoatOrderController::class, 'store']);
                 Route::post('/fast-boat-orders/{order}/cancel', [UserFastBoatOrderController::class, 'cancel']);
                 Route::post('/fast-boat-orders/{order}/refund', [UserFastBoatOrderController::class, 'refund']);
-                Route::get('/fast-boat-orders/{order}/refund-channels', [UserFastBoatOrderController::class, 'refundChanel']);
-                Route::resource('/fast-boat-orders', UserFastBoatOrderController::class)->only(['index', 'show', 'store']);
             });
         });
     });

@@ -27,8 +27,8 @@ class FastBoatOrderService
         $order->uuid                    = $this->generateUuid();
         $order->promo_amount            = $promoAmount;
         $order->promo_id                = $promo?->id;
-        $order->total_purchased         = $totalPurchased;
-        $order->grand_total_purchased   = $grandTotalPurchased;
+        $order->total_purchased         = round($totalPurchased, 2);
+        $order->grand_total_purchased   = round($grandTotalPurchased, 2);
         $order->status                  = 'waiting_for_payment';
         $order->pic_name                = $request->pic_name;
         $order->pic_email               = $request->pic_email;

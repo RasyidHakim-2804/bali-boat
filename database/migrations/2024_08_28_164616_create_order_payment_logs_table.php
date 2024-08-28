@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('order_payment_logs', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->unsignedBigInteger('fast_boat_order_id');
             $table->foreign('fast_boat_order_id')->references('id')->on('fast_boat_orders')->cascadeOnDelete();
             $table->string('payment_vendor');

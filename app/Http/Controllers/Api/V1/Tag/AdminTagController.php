@@ -90,6 +90,8 @@ class AdminTagController extends Controller
 
             DB::commit();
 
+            return $this->successResponse();
+
         } catch (\Throwable $th) {
             throw $th;
         }

@@ -55,7 +55,7 @@ class OrderCreatedNotification extends Notification
 
         return (new MailMessage)
             ->subject(env('APP_EMAIL_COMPANY') . $subject)
-            ->greeting('Hi ' . $this->data['name'] . ',')
+            ->greeting('Hi ' . $this->data['first_name'] . ',')
             ->line($line)
             ->action('Payment', url($this->data['payment_url']));
     }

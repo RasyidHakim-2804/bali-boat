@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product\FastBoat;
 
+use App\Http\Resources\Habor\HarborResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,8 +21,8 @@ class ScheduleResource extends JsonResource
             'is_active'                 => $this->is_active,
             'arrival_time'              => $this->arrival_time,
             'departure_time'            => $this->departure_time,
-            'arrival_harbor_name'       => $this->arrivalHarbor->name,
-            'departure_hartbor_name'    => $this->departureHarbor->name,
+            'arrival_harbor_name'       => new HarborResource($this->arrivalHarbor),
+            'departure_hartbor_name'    => new HarborResource($this->departureHarbor),
 
             'fast_boat'     => new FastBoatResource($this->whenLoaded('fastBoat')),
             'variants' => $this->whenLoaded('variants', function(){

@@ -109,12 +109,12 @@ class AdminScheduleController extends Controller
      */
     public function destroy(FastBoat $fastBoat, FastBoatSchedule $schedule)
     {
-        // DB::transaction(function() use ($schedule) {
-        //     $schedule->variants()->delete();
-        //     $schedule->delete();
-        // });
+        DB::transaction(function() use ($schedule) {
+            $schedule->variants()->delete();
+            $schedule->delete();
+        });
 
-        // return new SuccessResource();
+        return new SuccessResource();
     }
 
     public function setVariant(FastBoatSchedule $schedule, $request)

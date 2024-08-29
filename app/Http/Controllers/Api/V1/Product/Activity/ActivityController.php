@@ -28,7 +28,7 @@ class ActivityController extends Controller
         ->with([
             'tags.translations'         => fn($query) => $query->language(),
             'thumbnailImage',
-            'defaultVariant',
+            'thumbnailVariant',
             'location'
         ])
         ->selectVariantPrice()
@@ -40,8 +40,6 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         $activity = $activity->load([
-            'defaultVariant',
-            'location',
             'tags.translations'         => fn($query) => $query->language(),
             'includes'                  => fn($query) => $query->orderBy('position', 'ASC'),
             'excludes'                  => fn($query) => $query->orderBy('position', 'ASC'),
@@ -50,7 +48,10 @@ class ActivityController extends Controller
             'includes.translations'     => fn($query) => $query->language(),
             'excludes.translations'     => fn($query) => $query->language(),
             'itineraries.translations'  => fn($query) => $query->language(),
+            'location',
             'images',
+            'variants',
+            'defaultVariant',
         ]);
 
         return $this->successGet(
@@ -63,10 +64,10 @@ class ActivityController extends Controller
         $privateBoats = Activity::with([
             'tags.translations' => fn($query) => $query->language(),
             'thumbnailImage',
-            'defaultVariant',
+            'thumbnailVariant',
             'location'
         ])
-        ->orderBy('order_count', 'DESC')
+        ->orderBy('id', 'DESC')
         ->limit(4)
         ->get();
 

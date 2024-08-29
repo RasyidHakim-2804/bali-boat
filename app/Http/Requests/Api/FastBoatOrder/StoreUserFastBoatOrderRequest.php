@@ -95,7 +95,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
             ],
             'forms.*.name'              => 'required|string|min:1',
             'forms.*.nationality'       => 'required|min:1',
-            'forms.*.passenger_type'    => ['required', Rule::when(($this->input('forms.*.is_itas_holder') == 1), ['in:local'])],
+            'forms.*.passenger_type'    => ['required', Rule::when(($this->input('forms.*.age_type') == 'adult'), ['in:local'])],
             'forms.*.age_type'          => 'required|in:adult,child',
             'forms.*.is_itas_holder'    => 'required|boolean',
         ];

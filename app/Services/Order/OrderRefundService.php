@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderRefundService
 {
-    public function refund($order)
+    public function refund($order, $type)
     {
         $user   = $order->user;
         $email  = $user->email;
@@ -20,6 +20,7 @@ class OrderRefundService
             $orderRefund->xendit_payout_link_id = $xenditPayoutLink->id;
             $orderRefund->status                = $xenditPayoutLink->status;
             $orderRefund->fast_boat_order_id    = $order->id;
+            $orderRefund->type                  = $type;
 
             $orderRefund->save();
 

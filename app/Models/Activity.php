@@ -40,17 +40,20 @@ class Activity extends Model
 
     public function includes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductInclude::class, 'pivot_activity_includes', 'activity_id', 'include_id');
+        return $this->belongsToMany(ProductInclude::class, 'pivot_activity_includes', 'activity_id', 'include_id')
+                    ->withPivot(['position']);
     }
 
     public function excludes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductExclude::class, 'pivot_activity_excludes', 'activity_id', 'exclude_id');
+        return $this->belongsToMany(ProductExclude::class, 'pivot_activity_excludes', 'activity_id', 'exclude_id')
+                    ->withPivot(['position']);
     }
 
     public function itineraries(): BelongsToMany
     {
-        return $this->belongsToMany(ProductItinerary::class, 'pivot_activity_itineraries', 'activity_id', 'itinerary_id');
+        return $this->belongsToMany(ProductItinerary::class, 'pivot_activity_itineraries', 'activity_id', 'itinerary_id')
+                    ->withPivot(['position']);
     }
 
     public function images(): HasMany
@@ -63,9 +66,19 @@ class Activity extends Model
         return $this->hasOne(ActivityImage::class)->ofMany('position', 'min');
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 0);
+    }
+
     public function defaultVariant(): HasOne
     {
-        return $this->hasOne(ActivityVariant::class);
+        return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 1);
+    }
+
+    public function thumbnailVariant()
+    {
+        return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->ofMany('id', 'MIN');
     }
 
     public function scopeSelectVariantPrice($query)

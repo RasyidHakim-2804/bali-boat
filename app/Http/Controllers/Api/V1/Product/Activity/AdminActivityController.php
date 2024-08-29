@@ -26,7 +26,7 @@ class AdminActivityController extends Controller
     public function index()
     {
         $activities = Activity::with([
-            'defaultVariant'
+            'thumbnailVariant'
         ])->paginate(25);
 
         return AdminActivityListResource::collection($activities);
@@ -41,7 +41,8 @@ class AdminActivityController extends Controller
             'includes.translations'     => fn($query) => $query->language(),
             'excludes.translations'     => fn($query) => $query->language(),
             'itineraries.translations'  => fn($query) => $query->field('title')->language(),
-            'defaultVariant'
+            'defaultVariant',
+            'variants'
         ]);
         
         return $this->successGet(
@@ -80,11 +81,11 @@ class AdminActivityController extends Controller
 
             return $this->successStore();
 
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
+        } catch (\Exception $e) {
 
-            throw $th;
+            DB::rollBack();
+            
+            return $this->errorServer($e->getMessage());
         }
     }
 
@@ -118,17 +119,39 @@ class AdminActivityController extends Controller
 
             return $this->successResponse();
 
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
+        } catch (\Exception $e) {
 
-            throw $th;
+            DB::rollBack();
+            
+            return $this->errorServer($e->getMessage());
         }
     }
 
-    public function destroy()
+    public function destroy(Activity $activity)
     {
-        
+        try {
+            DB::beginTransaction();
+            
+            $activity->tags()->detach();
+            $activity->includes()->detach();
+            $activity->excludes()->detach();
+            $activity->itineraries()->detach();
+            $activity->translations()->delete();
+            $activity->images()->delete();
+            $activity->variants()->delete();
+            $activity->defaultVariant()->delete();
+            $activity->delete();
+
+            DB::commit();
+
+            return $this->successResponse();
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            
+            return $this->errorServer($e->getMessage());
+        }
     }
 
     ////////////////////////

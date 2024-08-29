@@ -31,7 +31,7 @@ class SaveActivityImageRequest extends FormRequest
                 'distinct',
                 'min:1',
                 Rule::exists(ActivityImage::class, 'id')->where(function($query){
-                    $query->where('rental_id', $this->route('activity')->id);
+                    $query->where('activity_id', $this->route('activity')->id);
                 })
             ],
         ];

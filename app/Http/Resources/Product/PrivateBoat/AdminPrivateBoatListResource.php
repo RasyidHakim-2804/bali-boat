@@ -23,11 +23,9 @@ class AdminPrivateBoatListResource extends JsonResource
             'slug'              => $this->slug,
             'is_rented'         => $this->is_rented,
             'is_active'         => $this->is_active,
-            'is_promo'          => $this->is_promo,
-            'order_count'       => $this->order_count,
-            'price'             => $this->defaultVariant->price,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
+            'thumbnail_variant' => new PrivateBoatVariantResource($this->thumbnailVariant),
         ];
     }
 }

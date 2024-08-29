@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class PrivateBoat extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory, HasSlug, SoftDeletes;
 
     public function getSlugOptions(): SlugOptions
     {
@@ -40,7 +41,8 @@ class PrivateBoat extends Model
 
     public function includes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductInclude::class, 'pivot_private_boat_includes', 'private_boat_id', 'include_id');
+        return $this->belongsToMany(ProductInclude::class, 'pivot_private_boat_includes', 'private_boat_id', 'include_id')
+                    ->withPivot(['position']);
     }
 
     public function specifications(): HasMany
@@ -58,9 +60,19 @@ class PrivateBoat extends Model
         return $this->hasOne(PrivateBoatImage::class)->ofMany('position', 'min');
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(PrivateBoatVariant::class, 'private_boat_id', 'id')->where('is_default', '=', 0);
+    }
+
     public function defaultVariant(): HasOne
     {
-        return $this->hasOne(PrivateBoatVariant::class);
+        return $this->hasOne(PrivateBoatVariant::class, 'private_boat_id', 'id')->where('is_default', '=', 1);
+    }
+
+    public function thumbnailVariant()
+    {
+        return $this->hasOne(PrivateBoatVariant::class, 'private_boat_id', 'id')->ofMany('id', 'MIN');
     }
 
     public function scopeSelectVariantPrice($query)

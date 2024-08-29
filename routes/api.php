@@ -186,9 +186,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::delete('/private-boats/{privateBoat:slug}', [AdminPrivateBoatController::class, 'destroy']);
 
             // Admin - PrivateBoat Image
-            Route::get('/private-boats/{privateBoat}/images', [AdminPrivateBoatImageController::class, 'index']);
-            Route::post('/private-boats/{privateBoat}/images', [AdminPrivateBoatImageController::class,'store']);
-            Route::post('/private-boats/{privateBoat}/save-images', [AdminPrivateBoatImageController::class, 'saveImages']);
+            Route::get('/private-boats/{privateBoat:slug}/images', [AdminPrivateBoatImageController::class, 'index']);
+            Route::post('/private-boats/{privateBoat:slug}/images', [AdminPrivateBoatImageController::class,'store']);
+            Route::post('/private-boats/{privateBoat:slug}/save-images', [AdminPrivateBoatImageController::class, 'saveImages']);
 
             // Admin - Activity
             Route::get('/activities', [AdminActivityController::class, 'index']);
@@ -198,9 +198,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::delete('/activities/{activity:slug}', [AdminActivityController::class, 'destroy']);
 
             // Admin - Activity Image
-            Route::get('/activities/{activity}/images', [AdminActivityImageController::class, 'index']);
-            Route::post('/activities/{activity}/images', [AdminActivityImageController::class,'store']);
-            Route::post('/activities/{activity}/save-images', [AdminActivityImageController::class, 'saveImages']);
+            Route::get('/activities/{activity:slug}/images', [AdminActivityImageController::class, 'index']);
+            Route::post('/activities/{activity:slug}/images', [AdminActivityImageController::class,'store']);
+            Route::post('/activities/{activity:slug}/save-images', [AdminActivityImageController::class, 'saveImages']);
 
             // Admin - FastBoat Order
             Route::get('/fast-boat-orders', [AdminFastBoatOrderController::class, 'index']);

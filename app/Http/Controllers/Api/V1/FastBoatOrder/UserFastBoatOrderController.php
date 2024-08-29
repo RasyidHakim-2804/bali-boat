@@ -44,8 +44,6 @@ class UserFastBoatOrderController extends Controller
     
     public function store(StoreUserFastBoatOrderRequest $request, User $user)
     {
-        return 'test';
-        
         $user = request()->user();
 
         // Validation
@@ -216,6 +214,18 @@ class UserFastBoatOrderController extends Controller
                 if (config('app.locale') == 'id') return abort(422, "Varian produk pada formulir ' . $key + 1 . ' wajib diisi.");
 
                 return abort(422, 'The forms ' . $key + 1 . ' variant_id is required.');
+            }
+
+            if (($form['nationality'] == 'indonesia') && ($form['passenger_type'] == 'foreign')) {
+                if (config('app.locale') == 'id') return abort(422, "Tipe penumpang pada formulir ' . $key + 1 . ' tidak valid.");
+
+                return abort(422, 'The passenger type of forms ' . $key + 1 . ' is invalid.');
+            }
+
+            if (($form['nationality'] != 'indonesia') && ($form['passenger_type'] == 'local')) {
+                if (config('app.locale') == 'id') return abort(422, "Tipe penumpang pada formulir ' . $key + 1 . ' tidak valid.");
+
+                return abort(422, 'The passenger type of forms ' . $key + 1 . ' is invalid.');
             }
         }
     }

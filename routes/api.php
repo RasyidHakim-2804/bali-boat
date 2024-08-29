@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\AdminFeatureController;
 use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
 use App\Http\Controllers\Api\V1\Admin\AuthAdminController;
 use App\Http\Controllers\Api\V1\Admin\ForgetAdminPasswordController;
+use App\Http\Controllers\Api\V1\Admin\UserManagementController;
 use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleImagesController;
@@ -201,11 +202,15 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/activities/{activity:slug}/images', [AdminActivityImageController::class,'store']);
             Route::post('/activities/{activity:slug}/save-images', [AdminActivityImageController::class, 'saveImages']);
 
+            // Admin - User
+            Route::get('/users', [UserManagementController::class, 'index']);
+            Route::put('/users/{user:uuid}', [UserManagementController::class, 'update']);
+
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);
 
             // Admin - Admin
-            Route::get('', [AdminController::class, 'index']);
+            Route::get('/', [AdminController::class, 'index']);
             Route::get('/{admin}', [AdminController::class, 'show']);
             Route::post('', [AdminController::class, 'store']);
             Route::put('/{admin}', [AdminController::class, 'update']);

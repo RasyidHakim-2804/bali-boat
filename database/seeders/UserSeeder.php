@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
                 'email'             => 'test@email.com',
                 'email_verified_at' => now(),
                 'password'          => bcrypt('user#2022!'),
-                'active'            => 1,
+                'is_active'         => 1,
                 'created_at'        => now(),
                 'updated_at'        => now()
             ]

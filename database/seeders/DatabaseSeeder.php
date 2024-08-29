@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         (new LanguageSeeder)->run();
         (new AdminSeeder)->run();
+        (new UserSeeder)->run();
         (new HarborSeeder)->run();
         (new LocationSeeder)->run();
         (new TagSeeder)->run();

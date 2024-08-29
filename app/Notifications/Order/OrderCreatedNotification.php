@@ -44,20 +44,21 @@ class OrderCreatedNotification extends Notification
     {
         $lang = $this->data['language'];
 
-        $subject = ' - New Order';
+        $subject    = ' - New Order';
+        $button     = 'Payment';
+        $line       = 'Your order was successfully created. Please complete the payment by clicking the "Payment" button. Thankyou.';
 
-        if ($lang == 'id') $subject = ' - Order Baru';
-
-        $line = 'Your order was successfully created. Please complete the payment by clicking the "Payment" button. Thankyou.';
-
-        if ($lang == 'id') $line = 'Order anda berhasil terbuat. Mohon untuk menyelesaikan pembayaran dengan meng-klik tombol "Pembayaran". Terimakasih.';
-
+        if ($lang == 'id') {
+            $subject    = ' - Order Baru';
+            $button     = 'Pembayaran';
+            $line       = 'Order anda berhasil terbuat. Mohon untuk menyelesaikan pembayaran dengan meng-klik tombol "Pembayaran". Terimakasih.';
+        }
 
         return (new MailMessage)
             ->subject(env('APP_EMAIL_COMPANY') . $subject)
             ->greeting('Hi ' . $this->data['first_name'] . ',')
             ->line($line)
-            ->action('Payment', url($this->data['payment_url']));
+            ->action($button, url($this->data['payment_url']));
     }
 
     /**

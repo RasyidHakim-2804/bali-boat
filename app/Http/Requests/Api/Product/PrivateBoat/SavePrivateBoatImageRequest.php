@@ -31,7 +31,7 @@ class SavePrivateBoatImageRequest extends FormRequest
                 'distinct',
                 'min:1',
                 Rule::exists(PrivateBoatImage::class, 'id')->where(function($query){
-                    $query->where('rental_id', $this->route('rental')->id);
+                    $query->where('private_boat_id', $this->route('privateBoat')->id);
                 })
             ],
         ];

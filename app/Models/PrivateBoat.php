@@ -41,7 +41,8 @@ class PrivateBoat extends Model
 
     public function includes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductInclude::class, 'pivot_private_boat_includes', 'private_boat_id', 'include_id');
+        return $this->belongsToMany(ProductInclude::class, 'pivot_private_boat_includes', 'private_boat_id', 'include_id')
+                    ->withPivot(['position']);
     }
 
     public function specifications(): HasMany

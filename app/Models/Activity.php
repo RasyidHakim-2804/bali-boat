@@ -40,17 +40,20 @@ class Activity extends Model
 
     public function includes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductInclude::class, 'pivot_activity_includes', 'activity_id', 'include_id');
+        return $this->belongsToMany(ProductInclude::class, 'pivot_activity_includes', 'activity_id', 'include_id')
+                    ->withPivot(['position']);
     }
 
     public function excludes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductExclude::class, 'pivot_activity_excludes', 'activity_id', 'exclude_id');
+        return $this->belongsToMany(ProductExclude::class, 'pivot_activity_excludes', 'activity_id', 'exclude_id')
+                    ->withPivot(['position']);
     }
 
     public function itineraries(): BelongsToMany
     {
-        return $this->belongsToMany(ProductItinerary::class, 'pivot_activity_itineraries', 'activity_id', 'itinerary_id');
+        return $this->belongsToMany(ProductItinerary::class, 'pivot_activity_itineraries', 'activity_id', 'itinerary_id')
+                    ->withPivot(['position']);
     }
 
     public function images(): HasMany

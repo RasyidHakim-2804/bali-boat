@@ -59,9 +59,19 @@ class PrivateBoat extends Model
         return $this->hasOne(PrivateBoatImage::class)->ofMany('position', 'min');
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(PrivateBoatVariant::class, 'private_boat_id', 'id')->where('is_default', '=', 0);
+    }
+
     public function defaultVariant(): HasOne
     {
-        return $this->hasOne(PrivateBoatVariant::class);
+        return $this->hasOne(PrivateBoatVariant::class, 'private_boat_id', 'id')->where('is_default', '=', 1);
+    }
+
+    public function thumbnailVariant()
+    {
+        return $this->hasOne(PrivateBoatVariant::class, 'private_boat_id', 'id')->ofMany('id', 'MIN');
     }
 
     public function scopeSelectVariantPrice($query)

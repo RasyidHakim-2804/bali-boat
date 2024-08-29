@@ -38,6 +38,8 @@ use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\User\AdminUserController;
 use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
 use App\Http\Controllers\Api\V1\User\UserProfileController;
+use App\Http\Controllers\Api\V1\Webhook\Xendit\XenditInvoiceWebhookController;
+use App\Http\Controllers\Api\V1\Webhook\Xendit\XenditPayoutLinkWebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +56,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
     // Public
+
+    // Webhook
+    Route::post('/xendit-webhook/invoice', XenditInvoiceWebhookController::class);
+    Route::post('/xendit-webhook/payout-link', XenditPayoutLinkWebhookController::class);
 
     // Public - FastBoat
     Route::get('/fast-boats', [FastBoatController::class, 'index']);

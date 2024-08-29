@@ -46,7 +46,7 @@ class ActivityResource extends JsonResource
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
             'includes'          => ListIncludeResource::collection($this->whenLoaded('includes')),
             'excludes'          => ListExcludeResource::collection($this->whenLoaded('excludes')),
-            'itinararies'       => ListItineraryResource::collection($this->whenLoaded('itinararies')),
+            'itineraries'       => ListItineraryResource::collection($this->whenLoaded('itineraries')),
             'thumbnail_image'   => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
             'images'            => ActivityImageResource::collection($this->whenLoaded('images')),
         ];

@@ -27,7 +27,7 @@ class PrivateBoatController extends Controller
         ->with([
             'tags.translations'     => fn($query) => $query->language(),
             'thumbnailImage',
-            'defaultVariant',
+            'thumbnailVariant',
             'pickupHarbor'
         ])
         ->selectVariantPrice()
@@ -39,13 +39,15 @@ class PrivateBoatController extends Controller
     public function show(PrivateBoat $privateBoat)
     {
         $privateBoat = $privateBoat->load([
-            'pickupHarbor',
             'tags.translations'     => fn($query) => $query->language(),
             'includes'              => fn($query) => $query->orderBy('position', 'ASC'),
             'translations'          => fn($query) => $query->language(),
             'includes.translations' => fn($query) => $query->language(),
             'specifications'        => fn($query) => $query->language(),
+            'pickupHarbor',
             'images',
+            'variants',
+            'defaultVariant'
         ]);
 
         return $this->successGet(
@@ -58,10 +60,10 @@ class PrivateBoatController extends Controller
         $privateBoats = PrivateBoat::with([
             'tags.translations'     => fn($query) => $query->language(),
             'thumbnailImage',
-            'defaultVariant',
+            'thumbnailVariant',
             'pickupHarbor'
         ])
-        ->orderBy('order_count', 'DESC')
+        ->orderBy('id', 'DESC')
         ->limit(4)
         ->get();
 

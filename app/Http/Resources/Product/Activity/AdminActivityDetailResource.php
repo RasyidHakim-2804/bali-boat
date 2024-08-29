@@ -25,10 +25,11 @@ class AdminActivityDetailResource extends JsonResource
             'slug'              => $this->slug,
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
-            'location'          => new LocationResource($this->location),
-            'price'             => $this->defaultVariant->price,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
+            'location'          => new LocationResource($this->location),
+            'default_variant'   => new ActivityVariantResource($this->defaultVariant),
+            'variants'          => ActivityVariantResource::collection($this->variants),
 
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
 

@@ -20,9 +20,9 @@ class AdminActivityListResource extends JsonResource
             'slug'              => $this->slug,
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
-            'price'             => $this->defaultVariant->price,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
+            'thumbnail_variant' => new ActivityVariantResource($this->thumbnailVariant),
         ];
     }
 }

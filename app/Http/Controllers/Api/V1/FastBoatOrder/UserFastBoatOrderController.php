@@ -14,7 +14,7 @@ use App\Notifications\Order\OrderCreatedNotification;
 use App\Services\FastBoatOrder\FastBoatOrderDetailService;
 use App\Services\FastBoatOrder\FastBoatOrderRegistrationService;
 use App\Services\FastBoatOrder\FastBoatOrderService;
-use App\Services\FastBoatOrder\OrderRefundService;
+use App\Services\Order\OrderRefundService;
 use App\Services\Payment\PaymentService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;

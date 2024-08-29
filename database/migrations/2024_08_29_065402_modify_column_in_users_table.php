@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('profile_image_url', 'profile_picture');
             $table->renameColumn('active', 'is_active');
+            $table->string('phone')->after('email');
         });
     }
 

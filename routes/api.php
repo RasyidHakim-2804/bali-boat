@@ -206,6 +206,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/fast-boat-orders', [AdminFastBoatOrderController::class, 'index']);
             Route::get('/fast-boat-orders/{order}', [AdminFastBoatOrderController::class, 'show']);
 
+            // Admin - Promo
+            Route::resource('/promos', AdminPromoController::class);
+
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);
 

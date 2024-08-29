@@ -24,11 +24,11 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'slug'              => $this->slug,
             'is_rented'         => $this->is_rented,
             'is_active'         => $this->is_active,
-            'pickup_harbor'     => new HarborResource($this->pickupHarbor),
-            'default_variant'   => new PrivateBoatVariantResource($this->whenLoaded('defaultVariant')),
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-            'variants'          => PrivateBoatVariantResource::collection($this->whenLoaded('variants')),
+            'pickup_harbor'     => new HarborResource($this->pickupHarbor),
+            'default_variant'   => new PrivateBoatVariantResource($this->defaultVariant),
+            'variants'          => PrivateBoatVariantResource::collection($this->variants),
 
             'tags'           => ListTagResource::collection($this->tags),
 

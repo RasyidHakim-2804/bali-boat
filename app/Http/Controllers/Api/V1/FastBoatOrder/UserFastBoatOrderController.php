@@ -14,6 +14,7 @@ use App\Notifications\Order\OrderCreatedNotification;
 use App\Services\FastBoatOrder\FastBoatOrderDetailService;
 use App\Services\FastBoatOrder\FastBoatOrderRegistrationService;
 use App\Services\FastBoatOrder\FastBoatOrderService;
+use App\Services\FastBoatOrder\OrderRefundService;
 use App\Services\Payment\PaymentService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
@@ -117,26 +118,26 @@ class UserFastBoatOrderController extends Controller
 
     public function refund(Request $request, User $user, FastBoatOrder $order)
     {
-        // if ($order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        if ($order->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        // if (!$order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        if (!$order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
-        // DB::beginTransaction();
-        // try {
-        //     (new OrderRefundService)->refund($order, $request);
+        DB::beginTransaction();
+        try {
+            (new OrderRefundService)->refund($order, $request);
 
-        //     $order->status = 'refunding';
+            $order->status = 'refunding';
 
-        //     $order->save();
+            $order->save();
 
-        //     DB::commit();
+            DB::commit();
 
-        //     return $this->successStore();
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
+            return $this->successStore();
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        //     return $this->errorServer($e->getMessage());
-        // }
+            return $this->errorServer($e->getMessage());
+        }
     }
     
     protected function setGlobalVariable($request)

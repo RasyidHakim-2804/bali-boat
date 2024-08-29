@@ -57,7 +57,6 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
             $privateBoat->is_rented        = $request->is_rented;
-            $privateBoat->is_promo         = $request->is_promo;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
             
@@ -79,11 +78,11 @@ class AdminPrivateBoatController extends Controller
 
             return $this->successStore();
 
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
+        } catch (\Exception $e) {
 
-            throw $th;
+            DB::rollBack();
+            
+            return $this->errorServer($e->getMessage());
         }
     }
 
@@ -95,7 +94,6 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
             $privateBoat->is_rented        = $request->is_rented;
-            $privateBoat->is_promo         = $request->is_promo;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
 
@@ -117,17 +115,29 @@ class AdminPrivateBoatController extends Controller
 
             return $this->successResponse();
 
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
+        } catch (\Exception $e) {
 
-            throw $th;
+            DB::rollBack();
+            
+            return $this->errorServer($e->getMessage());
         }
     }
 
     public function destroy()
     {
-        
+        try {
+            DB::beginTransaction();
+
+            DB::commit();
+
+            return $this->successResponse();
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            
+            return $this->errorServer($e->getMessage());
+        }
     }
 
     ////////////////////////

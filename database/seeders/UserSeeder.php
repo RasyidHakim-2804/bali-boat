@@ -64,6 +64,7 @@ class UserSeeder extends Seeder
                 'first_name'        => $firstname,
                 'last_name'         => $lastName,
                 'email'             => 'test@email.com',
+                'phone'             => fake()->phoneNumber(),
                 'email_verified_at' => now(),
                 'password'          => bcrypt('user#2022!'),
                 'is_active'         => 1,

@@ -26,7 +26,7 @@ class AdminPrivateBoatController extends Controller
     public function index()
     {
         $privateBoats = PrivateBoat::with([
-            'defaultVariant',
+            'thumbnailVariant',
         ])->paginate(25);
 
         return AdminPrivateBoatListResource::collection($privateBoats);
@@ -40,7 +40,8 @@ class AdminPrivateBoatController extends Controller
             'tags.translations'     => fn($query) => $query->language(),
             'includes.translations' => fn($query) => $query->language(), 
             'specifications', 
-            'defaultVariant'
+            'defaultVariant',
+            'variants'
         ]);
 
         return $this->successGet(
@@ -123,10 +124,19 @@ class AdminPrivateBoatController extends Controller
         }
     }
 
-    public function destroy()
+    public function destroy(PrivateBoat $privateBoat)
     {
         try {
             DB::beginTransaction();
+            
+            $privateBoat->tags()->detach();
+            $privateBoat->includes()->detach();
+            $privateBoat->specifications()->delete();
+            $privateBoat->translations()->delete();
+            $privateBoat->images()->delete();
+            $privateBoat->variants()->delete();
+            $privateBoat->defaultVariant()->delete();
+            $privateBoat->delete();
 
             DB::commit();
 

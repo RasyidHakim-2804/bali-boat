@@ -44,6 +44,8 @@ class UserFastBoatOrderController extends Controller
     
     public function store(StoreUserFastBoatOrderRequest $request, User $user)
     {
+        return 'test';
+        
         $user = request()->user();
 
         // Validation

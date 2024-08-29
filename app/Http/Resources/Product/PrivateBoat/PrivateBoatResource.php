@@ -22,7 +22,6 @@ class PrivateBoatResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'is_rented'         => $this->is_rented,
-            'is_promo'          => $this->is_promo,
             'is_active'         => $this->is_active,
             'pickup_harbor'     => new HarborResource($this->whenLoaded('pickupHarbor')),
             'price'             => $this->defaultVariant->price,

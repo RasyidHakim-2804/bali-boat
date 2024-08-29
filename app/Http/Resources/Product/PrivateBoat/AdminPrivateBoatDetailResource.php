@@ -23,8 +23,6 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'is_rented'         => $this->is_rented,
-            'is_promo'          => $this->is_promo,
-            'order_count'       => $this->order_count,
             'is_active'         => $this->is_active,
             'pickup_harbor'     => new HarborResource($this->pickupHarbor),
             'price'             => $this->defaultVariant->price,

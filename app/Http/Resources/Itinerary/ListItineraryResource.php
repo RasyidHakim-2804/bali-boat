@@ -18,7 +18,11 @@ class ListItineraryResource extends JsonResource
             'id'            => $this->id,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
-            'title'         => $this->translations->first()->translation
+            'title'         => $this->translations->first()->translation,
+            $this->mergeWhen(
+                isset($this->pivot),
+                fn() => ['position'  => $this->pivot->position]
+            ),
         ];
     }
 }

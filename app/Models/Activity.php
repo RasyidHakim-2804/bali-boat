@@ -63,9 +63,19 @@ class Activity extends Model
         return $this->hasOne(ActivityImage::class)->ofMany('position', 'min');
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 0);
+    }
+
     public function defaultVariant(): HasOne
     {
-        return $this->hasOne(ActivityVariant::class);
+        return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 1);
+    }
+
+    public function thumbnailVariant()
+    {
+        return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->ofMany('id', 'MIN');
     }
 
     public function scopeSelectVariantPrice($query)

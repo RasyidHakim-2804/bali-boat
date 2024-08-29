@@ -23,7 +23,6 @@ use App\Http\Controllers\Api\V1\Itinerary\AdminItineraryController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\UserFastBoatOrderController;
-use App\Http\Controllers\Api\V1\Order\UserOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminScheduleController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatController;
@@ -36,8 +35,9 @@ use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
+use App\Http\Controllers\Api\V1\User\AdminUserController;
 use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
-use App\Http\Controllers\Api\V1\User\Profile\UserProfileController;
+use App\Http\Controllers\Api\V1\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -209,11 +209,15 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             // Admin - Promo
             Route::resource('/promos', AdminPromoController::class);
 
+            // Admin - User
+            Route::get('/users', [AdminUserController::class, 'index']);
+            Route::put('/users/{user:uuid}', [AdminUserController::class, 'update']);
+
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);
 
             // Admin - Admin
-            Route::get('', [AdminController::class, 'index']);
+            Route::get('/', [AdminController::class, 'index']);
             Route::get('/{admin}', [AdminController::class, 'show']);
             Route::post('', [AdminController::class, 'store']);
             Route::put('/{admin}', [AdminController::class, 'update']);

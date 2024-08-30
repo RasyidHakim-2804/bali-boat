@@ -63,7 +63,7 @@ class User extends Authenticatable
     //     return $this->hasOne(Cart::class, 'user_id', 'id');
     // }
 
-    public function fastBoatOrder()
+    public function fastBoatOrders()
     {
         return $this->hasMany(FastBoatOrder::class, 'user_id', 'id');
     }

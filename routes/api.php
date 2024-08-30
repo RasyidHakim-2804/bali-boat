@@ -246,7 +246,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::post('/password/reset/', [UserPasswordController::class, 'resetPassword']);
         Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
 
-        Route::middleware(['auth:api_user', 'scopes:user'])->group(function(){
+        Route::middleware(['auth:api_user'])->group(function(){
             //User Profile
             Route::get('/profile', [UserProfileController::class, 'index']);
             Route::put('/profile', [UserProfileController::class, 'update']);
@@ -263,10 +263,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
                 // Order
                 Route::get('/fast-boat-orders', [UserFastBoatOrderController::class, 'index']);
-                Route::get('/fast-boat-orders/{order}', [UserFastBoatOrderController::class, 'show']);
+                Route::get('/fast-boat-orders/{fastBoatOrder}', [UserFastBoatOrderController::class, 'show']);
                 Route::post('/fast-boat-orders', [UserFastBoatOrderController::class, 'store']);
-                Route::post('/fast-boat-orders/{order}/cancel', [UserFastBoatOrderController::class, 'cancel']);
-                Route::post('/fast-boat-orders/{order}/refund', [UserFastBoatOrderController::class, 'refund']);
+                Route::post('/fast-boat-orders/{fastBoatOrder}/cancel', [UserFastBoatOrderController::class, 'cancel']);
+                Route::post('/fast-boat-orders/{fastBoatOrder}/refund', [UserFastBoatOrderController::class, 'refund']);
             });
         });
     });

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\FastBoatOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FastBoatOrder\StoreUserFastBoatOrderRequest;
-use App\Http\Resources\Order\ListOrderResource;
-use App\Http\Resources\Order\OrderResource;
+use App\Http\Resources\FastBoatOrder\ListFastBoatOrderResource;
+use App\Http\Resources\Product\FastBoat\FastBoatResource;
 use App\Models\FastBoatOrder;
 use App\Models\FastBoatSchedule;
 use App\Models\FastBoatScheduleVariant;
@@ -18,7 +18,6 @@ use App\Services\Payment\PaymentService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Request;
 
 class UserFastBoatOrderController extends Controller
@@ -33,18 +32,20 @@ class UserFastBoatOrderController extends Controller
 
     public function index(User $user)
     {
-        return ListOrderResource::collection(FastBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
+        return ListFastBoatOrderResource::collection(FastBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
     }
     
-    public function show(User $user, FastBoatOrder $fast_boat_order)
+    public function show(User $user, FastBoatOrder $order)
     {
-        $order = new OrderResource($fast_boat_order);
+        $order = new FastBoatResource($order);
 
         return $this->successGet($order);
     }
     
     public function store(StoreUserFastBoatOrderRequest $request, User $user)
     {
+        return 'test';
+        
         $user = request()->user();
 
         // Validation
@@ -73,7 +74,7 @@ class UserFastBoatOrderController extends Controller
 
             $responseData = ['order_uuid' => $order->uuid];
 
-            (new PaymentService)->prepare()->pay($order);
+            (new PaymentService)->prepare()->pay($order, 'fast_boat');
 
             $responseData['payment_url'] = $order->payment->url;
 
@@ -94,17 +95,17 @@ class UserFastBoatOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, FastBoatOrder $fast_boat_order)
+    public function cancel(User $user, FastBoatOrder $order)
     {
         DB::beginTransaction();
         try {
-            if ($fast_boat_order->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+            if ($order->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-            $fast_boat_order->status = 'canceled';
+            $order->status = 'canceled';
 
-            $fast_boat_order->save();
+            $order->save();
 
-            (new PaymentService)->prepare()->expire($fast_boat_order);
+            (new PaymentService)->prepare()->expire($order);
 
             DB::commit();
 
@@ -116,19 +117,19 @@ class UserFastBoatOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, FastBoatOrder $fast_boat_order)
+    public function refund(Request $request, User $user, FastBoatOrder $order)
     {
-        // if ($fast_boat_order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        // if ($order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        // if (!$fast_boat_order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        // if (!$order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
         // DB::beginTransaction();
         // try {
-        //     (new OrderRefundService)->refund($fast_boat_order, $request);
+        //     (new OrderRefundService)->refund($order, $request);
 
-        //     $fast_boat_order->status = 'refunding';
+        //     $order->status = 'refunding';
 
-        //     $fast_boat_order->save();
+        //     $order->save();
 
         //     DB::commit();
 
@@ -146,7 +147,7 @@ class UserFastBoatOrderController extends Controller
         
         foreach ($request->products as $key => $product) {
             $this->products[$key] = FastBoatSchedule::where('id', $product['id'])->first();
-            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->where('passenger_type', $product['passenger_type'])->where('age_type', $product['age_type'])->first();
+            $this->variants[$key] = FastBoatScheduleVariant::where('id', $product['variant_id'])->first();
 
             $this->totalProductQuantity = $this->totalProductQuantity + $product['quantity'];
         }
@@ -183,7 +184,7 @@ class UserFastBoatOrderController extends Controller
 
                 if (isset($product['variant_id'])) {
                     // $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['activity_date'] == $product['activity_date'])))
-                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['passenger_type'] == $product['passenger_type'])) && (($form['age_type'] == $product['age_type'])))
+                    $check = (($form['product_id'] == $product['id']) && (($form['variant_id'] == $product['variant_id'])) && (($form['passenger_type'] == $this->variants[$key]->passenger_type)) && (($form['age_type'] == $this->variants[$key]->age_type)))
                         ? 1 : 0;
                 } else {
                     // $check = ($form['product_id'] == $product['id']  && (($form['activity_date'] == $product['activity_date'])))
@@ -193,12 +194,8 @@ class UserFastBoatOrderController extends Controller
 
                 $countCheck = $countCheck + $check;
             }
-
-            $personQty = $this->products[$key]->person_qty;
-
-            if (isset($this->variants[$key])) $personQty = $this->variants[$key]->person_qty;
-
-            if ($countCheck != ($product['quantity'] * $personQty)) {
+            
+            if ($countCheck != $product['quantity']) {
                 if (config('app.locale') == 'id') return abort(422, "Jumlah produk " . $key + 1 . " tidak sama dengan jumlah formulir terkait.");
                 
                 return abort(422, "The quantity of product " . ($key + 1) .  " not equal to the form quantity.");
@@ -242,12 +239,12 @@ class UserFastBoatOrderController extends Controller
         $user = request()->user();
         
         $data                   = [];
-        $data['language']       = $user->language;
+        $data['language']       = 'en';
         $data['first_name']     = $user->first_name;
         $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
-        Notification::send(new OrderCreatedNotification($data));
+        $user->notify(new OrderCreatedNotification($data));
     }
 
     // protected function sendAdminEmail($order)

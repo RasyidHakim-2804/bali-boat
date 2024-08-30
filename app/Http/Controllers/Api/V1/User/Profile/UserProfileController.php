@@ -8,10 +8,13 @@ use App\Http\Resources\Api\V1\Common\SuccessResource;
 use App\Http\Resources\Profile\UserProfileResource;
 use App\Models\User;
 use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class UserProfileController extends Controller
 {
+
+    use JsonResponsesTrait;
     /**
      * Display the specified resource.
      */

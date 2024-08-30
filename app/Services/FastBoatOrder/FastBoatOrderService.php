@@ -16,20 +16,24 @@ class FastBoatOrderService
 
         if ($promo) $promoAmount = $this->calculatePromoAmount($totalPurchased, $promo);
 
-        $totalPurchasedAfterPromo = $promoAmount - $promoAmount;
+        $totalPurchasedAfterPromo = $totalPurchased - $promoAmount;
 
         if ($totalPurchasedAfterPromo < 0) $totalPurchasedAfterPromo = 0;
 
         $grandTotalPurchased = $totalPurchasedAfterPromo;
 
-        $order                                  = new FastBoatOrder();
-        $order->user_id                         = $user->id;
-        $order->uuid                            = $this->generateUuid();
-        $order->promo_amount                    = $promoAmount;
-        $order->promo_id                        = $promo->id;
-        $order->total_purchased                 = $totalPurchased['idr'];
-        $order->grand_total_purchased           = $grandTotalPurchased;
-        $order->status                          = 'waiting_for_payment';
+        $order                          = new FastBoatOrder();
+        $order->user_id                 = $user->id;
+        $order->uuid                    = $this->generateUuid();
+        $order->promo_amount            = number_format($promoAmount, 2, '.', '');
+        $order->promo_id                = $promo?->id;
+        $order->total_purchased         = number_format($totalPurchased, 2, '.', '');
+        $order->grand_total_purchased   = number_format($grandTotalPurchased, 2, '.', '');
+        $order->status                  = 'waiting_for_payment';
+        $order->pic_name                = $request->pic_name;
+        $order->pic_email               = $request->pic_email;
+        $order->pic_phone_number        = $request->pic_name;
+        $order->activity_date           = $request->activity_date;
 
         $order->save();
 
@@ -40,23 +44,13 @@ class FastBoatOrderService
 
     protected function calculateTotalPurchased($request, $variantsData)
     {
-        $totalPurchased = $totalUsdPurchased = $totalEurPurchased = $totalJpyPurchased = $totalCnyPurchased = 0;
+        $totalPurchased = 0;
 
         foreach ($request->products as $key => $product) {
-            $totalPurchased     = $totalPurchased + ($product['quantity'] * $variantsData[$key]->price);
-            $totalUsdPurchased  = $totalUsdPurchased + ($product['quantity'] * $variantsData[$key]->usd_price);
-            $totalEurPurchased  = $totalEurPurchased + ($product['quantity'] * $variantsData[$key]->eur_price);
-            $totalJpyPurchased  = $totalJpyPurchased + ($product['quantity'] * $variantsData[$key]->jpy_price);
-            $totalCnyPurchased  = $totalCnyPurchased + ($product['quantity'] * $variantsData[$key]->cny_price);
+            $totalPurchased = $totalPurchased + ($product['quantity'] * $variantsData[$key]->price);
         }
 
-        return [
-            'idr'   => $totalPurchased,
-            'usd'   => $totalUsdPurchased,
-            'eur'   => $totalEurPurchased,
-            'jpy'   => $totalJpyPurchased,
-            'cny'   => $totalCnyPurchased
-        ];
+        return $totalPurchased;
     }
 
     protected function calculateTotalAdditionalPurchased($request, $additionalsData)

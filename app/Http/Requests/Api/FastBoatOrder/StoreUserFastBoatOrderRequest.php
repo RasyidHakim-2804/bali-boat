@@ -48,7 +48,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     
                     if ($count > 1) $fail(__('validation.distinct'));
                 },
-                Rule::exists('fast_boat_schedules', 'id')->where('is_saleable', 1)->whereNull('deleted_at'),
+                Rule::exists('fast_boat_schedules', 'id')->where('is_active', 1)->whereNull('deleted_at'),
             ],
             'products.*.variant_id' => [
                 'required',
@@ -65,10 +65,8 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                     if ($count->count() > 0) $fail(__('validation.distinct'));
                 },
                 
-                Rule::exists('fast_boat_schedule_variants', 'id')->where('product_id', $this->input('products.*.id'))->where('passenger_type', $this->input('products.*.passenger_type'))->whereNull('deleted_at'),
+                Rule::exists('fast_boat_schedule_variants', 'id')->where('fast_boat_schedule_id', $this->input('products.*.id'))->whereNull('deleted_at'),
             ],
-            'products.*.passenger_type' => 'required|in:local,foreign',
-            'products.*.age_type'       => 'required|in:adult,child',
             'products.*.quantity'       => 'required|integer|gt:0',
             'forms'                     => 'required|array',
             'forms.*.product_id'        => ['required',
@@ -93,11 +91,11 @@ class StoreUserFastBoatOrderRequest extends FormRequest
 
                     if ($count < 1) $fail(__('validation.in'));
                 },
-                Rule::exists('product_variants', 'id')->where('product_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
+                Rule::exists('fast_boat_schedule_variants', 'id')->where('fast_boat_schedule_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
             ],
             'forms.*.name'              => 'required|string|min:1',
             'forms.*.nationality'       => 'required|min:1',
-            'forms.*.age_type'          => ['required','in:local,foreign', Rule::when($this->input('forms.*.nationality') == 'indonesia', ['same:local'])],
+            'forms.*.passenger_type'    => ['required', Rule::when(($this->input('forms.*.is_itas_holder') === 1), ['in:local'], ['in:foreign'])],
             'forms.*.age_type'          => 'required|in:adult,child',
             'forms.*.is_itas_holder'    => 'required|boolean',
         ];

@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 
 use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
+use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Include\AdminIncludeController;
@@ -206,6 +207,13 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/users', [UserManagementController::class, 'index']);
             Route::put('/users/{user:uuid}', [UserManagementController::class, 'update']);
 
+            // Admin - FastBoat Order
+            Route::get('/fast-boat-orders', [AdminFastBoatOrderController::class, 'index']);
+            Route::get('/fast-boat-orders/{order}', [AdminFastBoatOrderController::class, 'show']);
+
+            // Admin - Promo
+            Route::resource('/promos', AdminPromoController::class);
+
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);
 
@@ -249,10 +257,11 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
 
                 // Order
+                Route::get('/fast-boat-orders', [UserFastBoatOrderController::class, 'index']);
+                Route::get('/fast-boat-orders/{order}', [UserFastBoatOrderController::class, 'show']);
+                Route::post('/fast-boat-orders', [UserFastBoatOrderController::class, 'store']);
                 Route::post('/fast-boat-orders/{order}/cancel', [UserFastBoatOrderController::class, 'cancel']);
                 Route::post('/fast-boat-orders/{order}/refund', [UserFastBoatOrderController::class, 'refund']);
-                Route::get('/fast-boat-orders/{order}/refund-channels', [UserFastBoatOrderController::class, 'refundChanel']);
-                Route::resource('/fast-boat-orders', UserFastBoatOrderController::class)->only(['index', 'show', 'store']);
             });
         });
     });

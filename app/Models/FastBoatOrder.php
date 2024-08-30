@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Notifications\Notifiable;
 
 class FastBoatOrder extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Notifiable;
 
     public function getRouteKeyName()
     {
@@ -31,7 +32,7 @@ class FastBoatOrder extends Model
 
     public function payment()
     {
-       return $this->hasOne(XenditPayment::class, 'order_id', 'id');
+       return $this->hasOne(OrderPayment::class, 'fast_boat_order_id', 'id');
     }
 
     // public function payout()
@@ -56,7 +57,7 @@ class FastBoatOrder extends Model
 
     public function forms()
     {
-        return $this->hasMany(OrderForm::class, 'order_id', 'id');
+        return $this->hasMany(FastBoatOrderForm::class, 'order_id', 'id');
     }
 
     // public function paymentHistories()

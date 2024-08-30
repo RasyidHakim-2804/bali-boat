@@ -32,7 +32,6 @@ class StorePromoRequest extends FormRequest
             'duration'          => 'required|in:once,repeat',
             'amount'            => 'required|numeric|integer|gt:0',
             'is_active'         => 'required|boolean',
-            'is_new_user_promo' => ['required', 'boolean', Rule::unique('promos', 'is_new_user_promo')->where('is_new_user_promo', 1)->whereNull('deleted_at')],
             'start_at'          => 'required|date|after_or_equal:today',
             'expired_at'        => 'required|date|after:start_at',
         ];

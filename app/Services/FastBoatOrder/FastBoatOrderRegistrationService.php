@@ -9,10 +9,11 @@ class FastBoatOrderRegistrationService
     public function create($orderId, $registrations)
     {
         foreach ($registrations as $key => $registration) {
-            $orderRegistration           = new FastBoatOrderForm();
-            $orderRegistration->order_id = $orderId;
+            $orderRegistration              = new FastBoatOrderForm();
+            $orderRegistration->order_id    = $orderId;
+            $orderRegistration->schedule_id = $registration['product_id'];
 
-            if ($registrations->nationality == 'indonesia')  $orderRegistration->is_local = 1;
+            if ($registration['nationality'] == 'indonesia')  $orderRegistration->is_local = 1;
 
             $orderRegistration->fill($registration);
             

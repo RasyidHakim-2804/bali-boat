@@ -34,7 +34,7 @@ class AuthUserController extends Controller
             return $this->errorValidationResponse('email', 'Username or password is invalid.');
         }
 
-        if ($user->active == 0) return $this->errorValidationResponse('email', 'Your account is blocked.');
+        if ($user->is_active == 0) return $this->errorValidationResponse('email', 'Your account is blocked.');
 
         $token = $user->createToken('user', ['user'])->accessToken;
 

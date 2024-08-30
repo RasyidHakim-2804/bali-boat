@@ -40,10 +40,10 @@ class FastBoatOrder extends Model
     //     return $this->hasOne(XenditPayout::class, 'order_id', 'id');
     // }
 
-    // public function refunds()
-    // {
-    //     return $this->hasMany(OrderRefund::class, 'order_id', 'id');
-    // }
+    public function refunds()
+    {
+        return $this->hasMany(OrderRefund::class, 'fast_boat_order_id', 'id');
+    }
 
     // public function decline()
     // {

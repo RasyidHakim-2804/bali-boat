@@ -11,6 +11,10 @@ class ProductExclude extends Model
 {
     use HasFactory;
 
+    public $type = [
+        'activity', 'private-boat'
+    ];
+
     public function translations(): HasMany
     {
         return $this->hasMany(ExcludeTranslation::class, 'exclude_id', 'id');

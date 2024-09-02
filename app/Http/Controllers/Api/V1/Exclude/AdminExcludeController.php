@@ -9,6 +9,8 @@ use App\Http\Resources\Exclude\ListExcludeResource;
 use App\Models\ProductExclude;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminExcludeController extends Controller
 {
@@ -23,18 +25,26 @@ class AdminExcludeController extends Controller
 
     public function index()
     {
-        $excludes = ProductExclude::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-        ])->paginate(25);
+        $excludes = QueryBuilder::for(ProductExclude::class)
+                    ->allowedFilters([
+                        AllowedFilter::exact('type')
+                    ])
+                    ->with([
+                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                    ])->paginate(25);
 
         return ListExcludeResource::collection($excludes);
     }
 
     public function all()
     {
-        $excludes = ProductExclude::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-        ])->get();
+        $excludes = QueryBuilder::for(ProductExclude::class)
+                    ->allowedFilters([
+                        AllowedFilter::exact('type')
+                    ])
+                    ->with([
+                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                    ])->get();
 
         return ListExcludeResource::collection($excludes);
     }

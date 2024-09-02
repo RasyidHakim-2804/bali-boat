@@ -11,7 +11,7 @@ class ProductInclude extends Model
 {
     use HasFactory;
 
-    public $type = [
+    public static $type = [
         'activity', 'private-boat'
     ];
 

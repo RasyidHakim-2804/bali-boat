@@ -48,10 +48,16 @@ class ActivityRequest extends FormRequest
             'description.*'     => 'required|string',
 
             'includes'          => 'required|array',
-            'includes.*'        => 'required|exists:product_includes,id',
+            'includes.*'        => [
+                'required',
+                Rule::exists('product_includes', 'id')->where('type', 'activity'),
+            ],,
 
             'excludes'          => 'required|array',
-            'excludes.*'        => 'required|exists:product_excludes,id',
+            'excludes.*'        => [
+                'required',
+                Rule::exists('product_includes', 'id')->where('type', 'activity'),
+            ],,
 
             'itineraries'       => 'required|array',
             'itineraries.*'     => 'required|exists:product_itineraries,id',

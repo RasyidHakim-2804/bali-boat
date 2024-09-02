@@ -39,7 +39,7 @@ class AdminPrivateBoatController extends Controller
             'translations',
             'tags.translations'     => fn($query) => $query->language(),
             'includes.translations' => fn($query) => $query->language(), 
-            'specifications', 
+            'specification', 
             'defaultVariant',
             'variants'
         ]);
@@ -164,22 +164,18 @@ class AdminPrivateBoatController extends Controller
         return $result;
     }
 
-    private function setSpecification(PrivateBoat $privateBoat, $specificationRequest)
+    private function setSpecification(PrivateBoat $privateBoat, $request)
     {
-        foreach ($specificationRequest as $lang => $value) {
-
-            $specification = $privateBoat->specifications()->language($lang)->firstOrNew();
+        $specification = $privateBoat->specifications()->firstOrNew();
             
-            $specification->private_boat_id = $privateBoat->id;
-            $specification->language  = $lang;
-            $specification->model     = $value['model'];
-            $specification->year      = $value['year'];
-            $specification->length    = $value['length'];
-            $specification->cabins    = $value['cabins'];
-            $specification->heads     = $value['heads'];
-            $specification->engine    = $value['engine'];
-            $specification->save();
-        }
+        $specification->private_boat_id = $privateBoat->id;
+        $specification->model     = $request['model'];
+        $specification->year      = $request['year'];
+        $specification->length    = $request['length'];
+        $specification->cabins    = $request['cabins'];
+        $specification->heads     = $request['heads'];
+        $specification->engine    = $request['engine'];
+        $specification->save();
     }
 
     private function setTranslations(PrivateBoat $privateBoat, $lang, $field, $translation)

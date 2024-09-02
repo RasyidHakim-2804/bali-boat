@@ -43,7 +43,7 @@ class PrivateBoatController extends Controller
             'includes'              => fn($query) => $query->orderBy('position', 'ASC'),
             'translations'          => fn($query) => $query->language(),
             'includes.translations' => fn($query) => $query->language(),
-            'specifications'        => fn($query) => $query->language(),
+            'specification',
             'pickupHarbor',
             'images',
             'variants',

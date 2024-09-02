@@ -37,7 +37,6 @@ class PrivateBoatRequest extends FormRequest
             'is_active'         => 'required|boolean',
             'pickup_harbor_id'  => 'required|exists:harbors,id',
             'tags'              => 'required|array',
-            'is_rented'         => 'required|boolean',
 
             'tags'              => 'required|array',
             'tags.*'            => [

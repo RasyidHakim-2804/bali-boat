@@ -22,7 +22,6 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
-            'is_rented'         => $this->is_rented,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,

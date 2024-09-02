@@ -162,6 +162,7 @@ class AuthUserController extends Controller
     protected function sendEmail($user, $token)
     {
         $data                           = [];
+        $data['language']               = config('app.locale');
         $data['first_name']             = $user->first_name;
         $data['email_verification_url'] = env('FRONTEND_URL') . '/email-verification/' . $token;
 
@@ -171,6 +172,7 @@ class AuthUserController extends Controller
     protected function sendWelcomeEmail($user)
     {
         $data                        = [];
+        $data['language']            = config('app.locale');
         $data['first_name']          = $user->first_name;
         $data['login_page_url']      = env('FRONTEND_URL') . '/login';
 

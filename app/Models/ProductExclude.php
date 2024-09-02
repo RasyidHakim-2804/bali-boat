@@ -11,7 +11,7 @@ class ProductExclude extends Model
 {
     use HasFactory;
 
-    public static $type = [
+    public const TYPE = [
         'activity', 'private-boat'
     ];
 

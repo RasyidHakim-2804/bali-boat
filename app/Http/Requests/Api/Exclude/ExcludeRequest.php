@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Api\Exclude;
 
 use App\Models\Language;
+use App\Models\ProductExclude;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ExcludeRequest extends FormRequest
 {
@@ -22,6 +24,13 @@ class ExcludeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $rule = [
+            'type'  => [
+                'required',
+                Rule::in(ProductExclude::$type),
+            ]
+        ];
+
         foreach (Language::code() as $lang) {
             $rule['description.' . $lang]    = 'required|string|max:200';
         }

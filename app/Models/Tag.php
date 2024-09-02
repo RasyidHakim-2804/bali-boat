@@ -11,6 +11,10 @@ class Tag extends Model
 {
     use HasFactory;
 
+    public static $type = [
+        'activity', 'private-boat'
+    ];
+
     public function translations(): HasMany
     {
         return $this->hasMany(TagTranslation::class, 'tag_id', 'id');

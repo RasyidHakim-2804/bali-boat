@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Api\Include;
 
 use App\Models\Language;
+use App\Models\ProductInclude;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class IncludeRequest extends FormRequest
 {
@@ -22,6 +24,13 @@ class IncludeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $rule = [
+            'type'  => [
+                'required',
+                Rule::in(ProductInclude::$type),
+            ]
+        ];
+
         foreach (Language::code() as $lang) {
             $rule['description.' . $lang]    = 'required|string|max:200';
         }

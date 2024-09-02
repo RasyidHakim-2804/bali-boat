@@ -16,7 +16,6 @@ class PrivateBoatSpecificationResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'language'      => $this->language,
             'model'         => $this->model,
             'year'          => $this->year,
             'length'        => $this->length,

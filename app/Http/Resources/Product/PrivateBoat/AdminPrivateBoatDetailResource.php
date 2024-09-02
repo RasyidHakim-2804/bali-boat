@@ -39,9 +39,7 @@ class AdminPrivateBoatDetailResource extends JsonResource
                 $this->translations->where('field', 'meta')
             ),
 
-            'specifications' => PrivateBoatSpecificationResource::collection($this->specifications)
-                                ->groupBy('language')
-                                ->map(fn($item) => $item->first()),
+            'specifications' => PrivateBoatSpecificationResource::collection($this->specification),
 
             'includes'       => ListIncludeResource::collection($this->includes),
 

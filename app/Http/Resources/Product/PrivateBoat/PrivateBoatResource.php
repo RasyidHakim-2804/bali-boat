@@ -37,8 +37,7 @@ class PrivateBoatResource extends JsonResource
             ),
             
             'specifications' => new PrivateBoatSpecificationResource($this->whenLoaded(
-                'specifications',
-                fn() => $this->specifications->first()
+                'specification',
             )),
             
             'pickup_harbor'     => new HarborResource($this->whenLoaded('pickupHarbor')),

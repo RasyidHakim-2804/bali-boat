@@ -6,11 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\User\Auth\ResendEmailVerificationRequest;
 use App\Http\Requests\Api\User\Auth\UserLoginRequest;
 use App\Http\Requests\Api\User\Auth\UserRegisterRequest;
-use App\Mail\Promo\NewUserPromoMail;
-use App\Mail\User\UserRegisterVerificationMail;
-use App\Mail\User\UserWelcomeMail;
 use App\Models\User;
 use App\Models\UserEmailVerificationToken;
+use App\Notifications\User\UserRegisterVerificationNotification;
+use App\Notifications\User\UserWelcomeNotification;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -160,33 +159,23 @@ class AuthUserController extends Controller
         $emailVerification->save();
     }
 
-    // protected function sendEmail($user, $token)
-    // {
-    //     $data                         = [];
-    //     $data['first_name']           = $user->first_name;
-    //     $data['email_validation_url'] = env('FRONTEND_URL') . '/email-verification/' . $token;
+    protected function sendEmail($user, $token)
+    {
+        $data                           = [];
+        $data['first_name']             = $user->first_name;
+        $data['email_verification_url'] = env('FRONTEND_URL') . '/email-verification/' . $token;
 
-    //     Mail::to($user->email)->send((new UserRegisterVerificationMail($data)));
-    // }
+        $user->notify(new UserRegisterVerificationNotification($data));
+    }
 
-    // protected function sendEmailNewUserPromo($user, $promo)
-    // {
-    //     $data                        = [];
-    //     $data['first_name']          = $user->first_name;
-    //     $data['promo_code']          = $promo->code;
-    //     $data['promo_amount_string'] = ($promo->type == 'fixed') ? ('$' . $promo->amount) : ($promo->amount . '%');
+    protected function sendWelcomeEmail($user)
+    {
+        $data                        = [];
+        $data['first_name']          = $user->first_name;
+        $data['login_page_url']      = env('FRONTEND_URL') . '/login';
 
-    //     Mail::to($user->email)->send((new NewUserPromoMail($data)));
-    // }
-
-    // protected function sendWelcomeEmail($user)
-    // {
-    //     $data                        = [];
-    //     $data['first_name']          = $user->first_name;
-    //     $data['login_page_url']      = env('FRONTEND_URL') . '/login';
-
-    //     Mail::to($user->email)->send((new UserWelcomeMail($data)));
-    // }
+        $user->notify(new UserWelcomeNotification($data));
+    }
 
     protected function generateUuid()
     {

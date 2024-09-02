@@ -52,7 +52,8 @@ class AdminExcludeController extends Controller
     {
         DB::transaction(function() use ($request) {
 
-            $exclude = new ProductExclude();
+            $exclude       = new ProductExclude();
+            $exclude->type = $request->type;
             $exclude->save();
             
             foreach ($request->validated('description') as $lang => $description) {
@@ -67,6 +68,7 @@ class AdminExcludeController extends Controller
     {
         DB::transaction(function() use ($request, $exclude) {
             
+            $exclude->type = $request->type;
             $exclude->save();
             
             foreach ($request->validated('description') as $lang => $description) {

@@ -56,17 +56,16 @@ class PrivateBoatRequest extends FormRequest
             'meta'              => ['required',$arrayLanguage],
             'meta.*'            => ['required','string'],
 
-            'specification'             => ['required', $arrayLanguage],
-            'specification.*.model'     => 'required|string',
-            'specification.*.year'      => 'required|string',
-            'specification.*.length'    => 'required|string',
-            'specification.*.cabins'    => 'required|string',
-            'specification.*.heads'     => 'required|string',
-            'specification.*.engine'    => 'required|string',
+            'specification'           => 'required|array',
+            'specification.model'     => 'required|string',
+            'specification.year'      => 'required|integer|digits:4|min:0',
+            'specification.length'    => 'required|string',
+            'specification.cabins'    => 'required|integer|min:1',
+            'specification.heads'     => 'required|integer|min:1',
+            'specification.engine'    => 'required|string',
         ];
 
         foreach (Language::code() as $lang) {
-            $rule['specification.' . $lang] = 'required';
             $rule['highlight.' . $lang]     = 'required';
             $rule['meta.' . $lang]          = 'required';
         }

@@ -40,7 +40,11 @@ class PrivateBoatRequest extends FormRequest
             'is_rented'         => 'required|boolean',
 
             'tags'              => 'required|array',
-            'tags.*'            => 'required|exists:tags,id',
+            'tags.*'            => [
+                'required',
+                Rule::exists('tags', 'id')->where('type', 'private-boat'),
+            ],
+
             'includes'          => 'required|array',
             'includes.*'        => [
                 'required',

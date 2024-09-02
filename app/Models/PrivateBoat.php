@@ -45,7 +45,7 @@ class PrivateBoat extends Model
                     ->withPivot(['position']);
     }
 
-    public function specifications(): HasOne
+    public function specification(): HasOne
     {
         return $this->hasOne(PrivateBoatSpecification::class, 'private_boat_id', 'id');
     }

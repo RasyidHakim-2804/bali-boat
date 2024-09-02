@@ -9,6 +9,8 @@ use App\Http\Resources\Tag\ListTagResource;
 use App\Models\Tag;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminTagController extends Controller
 {
@@ -23,18 +25,27 @@ class AdminTagController extends Controller
 
     public function index()
     {
-        $tags = Tag::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-        ])->paginate(25);
+        $tags = QueryBuilder::for(Tag::class)
+                    ->allowedFilters([
+                        AllowedFilter::exact('type')
+                    ])
+                    ->with([
+                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                    ])->paginate(25);
 
         return ListTagResource::collection($tags);
     }
 
     public function all()
     {
-        $tags = Tag::with([
-            'translations' => fn($query) => $query->where('language', '=', 'id')
-        ])->get();
+        $tags = QueryBuilder::for(Tag::class)
+                    ->allowedFilters([
+                        AllowedFilter::exact('type')
+                    ])
+                    ->with([
+                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                    ])->get();
+
 
         return ListTagResource::collection($tags);
     }
@@ -52,7 +63,8 @@ class AdminTagController extends Controller
     {
         DB::transaction(function() use ($request) {
 
-            $tag = new Tag();
+            $tag       = new Tag();
+            $tag->type = $request->type;
             $tag->save();
             
             foreach ($request->validated('name') as $lang => $name) {
@@ -67,6 +79,7 @@ class AdminTagController extends Controller
     {
         DB::transaction(function() use ($request, $tag) {
             
+            $tag->type = $request->type;
             $tag->save();
             
             foreach ($request->validated('name') as $lang => $name) {

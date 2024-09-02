@@ -27,7 +27,7 @@ class IncludeRequest extends FormRequest
         $rule = [
             'type'  => [
                 'required',
-                Rule::in(ProductInclude::$type),
+                Rule::in(ProductInclude::TYPE),
             ]
         ];
 

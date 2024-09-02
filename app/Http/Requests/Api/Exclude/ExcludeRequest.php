@@ -27,7 +27,7 @@ class ExcludeRequest extends FormRequest
         $rule = [
             'type'  => [
                 'required',
-                Rule::in(ProductExclude::$type),
+                Rule::in(ProductExclude::TYPE),
             ]
         ];
 

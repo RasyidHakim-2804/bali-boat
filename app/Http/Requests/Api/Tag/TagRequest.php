@@ -27,7 +27,7 @@ class TagRequest extends FormRequest
         $rule = [
             'type'  => [
                 'required',
-                Rule::in(Tag::$type),
+                Rule::in(Tag::TYPE),
             ]
         ];
 

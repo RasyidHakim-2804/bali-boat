@@ -42,7 +42,6 @@ class PrivateBoatResource extends JsonResource
             
             'pickup_harbor'     => new HarborResource($this->whenLoaded('pickupHarbor')),
             'thumbnail_variant' => new PrivateBoatVariantResource($this->whenLoaded('thumbnailVariant')),
-            'variants'          => PrivateBoatVariantResource::collection($this->whenLoaded('variants')),
             'default_variant'   => new PrivateBoatVariantResource($this->whenLoaded('defaultVariant')),
             'images'            => PrivateBoatImageResource::collection($this->whenLoaded('images')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),

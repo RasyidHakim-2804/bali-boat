@@ -27,7 +27,6 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'updated_at'        => $this->updated_at,
             'pickup_harbor'     => new HarborResource($this->pickupHarbor),
             'default_variant'   => new PrivateBoatVariantResource($this->defaultVariant),
-            'variants'          => PrivateBoatVariantResource::collection($this->variants),
 
             'tags'           => ListTagResource::collection($this->tags),
 

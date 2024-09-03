@@ -38,7 +38,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                         })
                         ->count();
     
-                    if ($count > 1) $fail(__('validation.required'));
+                    if (($count > 1) && (!$value)) $fail(__('validation.required'));
                 },
             ],
             'pic_name'          => 'required|min:1',

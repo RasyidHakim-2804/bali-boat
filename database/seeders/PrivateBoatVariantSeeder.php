@@ -16,8 +16,6 @@ class PrivateBoatVariantSeeder extends Seeder
         for ($private_boat_id = 1; $private_boat_id < 5; $private_boat_id++) { 
             DB::table('private_boat_variants')->insert([
                 'private_boat_id'      => $private_boat_id,
-                'passenger_type' => null,
-                'age_type'       => null,
                 'is_default'     => 1,
                 'price'          => '7000000',
                 'created_at'     => now(),

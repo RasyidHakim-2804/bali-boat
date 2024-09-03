@@ -129,7 +129,7 @@ class AdminPrivateBoatController extends Controller
             
             $privateBoat->tags()->detach();
             $privateBoat->includes()->detach();
-            $privateBoat->specifications()->delete();
+            $privateBoat->specification()->delete();
             $privateBoat->translations()->delete();
             $privateBoat->images()->delete();
             $privateBoat->variants()->delete();
@@ -166,7 +166,7 @@ class AdminPrivateBoatController extends Controller
 
     private function setSpecification(PrivateBoat $privateBoat, $request)
     {
-        $specification = $privateBoat->specifications()->firstOrNew();
+        $specification = $privateBoat->specification()->firstOrNew();
             
         $specification->private_boat_id = $privateBoat->id;
         $specification->model     = $request['model'];

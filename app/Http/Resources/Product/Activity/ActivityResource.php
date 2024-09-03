@@ -23,12 +23,15 @@ class ActivityResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
-            'price'             => $this->thumbnailVariant->price,
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             
+            $this->mergeWhen(
+                $this->relationLoaded('thumbnailVariant'),
+                fn() => [ 'price' => $this->thumbnailVariant->price,]
+            ),
             
             'highlight' => $this->whenLoaded(
                 'translations',

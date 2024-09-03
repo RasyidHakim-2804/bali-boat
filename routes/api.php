@@ -236,8 +236,8 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
         //Authentication
         Route::post('/register', [AuthUserController::class,'register']);
-        Route::post('/email-verify/confirm/{token}', [AuthUserController::class, 'verifyEmail']);
-        Route::post('/email-verify/resend', [AuthUserController::class, 'resendEmailVerification']);
+        Route::post('/resend-email-verification', [AuthUserController::class, 'resendEmailVerification'])->middleware('throttle:limit_public_api_with_email_sending');
+        Route::post('/email-verification/{token}', [AuthUserController::class, 'emailVerification']);
         Route::post('/login', [AuthUserController::class, 'login']);
 
         //password controller

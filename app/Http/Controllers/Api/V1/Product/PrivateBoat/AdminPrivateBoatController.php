@@ -41,7 +41,6 @@ class AdminPrivateBoatController extends Controller
             'includes.translations' => fn($query) => $query->language(), 
             'specification', 
             'defaultVariant',
-            'variants'
         ]);
 
         return $this->successGet(

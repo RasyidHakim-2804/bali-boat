@@ -46,7 +46,6 @@ class PrivateBoatController extends Controller
             'specification',
             'pickupHarbor',
             'images',
-            'variants',
             'defaultVariant'
         ]);
 

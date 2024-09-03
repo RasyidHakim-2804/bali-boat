@@ -15,20 +15,17 @@ class PrivateBoatSpecificationSeeder extends Seeder
     public function run(): void
     {
         for ($private_boat_id = 1; $private_boat_id < 5; $private_boat_id++) { 
-            foreach (Language::code() as $lang) {
-                DB::table('private_boat_specifications')->insert([
-                    'private_boat_id'     => $private_boat_id,
-                    'model'         => 'Azimut 43',
-                    'year'          => '2017',
-                    'length'        => '43ft (13.16m)',
-                    'cabins'        => '2',
-                    'heads'         => '3',
-                    'engine'        => 'Volva Penta IPS',
-                    'language'      => $lang,
-                    'created_at'    => now(),
-                    'updated_at'    => now(),
-                ]);
-            }
+            DB::table('private_boat_specifications')->insert([
+                'private_boat_id'     => $private_boat_id,
+                'model'         => 'Azimut 43',
+                'year'          => '2017',
+                'length'        => '43ft (13.16m)',
+                'cabins'        => '2',
+                'heads'         => '3',
+                'engine'        => 'Volva Penta IPS',
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
         }
     }
 }

@@ -39,7 +39,7 @@ class AdminPrivateBoatDetailResource extends JsonResource
                 $this->translations->where('field', 'meta')
             ),
 
-            'specifications' => PrivateBoatSpecificationResource::collection($this->specification),
+            'specifications' => new PrivateBoatSpecificationResource($this->specification),
 
             'includes'       => ListIncludeResource::collection($this->includes),
 

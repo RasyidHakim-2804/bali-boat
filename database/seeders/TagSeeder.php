@@ -15,20 +15,32 @@ class TagSeeder extends Seeder
     {
         $tags = [
             [
-                'en' => 'Private tour',
-                'id' => 'Tur pribadi',
+                'type'          => 'private-boat',
+                'translations'  => [
+                    'en' => 'Private tour',
+                    'id' => 'Tur pribadi',
+                ]
             ],
             [
-                'en' => '8 - 10 hours',
-                'id' => '8 - 10 jam',
+                'type'          => 'private-boat',
+                'translations'  => [
+                    'en' => '8 - 10 hours',
+                    'id' => '8 - 10 jam',
+                ]
             ],
             [
-                'en' => 'Free lunch',
-                'id' => 'Makan siang gratis',
+                'type'          => 'private-boat',
+                'translations'  => [
+                    'en' => 'Free lunch',
+                    'id' => 'Makan siang gratis',
+                ]
             ],
             [
-                'en' => 'Pickup Add-on Available',
-                'id' => 'Tambahan penjemputan tersedia',
+                'type'          => 'private-boat',
+                'translations'  => [
+                    'en' => 'Pickup Add-on Available',
+                    'id' => 'Tambahan penjemputan tersedia',
+                ]
             ],
         ];
 
@@ -37,11 +49,12 @@ class TagSeeder extends Seeder
         foreach ($tags as $tag) {
             DB::table('tags')->insert([
                 'id'         => $id,
+                'type'       => $tag['type'],
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
 
-            foreach ($tag as $lang => $value) {
+            foreach ($tag['translations'] as $lang => $value) {
                 DB::table('tag_translations')->insert([
                     'field'         => 'name',
                     'translation'   => $value,

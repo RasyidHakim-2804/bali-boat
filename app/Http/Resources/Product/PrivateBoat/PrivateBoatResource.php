@@ -21,7 +21,6 @@ class PrivateBoatResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
-            'is_rented'         => $this->is_rented,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
@@ -38,13 +37,11 @@ class PrivateBoatResource extends JsonResource
             ),
             
             'specifications' => new PrivateBoatSpecificationResource($this->whenLoaded(
-                'specifications',
-                fn() => $this->specifications->first()
+                'specification',
             )),
             
             'pickup_harbor'     => new HarborResource($this->whenLoaded('pickupHarbor')),
             'thumbnail_variant' => new PrivateBoatVariantResource($this->whenLoaded('thumbnailVariant')),
-            'variants'          => PrivateBoatVariantResource::collection($this->whenLoaded('variants')),
             'default_variant'   => new PrivateBoatVariantResource($this->whenLoaded('defaultVariant')),
             'images'            => PrivateBoatImageResource::collection($this->whenLoaded('images')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),

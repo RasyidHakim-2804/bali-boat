@@ -11,6 +11,10 @@ class ProductInclude extends Model
 {
     use HasFactory;
 
+    public const TYPE = [
+        'activity', 'private-boat'
+    ];
+
     public function privateBoats(): BelongsToMany
     {
         return $this->belongsToMany(PrivateBoat::class, 'pivot_private_boat_includes', 'include_id', 'private_boat_id');

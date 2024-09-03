@@ -39,9 +39,8 @@ class AdminPrivateBoatController extends Controller
             'translations',
             'tags.translations'     => fn($query) => $query->language(),
             'includes.translations' => fn($query) => $query->language(), 
-            'specifications', 
+            'specification', 
             'defaultVariant',
-            'variants'
         ]);
 
         return $this->successGet(
@@ -57,7 +56,6 @@ class AdminPrivateBoatController extends Controller
             $privateBoat                   = new PrivateBoat();
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
-            $privateBoat->is_rented        = $request->is_rented;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
             
@@ -94,7 +92,6 @@ class AdminPrivateBoatController extends Controller
 
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
-            $privateBoat->is_rented        = $request->is_rented;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
 
@@ -131,7 +128,7 @@ class AdminPrivateBoatController extends Controller
             
             $privateBoat->tags()->detach();
             $privateBoat->includes()->detach();
-            $privateBoat->specifications()->delete();
+            $privateBoat->specification()->delete();
             $privateBoat->translations()->delete();
             $privateBoat->images()->delete();
             $privateBoat->variants()->delete();
@@ -166,22 +163,18 @@ class AdminPrivateBoatController extends Controller
         return $result;
     }
 
-    private function setSpecification(PrivateBoat $privateBoat, $specificationRequest)
+    private function setSpecification(PrivateBoat $privateBoat, $request)
     {
-        foreach ($specificationRequest as $lang => $value) {
-
-            $specification = $privateBoat->specifications()->language($lang)->firstOrNew();
+        $specification = $privateBoat->specification()->firstOrNew();
             
-            $specification->private_boat_id = $privateBoat->id;
-            $specification->language  = $lang;
-            $specification->model     = $value['model'];
-            $specification->year      = $value['year'];
-            $specification->length    = $value['length'];
-            $specification->cabins    = $value['cabins'];
-            $specification->heads     = $value['heads'];
-            $specification->engine    = $value['engine'];
-            $specification->save();
-        }
+        $specification->private_boat_id = $privateBoat->id;
+        $specification->model     = $request['model'];
+        $specification->year      = $request['year'];
+        $specification->length    = $request['length'];
+        $specification->cabins    = $request['cabins'];
+        $specification->heads     = $request['heads'];
+        $specification->engine    = $request['engine'];
+        $specification->save();
     }
 
     private function setTranslations(PrivateBoat $privateBoat, $lang, $field, $translation)

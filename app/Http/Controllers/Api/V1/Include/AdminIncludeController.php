@@ -9,6 +9,8 @@ use App\Http\Resources\Include\ListIncludeResource;
 use App\Models\ProductInclude;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminIncludeController extends Controller
 {
@@ -23,18 +25,26 @@ class AdminIncludeController extends Controller
 
     public function index()
     {
-        $includes = ProductInclude::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-        ])->paginate(25);
+        $includes = QueryBuilder::for(ProductInclude::class)
+                    ->allowedFilters([
+                        AllowedFilter::exact('type')
+                    ])
+                    ->with([
+                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                    ])->paginate(25);
 
         return ListIncludeResource::collection($includes);
     }
 
     public function all()
     {
-        $includes = ProductInclude::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-        ])->get();
+        $includes = QueryBuilder::for(ProductInclude::class)
+                    ->allowedFilters([
+                        AllowedFilter::exact('type')
+                    ])
+                    ->with([
+                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                    ])->get();
 
         return ListIncludeResource::collection($includes);
     }
@@ -52,7 +62,8 @@ class AdminIncludeController extends Controller
     {
         DB::transaction(function() use ($request) {
 
-            $include = new ProductInclude();
+            $include       = new ProductInclude();
+            $include->type = $request->type;
             $include->save();
             
             foreach ($request->validated('description') as $lang => $description) {
@@ -67,6 +78,7 @@ class AdminIncludeController extends Controller
     {
         DB::transaction(function() use ($request, $include) {
             
+            $include->type = $request->type;
             $include->save();
             
             foreach ($request->validated('description') as $lang => $description) {

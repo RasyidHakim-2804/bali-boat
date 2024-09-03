@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         (new ActivitySeeder)->run();
         (new ActivityVariantSeeder)->run();
         (new ActivityTranslationSeeder)->run();
-        (new PivotTagActivitySeeder)->run();
+        // (new PivotTagActivitySeeder)->run();
         (new PivotActivityIncludeSeeder)->run();
         (new PivotActivityExcludeSeeder)->run();
         (new PivotActivityItinerarySeeder)->run();

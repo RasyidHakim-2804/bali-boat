@@ -15,12 +15,18 @@ class ProductExcludeWithTranslationSeeder extends Seeder
     {
         $excludes = [
             [
-                'en' => 'Transport from a hotel in Bali to Sanur port.',
-                'id' => 'Transportasi dari hotel di Bali ke pelabuhan Sanur.',
+                'type'          => 'activity',
+                'translations'  => [
+                    'en' => 'Transport from a hotel in Bali to Sanur port.',
+                    'id' => 'Transportasi dari hotel di Bali ke pelabuhan Sanur.',    
+                ]
             ],
             [
-                'en' => 'Ticket to any private property of selfie spot in Kelingking & Paluang cliff area.',
-                'id' => 'Tiket ke properti pribadi area spot selfie di Kelingking & tebing Paluang.',
+                'type'          => 'activity',
+                'translations'  => [
+                    'en' => 'Ticket to any private property of selfie spot in Kelingking & Paluang cliff area.',
+                    'id' => 'Tiket ke properti pribadi area spot selfie di Kelingking & tebing Paluang.',    
+                ]
             ],
         ];
 
@@ -31,11 +37,12 @@ class ProductExcludeWithTranslationSeeder extends Seeder
             
             DB::table('product_excludes')->insert([
                 'id'         => $id,
+                'type'       => $exclude['type'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            foreach ($exclude as $lang => $value) {
+            foreach ($exclude['translations'] as $lang => $value) {
                 DB::table('exclude_translations')->insert([
                     'field'         => 'description',
                     'translation'   => $value,

@@ -29,7 +29,6 @@ class PrivateBoatSeeder extends Seeder
                 'name'              => $private_boat,
                 'slug'              => Str::slug($private_boat),
                 'pickup_harbor_id'  => rand(1,4),
-                'is_rented'         => 1,
                 'is_active'            => 1,
                 'created_at'        => now(),
                 'updated_at'        => now(),

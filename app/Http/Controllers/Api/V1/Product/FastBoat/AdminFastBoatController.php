@@ -92,9 +92,35 @@ class AdminFastBoatController extends Controller
         }
     }
 
-    public function destroy(FastBoat $boat)
+    public function destroy(FastBoat $fastBoat)
     {
-        
+        try {
+            DB::beginTransaction();
+
+            $fastBoat = $fastBoat->load([
+                'schedules'
+            ]);
+    
+            // soft delete schedule_variants
+            
+            foreach ($fastBoat->schedules as $schedule) {
+                $schedule->variants()->delete();
+            }
+    
+            $fastBoat->schedules()->delete();
+            $fastBoat->delete();
+
+            DB::commit();
+
+            return $this->successResponse();
+
+        } catch (\Exception $e) {
+            
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+            
+        }
     }
 
     protected function setImage(FastBoat $fastBoat, $requestImage)

@@ -22,13 +22,11 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
-            'is_rented'         => $this->is_rented,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'pickup_harbor'     => new HarborResource($this->pickupHarbor),
             'default_variant'   => new PrivateBoatVariantResource($this->defaultVariant),
-            'variants'          => PrivateBoatVariantResource::collection($this->variants),
 
             'tags'           => ListTagResource::collection($this->tags),
 
@@ -40,9 +38,7 @@ class AdminPrivateBoatDetailResource extends JsonResource
                 $this->translations->where('field', 'meta')
             ),
 
-            'specifications' => PrivateBoatSpecificationResource::collection($this->specifications)
-                                ->groupBy('language')
-                                ->map(fn($item) => $item->first()),
+            'specifications' => new PrivateBoatSpecificationResource($this->specification),
 
             'includes'       => ListIncludeResource::collection($this->includes),
 

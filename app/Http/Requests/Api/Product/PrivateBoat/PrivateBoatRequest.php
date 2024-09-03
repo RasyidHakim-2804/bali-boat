@@ -37,12 +37,18 @@ class PrivateBoatRequest extends FormRequest
             'is_active'         => 'required|boolean',
             'pickup_harbor_id'  => 'required|exists:harbors,id',
             'tags'              => 'required|array',
-            'is_rented'         => 'required|boolean',
 
             'tags'              => 'required|array',
-            'tags.*'            => 'required|exists:tags,id',
+            'tags.*'            => [
+                'required',
+                Rule::exists('tags', 'id')->where('type', 'private-boat'),
+            ],
+
             'includes'          => 'required|array',
-            'includes.*'        => 'required|exists:product_includes,id',
+            'includes.*'        => [
+                'required',
+                Rule::exists('product_includes', 'id')->where('type', 'private-boat'),
+            ],
 
             'highlight'         => ['required',$arrayLanguage],
             'highlight.*'       => ['required','string'],
@@ -50,17 +56,16 @@ class PrivateBoatRequest extends FormRequest
             'meta'              => ['required',$arrayLanguage],
             'meta.*'            => ['required','string'],
 
-            'specification'             => ['required', $arrayLanguage],
-            'specification.*.model'     => 'required|string',
-            'specification.*.year'      => 'required|string',
-            'specification.*.length'    => 'required|string',
-            'specification.*.cabins'    => 'required|string',
-            'specification.*.heads'     => 'required|string',
-            'specification.*.engine'    => 'required|string',
+            'specification'           => 'required|array',
+            'specification.model'     => 'required|string',
+            'specification.year'      => 'required|integer|digits:4|min:0',
+            'specification.length'    => 'required|string',
+            'specification.cabins'    => 'required|integer|min:1',
+            'specification.heads'     => 'required|integer|min:1',
+            'specification.engine'    => 'required|string',
         ];
 
         foreach (Language::code() as $lang) {
-            $rule['specification.' . $lang] = 'required';
             $rule['highlight.' . $lang]     = 'required';
             $rule['meta.' . $lang]          = 'required';
         }

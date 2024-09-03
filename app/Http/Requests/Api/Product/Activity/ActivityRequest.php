@@ -38,8 +38,12 @@ class ActivityRequest extends FormRequest
             'is_active'         => 'required|boolean',
             'location_id'       => 'required|exists:locations,id',
             'max_person'        => 'required|integer|min:1|max_digits:6',
+            
             'tags'              => 'required|array',
-            'tags.*'            => 'required|exists:tags,id',
+            'tags.*'            => [
+                'required',
+                Rule::exists('tags', 'id')->where('type', 'activity'),
+            ],
 
             'highlight'         => ['required', $arrayLanguage],
             'highlight.*'       => 'required|string',
@@ -48,10 +52,16 @@ class ActivityRequest extends FormRequest
             'description.*'     => 'required|string',
 
             'includes'          => 'required|array',
-            'includes.*'        => 'required|exists:product_includes,id',
+            'includes.*'        => [
+                'required',
+                Rule::exists('product_includes', 'id')->where('type', 'activity'),
+            ],
 
             'excludes'          => 'required|array',
-            'excludes.*'        => 'required|exists:product_excludes,id',
+            'excludes.*'        => [
+                'required',
+                Rule::exists('product_excludes', 'id')->where('type', 'activity'),
+            ],
 
             'itineraries'       => 'required|array',
             'itineraries.*'     => 'required|exists:product_itineraries,id',

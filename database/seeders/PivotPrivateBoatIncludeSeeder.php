@@ -16,16 +16,45 @@ class PivotPrivateBoatIncludeSeeder extends Seeder
     {
         for ($private_boat_id = 1; $private_boat_id < 5; $private_boat_id++) {
             
-            for ($include_id = 1; $include_id <= 7; $include_id++) { 
+            DB::table('pivot_private_boat_includes')->insert([
+                'private_boat_id'     => $private_boat_id,
+                'include_id'          => 8,
+                'position'            => 1,
+                'created_at'          => now(),
+                'updated_at'          => now(),
+            ]);
 
-                DB::table('pivot_private_boat_includes')->insert([
-                    'private_boat_id'     => $private_boat_id,
-                    'include_id'          => $include_id,
-                    'position'            => $include_id,
-                    'created_at'          => now(),
-                    'updated_at'          => now(),
-                ]);
-            }
+            DB::table('pivot_private_boat_includes')->insert([
+                'private_boat_id'     => $private_boat_id,
+                'include_id'          => 9,
+                'position'            => 2,
+                'created_at'          => now(),
+                'updated_at'          => now(),
+            ]);
+
+            DB::table('pivot_private_boat_includes')->insert([
+                'private_boat_id'     => $private_boat_id,
+                'include_id'          => 10,
+                'position'            => 3,
+                'created_at'          => now(),
+                'updated_at'          => now(),
+            ]);
+
+            DB::table('pivot_private_boat_includes')->insert([
+                'private_boat_id'     => $private_boat_id,
+                'include_id'          => 11,
+                'position'            => 4,
+                'created_at'          => now(),
+                'updated_at'          => now(),
+            ]);
+
+            DB::table('pivot_private_boat_includes')->insert([
+                'private_boat_id'     => $private_boat_id,
+                'include_id'          => 12,
+                'position'            => 5,
+                'created_at'          => now(),
+                'updated_at'          => now(),
+            ]);
         }
     }
 }

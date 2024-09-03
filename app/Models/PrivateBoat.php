@@ -45,9 +45,9 @@ class PrivateBoat extends Model
                     ->withPivot(['position']);
     }
 
-    public function specifications(): HasMany
+    public function specification(): HasOne
     {
-        return $this->hasMany(PrivateBoatSpecification::class, 'private_boat_id', 'id');
+        return $this->hasOne(PrivateBoatSpecification::class, 'private_boat_id', 'id');
     }
 
     public function images(): HasMany

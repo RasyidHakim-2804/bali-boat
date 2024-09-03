@@ -27,7 +27,7 @@ class AdminFaqController extends Controller
     {
         return ListFaqResource::collection(
             Faq::with([
-                'translations' => fn($query) => $query->language()->field('question')
+                'translations' => fn($query) => $query->language()
             ])->paginate(25)
         );
     }

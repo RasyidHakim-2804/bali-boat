@@ -27,6 +27,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     {
         return [
             'activity_date'     => 'required|date|after:yesterday',
+            'return_date'       => 'required|date|after:yesterday',
             'pic_name'          => 'required|min:1',
             'pic_email'         => 'required|min:1',
             'pic_phone_number'  => 'required|min:1',

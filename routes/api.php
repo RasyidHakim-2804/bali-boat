@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
 use App\Http\Controllers\Api\V1\Faq\AdminFaqController;
+use App\Http\Controllers\Api\V1\Faq\FaqController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
@@ -55,7 +56,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
-    // Public
+    // Public - FAQ
+    Route::get('/faqs', [FaqController::class, 'index']);
 
     // Public - FastBoat
     Route::get('/fast-boats', [FastBoatController::class, 'index']);

@@ -28,9 +28,9 @@ class ActivityResource extends JsonResource
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             
-            $this->mergeWhen(
-                $this->relationLoaded('thumbnailVariant'),
-                fn() => [ 'price' => $this->thumbnailVariant->price,]
+            'price'     => $this->whenLoaded(
+                'thumbnailVariant',
+                fn() => $this->thumbnailVariant->price
             ),
             
             'highlight' => $this->whenLoaded(

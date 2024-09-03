@@ -27,7 +27,20 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     {
         return [
             'activity_date'     => 'required|date|after:yesterday',
-            'return_date'       => 'required|date|after:yesterday',
+            'return_date'       => [
+                'nullable',
+                'date',
+                'after:yesterday',
+                function ($attr, $value, $fail) {
+                    $count = collect($this->input('products'))
+                        ->reject(function ($product) {
+                            return (!isset($product['id']));
+                        })
+                        ->count();
+    
+                    if ($count > 1) $fail(__('validation.required'));
+                },
+            ],
             'pic_name'          => 'required|min:1',
             'pic_email'         => 'required|min:1',
             'pic_phone_number'  => 'required|min:1',

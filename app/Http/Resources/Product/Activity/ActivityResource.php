@@ -23,6 +23,7 @@ class ActivityResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
+            'price'             => $this->thumbnailVariant->price,
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
@@ -39,7 +40,6 @@ class ActivityResource extends JsonResource
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
             
-            'thumbnail_variant' => new ActivityVariantResource($this->whenLoaded('thumbnailVariant')),
             'variants'          => ActivityVariantResource::collection($this->whenLoaded('variants')),
             'default_variant'   => new ActivityVariantResource($this->whenLoaded('defaultVariant')),
             'location'          => new LocationResource($this->whenLoaded('location')),

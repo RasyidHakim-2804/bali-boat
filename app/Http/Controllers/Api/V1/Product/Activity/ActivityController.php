@@ -51,7 +51,6 @@ class ActivityController extends Controller
             'location',
             'images',
             'variants',
-            'defaultVariant',
         ]);
 
         return $this->successGet(

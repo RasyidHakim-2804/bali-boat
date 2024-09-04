@@ -46,7 +46,7 @@ class PrivateBoatController extends Controller
             'specification',
             'pickupHarbor',
             'images',
-            'defaultVariant'
+            'variants'
         ]);
 
         return $this->successGet(

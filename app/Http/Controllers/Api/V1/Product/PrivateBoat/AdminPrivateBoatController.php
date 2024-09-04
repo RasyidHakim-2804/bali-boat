@@ -190,7 +190,7 @@ class AdminPrivateBoatController extends Controller
 
     private function setPrice(PrivateBoat $privateBoat, $request)
     {
-        $price                  = $privateBoat->defaultVariant()->firstOrNew();
+        $price                  = $privateBoat->variants()->where('is_default', '=', true)->firstOrNew();
         $price->price           = $request->price;
         $price->private_boat_id = $privateBoat->id;
         $price->is_default      = true;

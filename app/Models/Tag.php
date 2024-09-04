@@ -36,7 +36,7 @@ class Tag extends Model
         $query->addSelect('*',DB::raw(
             "( select translation from tag_translations " .
             "where tag_id = product_tags.id " .
-            "and field = 'description' " .
+            "and field = 'name' " .
             "and language = 'en' " .
             "order by id asc limit 1) as name"
         ))->having('name', 'LIKE','%' . $search . '%');

@@ -35,7 +35,7 @@ class ProductItinerary extends Model
         $query->addSelect('*',DB::raw(
             "( select translation from itinerary_translations " .
             "where itinerary_id = product_itineraries.id " .
-            "and field = 'description' " .
+            "and field = 'title' " .
             "and language = 'en' " .
             "order by id asc limit 1) as title"
         ))->having('title', 'LIKE','%' . $search . '%');

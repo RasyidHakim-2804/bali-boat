@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Tag extends Model
 {
@@ -28,5 +29,16 @@ class Tag extends Model
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'pivot_activity_tags', 'tag_id', 'activity_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->addSelect('*',DB::raw(
+            "( select translation from tag_translations " .
+            "where tag_id = product_tags.id " .
+            "and field = 'description' " .
+            "and language = 'en' " .
+            "order by id asc limit 1) as name"
+        ))->having('name', 'LIKE','%' . $search . '%');
     }
 }

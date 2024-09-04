@@ -44,7 +44,6 @@ class ActivityResource extends JsonResource
             ),
             
             'variants'          => ActivityVariantResource::collection($this->whenLoaded('variants')),
-            'default_variant'   => new ActivityVariantResource($this->whenLoaded('defaultVariant')),
             'location'          => new LocationResource($this->whenLoaded('location')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
             'includes'          => ListIncludeResource::collection($this->whenLoaded('includes')),

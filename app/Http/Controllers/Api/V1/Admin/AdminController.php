@@ -30,7 +30,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->permissionService = (new AdminPermissionService('admin'));
+        $this->permissionService = (new AdminPermissionService('admins'));
     }
 
     public function index()

@@ -9,4 +9,8 @@ class Location extends Model
 {
     use HasFactory;
 
+    public function scopeSearch( $query, $search)
+    {
+        return $query->where('name', 'LIKE','%' . $search . '%');
+    }
 }

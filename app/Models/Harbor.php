@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Harbor extends Model
 {
     use HasFactory;
+
+    public function scopeSearch( $query, $search)
+    {
+        return $query->where('name', 'LIKE','%' . $search . '%');
+    }
 }

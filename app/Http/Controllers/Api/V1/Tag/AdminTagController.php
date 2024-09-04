@@ -27,10 +27,11 @@ class AdminTagController extends Controller
     {
         $tags = QueryBuilder::for(Tag::class)
                     ->allowedFilters([
-                        AllowedFilter::exact('type')
+                        AllowedFilter::exact('type'),
+                        AllowedFilter::scope('search')
                     ])
                     ->with([
-                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                        'translations' => fn($query) => $query->language()
                     ])->paginate(25);
 
         return ListTagResource::collection($tags);

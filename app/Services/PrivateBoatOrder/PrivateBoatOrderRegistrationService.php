@@ -11,11 +11,11 @@ class PrivateBoatOrderRegistrationService
         foreach ($registrations as $key => $registration) {
             $orderRegistration              = new PrivateBoatOrderForm();
             $orderRegistration->order_id    = $orderId;
-            $orderRegistration->schedule_id = $registration['product_id'];
+            $orderRegistration->product_id = $registration['product_id'];
 
             if ($registration['nationality'] == 'indonesia')  $orderRegistration->is_local = 1;
 
-            $orderRegistration->fill($registration);
+            $orderRegistration->fill($registration->validated());
             
             $orderRegistration->save();
         }

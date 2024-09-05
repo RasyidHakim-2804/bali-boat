@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('order_payment_logs', function (Blueprint $table) {
-            $table->dropForeign(['order_id']);
+            $table->dropForeign(['fast_boat_order_id']);
         });
     }
 

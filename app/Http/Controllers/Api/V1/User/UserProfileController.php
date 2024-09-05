@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserProfileController extends Controller
 {

@@ -44,7 +44,7 @@ class XenditInvoiceWebhookController extends Controller
 
             if ($paymentStatus == 'paid') $orderStatus = 'paid';
 
-            if ($order->status != $orderStatus) (new OrderPaymentEmailService)->paid($order);
+            // if ($order->status != $orderStatus) (new OrderPaymentEmailService)->paid($order);
 
             $orderPayment->status          = $paymentStatus;
             $orderPayment->payment_method  = strtolower($request->payment_method);

@@ -21,7 +21,7 @@ class PrivateBoatOrderDetailService
             $orderDetail->product_id            = $productData->id;
             $orderDetail->variant_id            = $variantData?->id;
             $orderDetail->pickup_harbor_id      = $productData->pickup_harbor_id;
-            $orderDetail->pickup_harbor_name    = $productData->arrivalHarbor->name;
+            $orderDetail->pickup_harbor_name    = $productData->pickupHarbor->name;
             $orderDetail->name                  = $productData->name;
             $orderDetail->quantity              = $productRequest['quantity'];
             $orderDetail->price                 = $variantData->price;

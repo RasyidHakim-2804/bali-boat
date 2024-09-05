@@ -31,7 +31,7 @@ class AdminTagController extends Controller
                         AllowedFilter::scope('search')
                     ])
                     ->with([
-                        'translations' => fn($query) => $query->language()
+                        'translations' => fn($query) => $query->language('en')
                     ])->paginate(25);
 
         return ListTagResource::collection($tags);
@@ -44,7 +44,7 @@ class AdminTagController extends Controller
                         AllowedFilter::exact('type')
                     ])
                     ->with([
-                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                        'translations' => fn($query) => $query->language('en')
                     ])->get();
 
 

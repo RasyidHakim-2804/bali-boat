@@ -12,7 +12,16 @@ class FaqController extends Controller
 {
     use JsonResponsesTrait;
 
-    public function index()
+    public function top()
+    {
+        return ListFaqResource::collection(
+            Faq::with([
+                'translations' => fn($query) => $query->language()
+            ])->limit(5)->get()
+        );
+    }
+
+    public function list()
     {
         return ListFaqResource::collection(
             Faq::with([

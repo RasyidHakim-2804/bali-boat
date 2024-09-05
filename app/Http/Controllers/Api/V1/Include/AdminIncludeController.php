@@ -45,7 +45,7 @@ class AdminIncludeController extends Controller
                         AllowedFilter::exact('type')
                     ])
                     ->with([
-                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                        'translations' => fn($query) => $query->language('en')
                     ])->get();
 
         return ListIncludeResource::collection($includes);

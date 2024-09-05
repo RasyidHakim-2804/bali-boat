@@ -10,5 +10,5 @@ interface PaymentInterface
 
     public function pay($data, $type);
 
-    public function expire($id);
+    public function expire($id, $type);
 }

@@ -21,10 +21,10 @@ class AdminPermission extends Model
         return $this->belongsTo(Admin::class, 'admin_id', 'id');
     }
 
-    // public function feature()
-    // {
-    //     return $this->hasOne(AdminFeature::class, 'id', 'feature_id');
-    // }
+    public function feature()
+    {
+        return $this->hasOne(AdminFeature::class, 'id', 'feature_id');
+    }
 
     public static function boot()
     {

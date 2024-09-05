@@ -59,15 +59,15 @@ class FastBoatOrderDetail extends Model
         }
   
         static::created(function($data) use($logService) {
-            $logService->store('create', 'order detail', $data->id);
+            $logService->store('create', 'fast order detail', $data->id);
         });
 
         static::updated(function($data) use($logService) {  
-            if ($logService) $logService->store('update', 'order detail', $data->id);
+            if ($logService) $logService->store('update', 'fast order detail', $data->id);
         });
         
         static::deleted(function($data) use($logService) { 
-            if ($logService) $logService->store('delete', 'order detail', $data->id);
+            if ($logService) $logService->store('delete', 'fast order detail', $data->id);
         });
     }
 }

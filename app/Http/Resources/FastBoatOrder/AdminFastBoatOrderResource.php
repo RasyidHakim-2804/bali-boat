@@ -24,6 +24,7 @@ class AdminFastBoatOrderResource extends JsonResource
             // 'refund_status'                 => $this->refunds()?->orderBy('id', 'DESC')->first()?->status ?? null,
             'status'                        => $this->status,
             'activity_date'                 => $this->activity_date,
+            'return_date'                   => $this->return_date,
             'details'                       => FastBoatOrderDetailResource::collection($this->details),
             'forms'                         => FastBoatOrderFormResource::collection($this->forms),
             // 'refund'                        => OrderRefundResource::collection($this->refunds),

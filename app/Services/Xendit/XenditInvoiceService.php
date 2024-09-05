@@ -62,7 +62,7 @@ class XenditInvoiceService implements PaymentInterface
 
             $this->createXenditPayment($order, $type, $response);
 
-            (new OrderPaymentLogService)->store($order->id, 'xendit', $response['status']);
+            (new OrderPaymentLogService)->store($order->id, 'xendit', $response['status'], $type);
 
             return $response;
         } catch (XenditSdkException $e) {
@@ -74,7 +74,7 @@ class XenditInvoiceService implements PaymentInterface
         }
     }
 
-    public function expire($order)
+    public function expire($order, $type)
     {
         try {
             $invoiceId = $order->payment->invoice_id;
@@ -84,7 +84,7 @@ class XenditInvoiceService implements PaymentInterface
 
             $response  = $this->invoiceApi->expireInvoice($invoiceId);
 
-            (new OrderPaymentLogService)->store($order->id, 'xendit', $response['status']);
+            (new OrderPaymentLogService)->store($order->id, 'xendit', $response['status'], $type);
 
             return $response;
         } catch (\Exception $e) {
@@ -131,6 +131,8 @@ class XenditInvoiceService implements PaymentInterface
         $invoice->expired_at          = date('Y-m-d H:i:s', strtotime($order->created_at . ' +1 minutes'));
 
         if ($type == 'fast_boat') $invoice->fast_boat_order_id  = $order->id;
+
+        if ($type == 'private_boat') $invoice->private_boat_order_id  = $order->id;
 
         $invoice->save();
 

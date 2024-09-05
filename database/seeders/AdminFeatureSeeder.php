@@ -67,15 +67,7 @@ class AdminFeatureSeeder extends Seeder
 
         \DB::table('admin_features')->insert(
             [
-                'name'          => 'additionals',
-                'created_at'    => now(),
-                'updated_at'    => now()
-            ]
-        );
-
-        \DB::table('admin_features')->insert(
-            [
-                'name'          => 'locations',
+                'name'          => 'data',
                 'created_at'    => now(),
                 'updated_at'    => now()
             ]

@@ -7,6 +7,7 @@ use App\Rules\EmailVerified;
 use App\Rules\IsActive;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class LoginRequest extends FormRequest
 {
@@ -39,10 +40,8 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        $isVerified = new EmailVerified('users');
-        $isActive   = new IsActive('users');
         return [
-            'email'     => ['bail','required','email','max:50', $isVerified, $isActive],
+            'email'     => ['bail','required','email','max:50', Rule::exists('users', 'email')->where('isActive', 1)->whereNotNull('email_verified_at')],
             'password'  => 'required|string|min:8',
         ];
     }

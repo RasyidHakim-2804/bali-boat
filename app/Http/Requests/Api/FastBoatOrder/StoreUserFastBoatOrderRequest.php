@@ -27,9 +27,24 @@ class StoreUserFastBoatOrderRequest extends FormRequest
     {
         return [
             'activity_date'     => 'required|date|after:yesterday',
+            'return_date'       => [
+                'nullable',
+                'date',
+                'after:yesterday',
+                function ($attr, $value, $fail) {
+                    $count = collect($this->input('products'))
+                        ->reject(function ($product) {
+                            return (!isset($product['id']));
+                        })
+                        ->count();
+    
+                    if (($count > 1) && (!$value)) $fail(__('validation.required'));
+                },
+            ],
             'pic_name'          => 'required|min:1',
             'pic_email'         => 'required|min:1',
             'pic_phone_number'  => 'required|min:1',
+            'promo_uuid'        => ['nullable', Rule::exists('promos', 'uuid')->where('is_active', 1)],
             'products'          => 'required|array',
             'products.*.id'     => [
                 'required',
@@ -95,7 +110,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
             ],
             'forms.*.name'              => 'required|string|min:1',
             'forms.*.nationality'       => 'required|min:1',
-            'forms.*.passenger_type'    => ['required', Rule::when(($this->input('forms.*.is_itas_holder') === 1), ['in:local'], ['in:foreign'])],
+            'forms.*.passenger_type'    => 'required|in:local,foreign',
             'forms.*.age_type'          => 'required|in:adult,child',
             'forms.*.is_itas_holder'    => 'required|boolean',
         ];

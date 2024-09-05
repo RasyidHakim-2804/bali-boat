@@ -19,6 +19,7 @@ class AdminListFastBoatOrderResource extends JsonResource
             'other_products'                => ($this->details()->count()) - 1,
             'product_thumbnail'             => new ListFastBoatOrderDetailResource($this->details()->first()),
             'activity_date'                 => $this->activity_date,
+            'return_date'                   => $this->return_date,
             'created_at'                    => $this->created_at,
             'updated_at'                    => $this->updated_at,
         ];

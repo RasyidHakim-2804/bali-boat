@@ -37,10 +37,6 @@ class XenditPayoutLink extends Model
         }
 
         $xenditPayoutLinkLog = new XenditPayoutLinkLogService;
-
-        if (auth()->guard('api_agent')->check()) {
-            $logService = new AgentLogService;
-        }
   
         static::created(function($data) use($logService, $xenditPayoutLinkLog) {
             $logService->store('create', 'xendit payout link', $data->id);

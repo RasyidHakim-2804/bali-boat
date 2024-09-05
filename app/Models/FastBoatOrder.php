@@ -40,10 +40,10 @@ class FastBoatOrder extends Model
     //     return $this->hasOne(XenditPayout::class, 'order_id', 'id');
     // }
 
-    // public function refunds()
-    // {
-    //     return $this->hasMany(OrderRefund::class, 'order_id', 'id');
-    // }
+    public function refunds()
+    {
+        return $this->hasMany(OrderRefund::class, 'fast_boat_order_id', 'id');
+    }
 
     // public function decline()
     // {
@@ -104,15 +104,15 @@ class FastBoatOrder extends Model
         }
   
         static::created(function($data) use($logService) {
-            $logService->store('create', 'order', $data->id);
+            $logService->store('create', 'fast order', $data->id);
         });
 
         static::updated(function($data) use($logService) {  
-            if ($logService) $logService->store('update', 'order', $data->id);
+            if ($logService) $logService->store('update', 'fast order', $data->id);
         });
         
         static::deleted(function($data) use($logService) { 
-            if ($logService) $logService->store('delete', 'order', $data->id);
+            if ($logService) $logService->store('delete', 'fast order', $data->id);
         });
     }
 }

@@ -58,19 +58,14 @@ class User extends Authenticatable
     //     return $this->hasMany(ForgetUserPasswordReset::class, 'user_id', 'id');
     // }
 
-    // public function addresses()
-    // {
-    //     return $this->hasMany(Address::class, 'user_id', 'id');
-    // }
-
     // public function cart()
     // {
     //     return $this->hasOne(Cart::class, 'user_id', 'id');
     // }
 
-    public function orders()
+    public function fastBoatOrders()
     {
-        return $this->hasMany(Order::class, 'user_id', 'id');
+        return $this->hasMany(FastBoatOrder::class, 'user_id', 'id');
     }
 
     // public function orderReviews()

@@ -6,10 +6,11 @@ use App\Models\OrderPaymentLog;
 
 class OrderPaymentLogService
 {
-    public function store($orderId, $paymentVendor, $status)
+    public function store($orderId, $paymentVendor, $status, $type)
     {
         $paymentLog                     = new OrderPaymentLog();
-        $paymentLog->fast_boat_order_id = $orderId;
+        $paymentLog->order_id           = $orderId;
+        $paymentLog->type               = $type;
         $paymentLog->payment_vendor     = $paymentVendor;
         $paymentLog->status             = $status;
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\FastBoatOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FastBoatOrder\StoreUserFastBoatOrderRequest;
+use App\Http\Resources\FastBoatOrder\FastBoatOrderResource;
 use App\Http\Resources\FastBoatOrder\ListFastBoatOrderResource;
-use App\Http\Resources\Product\FastBoat\FastBoatResource;
 use App\Models\FastBoatOrder;
 use App\Models\FastBoatSchedule;
 use App\Models\FastBoatScheduleVariant;
@@ -14,6 +14,7 @@ use App\Notifications\Order\OrderCreatedNotification;
 use App\Services\FastBoatOrder\FastBoatOrderDetailService;
 use App\Services\FastBoatOrder\FastBoatOrderRegistrationService;
 use App\Services\FastBoatOrder\FastBoatOrderService;
+use App\Services\Order\OrderRefundService;
 use App\Services\Payment\PaymentService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
@@ -35,20 +36,20 @@ class UserFastBoatOrderController extends Controller
         return ListFastBoatOrderResource::collection(FastBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
     }
     
-    public function show(User $user, FastBoatOrder $order)
+    public function show(User $user, FastBoatOrder $fastBoatOrder)
     {
-        $order = new FastBoatResource($order);
+        $order = new FastBoatOrderResource($fastBoatOrder);
 
         return $this->successGet($order);
     }
     
     public function store(StoreUserFastBoatOrderRequest $request, User $user)
     {
-        return 'test';
-        
         $user = request()->user();
 
         // Validation
+        $promo = $this->verifyPromo($request->promo_uuid);
+
         $this->setGlobalVariable($request);
 
         $this->checkProductAvailability($request);
@@ -59,12 +60,6 @@ class UserFastBoatOrderController extends Controller
 
         DB::beginTransaction();
         try {
-            $promo = null;
-        
-            if (isset($request->promo_uuid)) $promo = Promo::where('uuid', $request->promo_uuid)->where('uuid', '!=', null)->first();
-            
-            if (!$this->verifyPromo($promo)) return $this->errorValidationResponse('promo', 'Promo already used.');
-
             // Create order
             $order = (new FastBoatOrderService)->create($request, $this->products, $this->variants, $user, $promo);
 
@@ -95,17 +90,17 @@ class UserFastBoatOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, FastBoatOrder $order)
+    public function cancel(User $user, FastBoatOrder $fastBoatOrder)
     {
         DB::beginTransaction();
         try {
-            if ($order->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+            if ($fastBoatOrder->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-            $order->status = 'canceled';
+            $fastBoatOrder->status = 'canceled';
 
-            $order->save();
+            $fastBoatOrder->save();
 
-            (new PaymentService)->prepare()->expire($order);
+            (new PaymentService)->prepare()->expire($fastBoatOrder, 'fast_boat');
 
             DB::commit();
 
@@ -117,28 +112,28 @@ class UserFastBoatOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, FastBoatOrder $order)
+    public function refund(Request $request, User $user, FastBoatOrder $fastBoatOrder)
     {
-        // if ($order->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        // if (!$order->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        if (!$fastBoatOrder->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
-        // DB::beginTransaction();
-        // try {
-        //     (new OrderRefundService)->refund($order, $request);
+        DB::beginTransaction();
+        try {
+            (new OrderRefundService)->refund($fastBoatOrder, 'fast_boat', $request);
 
-        //     $order->status = 'refunding';
+            $fastBoatOrder->status = 'refunding';
 
-        //     $order->save();
+            $fastBoatOrder->save();
 
-        //     DB::commit();
+            DB::commit();
 
-        //     return $this->successStore();
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
+            return $this->successStore();
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        //     return $this->errorServer($e->getMessage());
-        // }
+            return $this->errorServer($e->getMessage());
+        }
     }
     
     protected function setGlobalVariable($request)
@@ -217,6 +212,18 @@ class UserFastBoatOrderController extends Controller
 
                 return abort(422, 'The forms ' . $key + 1 . ' variant_id is required.');
             }
+
+            if (($form['nationality'] == 'Indonesia') && ($form['passenger_type'] == 'foreign')) {
+                if (config('app.locale') == 'id') return abort(422, "Tipe penumpang pada formulir ' . $key + 1 . ' tidak valid.");
+
+                return abort(422, 'The passenger type of forms ' . $key + 1 . ' is invalid.');
+            }
+
+            if (($form['nationality'] != 'Indonesia') && ($form['passenger_type'] == 'local')) {
+                if (config('app.locale') == 'id') return abort(422, "Tipe penumpang pada formulir ' . $key + 1 . ' tidak valid.");
+
+                return abort(422, 'The passenger type of forms ' . $key + 1 . ' is invalid.');
+            }
         }
     }
     
@@ -239,7 +246,7 @@ class UserFastBoatOrderController extends Controller
         $user = request()->user();
         
         $data                   = [];
-        $data['language']       = 'en';
+        $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
         $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
@@ -258,16 +265,34 @@ class UserFastBoatOrderController extends Controller
     //     Mail::to($email)->send((new OrderNeedAdminConfirmationNotificationMail($data)));
     // }
     
-    protected function verifyPromo($promo)
+    protected function verifyPromo($promoUuid)
     {
-        if (!$promo) return true;
+        if (!isset($promoUuid)) return null;
+        
+        $promo = Promo::where('uuid', $promoUuid)->where('uuid', '!=', null)->first();
+
+        if (!$promo) {
+            if (config('app.locale') == 'id') return abort(422, 'Promo tidak valid.');
+
+            return abort(422, 'The promo is invalid.');
+        }
+
+        if ($promo->expired_at < now()) {
+            if (config('app.locale') == 'id') return abort(422, 'Promo sudah berakhir.');
+
+            return abort(422, 'The promo is expired.');
+        }
         
         $orderPromoAppliedCounted = 0;
         
         if ($promo->duration == 'once') $orderPromoAppliedCounted = FastBoatOrder::where('user_id', auth()->user()->id)->where('promo_id', $promo->id)->count();
         
-        if ($orderPromoAppliedCounted > 0) return false;
-        
-        return true;
+        if ($orderPromoAppliedCounted > 0) {
+            if (config('app.locale') == 'id') return abort(422, 'Promo telah terpakai.');
+
+            return abort(422, 'The promo already used.');
+        }
+
+        return $promo;
     }
 }

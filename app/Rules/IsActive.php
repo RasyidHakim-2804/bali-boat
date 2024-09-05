@@ -20,7 +20,7 @@ class IsActive implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $user = DB::table($this->tableName)
-                        ->select('active')
+                        ->select('is_active')
                         ->where('email', $value)
                         ->first();
 

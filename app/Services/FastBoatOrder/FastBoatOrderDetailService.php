@@ -27,10 +27,9 @@ class FastBoatOrderDetailService
             $orderDetail->arrival_harbor_id     = $productData->arrival_harbor_id;
             $orderDetail->departure_harbor_name = $productData->departureHarbor->name;
             $orderDetail->arrival_harbor_name   = $productData->arrivalHarbor->name;
-            $orderDetail->departure_time        = $productData->departure_time;
-            $orderDetail->arrival_time          = $productData->arrival_time;
+            $orderDetail->departure_time        = $variantData->departure_time;
+            $orderDetail->arrival_time          = $variantData->arrival_time;
             $orderDetail->name                  = $productData->fastBoat->name;
-            $orderDetail->nationality           = $productRequest['nationality'];
             $orderDetail->passenger_type        = $variantData->passenger_type;
             $orderDetail->age_type              = $variantData->age_type;
             $orderDetail->quantity              = $productRequest['quantity'];

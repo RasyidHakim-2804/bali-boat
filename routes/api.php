@@ -59,7 +59,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
     // Public - FAQ
-    Route::get('/faqs', [FaqController::class, 'index']);
+    Route::get('/faqs', [FaqController::class, 'list']);
     Route::get('/faqs-top', [FaqController::class, 'top']);
 
     // Webhook

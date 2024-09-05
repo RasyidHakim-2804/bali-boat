@@ -38,9 +38,9 @@ class UserProfileController extends Controller
 
             $user->fill($request->validated());
 
-            if ($request->is_profile_picture_deleted == 1) $user = $this->deleteProfilePicture($user);
+            // if ($request->is_profile_picture_deleted == 1) $user = $this->deleteProfilePicture($user);
 
-            if ($request->profile_picture) $user = $this->saveProfilePicture($user, $request->profile_picture);
+            if ($request->profile_image) $user = $this->saveProfilePicture($user, $request->profile_image);
 
             $emailChanges = true;
 
@@ -105,7 +105,7 @@ class UserProfileController extends Controller
 
         $image->save();
 
-        $user->profile_picture = $image->getImageName();
+        $user->profile_image = $image->getImageName();
 
         return $user;
     }

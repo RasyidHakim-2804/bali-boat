@@ -262,6 +262,8 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             //User Profile
             Route::get('/profile', [UserProfileController::class, 'index']);
             Route::put('/profile', [UserProfileController::class, 'update']);
+            Route::post('/change-password', [UserProfileController::class, 'changePassword']);
+            Route::post('/change-language', [UserProfileController::class, 'changeLanguage']);
         });
     
         Route::prefix('/{user}')->scopeBindings()->group(function () {

@@ -14,7 +14,7 @@ class OrderRefundService
         $email  = $user->email;
 
         try {
-            $xenditPayoutLink = (new PaymentPayoutService)->prepare()->payout($email, $order->uuid, $order->grand_total_purchased, 'refund');
+            return $xenditPayoutLink = (new PaymentPayoutService)->prepare()->payout($email, $order->uuid, float($order->grand_total_purchased), 'refund');
 
             $orderRefund                        = new OrderRefund();
             $orderRefund->xendit_payout_link_id = $xenditPayoutLink->id;

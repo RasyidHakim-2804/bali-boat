@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\V1\Itinerary\AdminItineraryController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\UserFastBoatOrderController;
+use App\Http\Controllers\Api\V1\PrivateBoatOrder\UserPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminScheduleController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatController;
@@ -267,6 +268,12 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/fast-boat-orders', [UserFastBoatOrderController::class, 'store']);
                 Route::post('/fast-boat-orders/{fastBoatOrder}/cancel', [UserFastBoatOrderController::class, 'cancel']);
                 Route::post('/fast-boat-orders/{fastBoatOrder}/refund', [UserFastBoatOrderController::class, 'refund']);
+
+                Route::get('/private-boat-orders', [UserPrivateBoatOrderController::class, 'index']);
+                Route::get('/private-boat-orders/{fastBoatOrder}', [UserPrivateBoatOrderController::class, 'show']);
+                Route::post('/private-boat-orders', [UserPrivateBoatOrderController::class, 'store']);
+                Route::post('/private-boat-orders/{fastBoatOrder}/cancel', [UserPrivateBoatOrderController::class, 'cancel']);
+                Route::post('/private-boat-orders/{fastBoatOrder}/refund', [UserPrivateBoatOrderController::class, 'refund']);
             });
         });
     });

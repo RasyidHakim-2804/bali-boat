@@ -10,6 +10,8 @@ use App\Models\ProductItinerary;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminItineraryController extends Controller
 {
@@ -24,10 +26,14 @@ class AdminItineraryController extends Controller
 
     public function index()
     {
-        $itineraries = ProductItinerary::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-                                                  ->where('field', 'title')
-        ])->paginate(25);
+        $itineraries = QueryBuilder::for(ProductItinerary::class)
+                        ->allowedFilters([
+                            AllowedFilter::scope('search'),
+                        ])
+                        ->with([
+                            'translations' => fn($query) => $query->language('en')
+                        ])
+                        ->paginate(25);
 
         return ListItineraryResource::collection($itineraries);
     }

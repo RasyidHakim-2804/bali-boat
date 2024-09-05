@@ -8,6 +8,8 @@ use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Location\LocationResource;
 use App\Models\Location;
 use App\Traits\JsonResponsesTrait;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminLocationController extends Controller
 {
@@ -22,7 +24,13 @@ class AdminLocationController extends Controller
 
     public function index()
     {
-        return LocationResource::collection(Location::paginate(25));
+        return LocationResource::collection(
+            QueryBuilder::for(Location::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])
+            ->paginate(25)
+        );
     }
 
     public function all()

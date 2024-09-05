@@ -183,7 +183,7 @@ class AdminActivityController extends Controller
 
     protected function setPrice(Activity $activity, $request)
     {
-        $price              = $activity->defaultVariant()->firstOrNew();
+        $price              = $activity->variants()->where('is_default', '=', true)->firstOrNew();
         $price->price       = $request->price;
         $price->activity_id = $activity->id;
         $price->is_default  = 1;

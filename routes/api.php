@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 
 use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
+use App\Http\Controllers\Api\V1\Faq\AdminFaqController;
+use App\Http\Controllers\Api\V1\Faq\FaqController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
@@ -56,7 +58,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
-    // Public
+    // Public - FAQ
+    Route::get('/faqs', [FaqController::class, 'index']);
 
     // Webhook
     Route::post('/xendit-webhook/invoice', XenditInvoiceWebhookController::class);
@@ -170,6 +173,13 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/tags', [AdminTagController::class, 'store']);
             Route::put('/tags/{tag}', [AdminTagController::class, 'update']);
             Route::delete('/tags/{tag}', [AdminTagController::class, 'destroy']);
+
+            // Admin - Faq
+            Route::get('/faqs', [AdminFaqController::class, 'index']);
+            Route::get('/faqs/{faq}', [AdminFaqController::class, 'show']);
+            Route::post('/faqs', [AdminFaqController::class, 'store']);
+            Route::put('/faqs/{faq}', [AdminFaqController::class, 'update']);
+            Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy']);
 
             // Admin - FastBoat
             Route::get('/fast-boats', [AdminFastBoatController::class, 'index']);

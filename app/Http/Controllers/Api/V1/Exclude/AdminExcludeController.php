@@ -27,10 +27,11 @@ class AdminExcludeController extends Controller
     {
         $excludes = QueryBuilder::for(ProductExclude::class)
                     ->allowedFilters([
-                        AllowedFilter::exact('type')
+                        AllowedFilter::exact('type'),
+                        AllowedFilter::scope('search')
                     ])
                     ->with([
-                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
+                        'translations' => fn($query) => $query->language()
                     ])->paginate(25);
 
         return ListExcludeResource::collection($excludes);

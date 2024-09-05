@@ -9,6 +9,8 @@ use App\Http\Resources\Habor\HarborResource;
 use App\Models\Harbor;
 use App\Services\Admin\AdminPermissionService;
 use App\Traits\JsonResponsesTrait;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminHarborController extends Controller
 {
@@ -23,9 +25,13 @@ class AdminHarborController extends Controller
 
     public function index()
     {
-        $harbor = Harbor::paginate(25);
-
-        return HarborResource::collection($harbor);
+        return HarborResource::collection(
+            QueryBuilder::for(Harbor::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])
+            ->paginate(25)
+        );
     }
 
     public function all()

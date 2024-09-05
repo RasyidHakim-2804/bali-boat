@@ -20,7 +20,6 @@ class AdminFastBoatResource extends JsonResource
             'slug'              => $this->slug,
             'image'             => $this->imageUrl('image'),
             'is_active'         => $this->is_active,
-            'rating'            => $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'schedules_count'   => $this->schedules_count,

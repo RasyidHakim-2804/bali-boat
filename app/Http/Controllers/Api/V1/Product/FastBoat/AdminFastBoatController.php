@@ -50,7 +50,6 @@ class AdminFastBoatController extends Controller
             $fastBoat->image     = $this->setImage($fastBoat, $request->image);
             $fastBoat->name      = $request->name;
             $fastBoat->is_active = $request->is_active;
-            $fastBoat->rating    = $request->rating;
             $fastBoat->save();
 
             DB::commit();
@@ -72,7 +71,6 @@ class AdminFastBoatController extends Controller
 
             $fastBoat->name      = $request->name;
             $fastBoat->is_active = $request->is_active;
-            $fastBoat->rating    = $request->rating;
             
             if ($request->image != null) {
                 $fastBoat->image = $this->setImage($fastBoat, $request->image);

@@ -22,15 +22,14 @@ class FastBoatRequest extends FormRequest
     public function rules(): array
     {
         if (strtolower($this->method()) == 'put') {
-            $ruleImage = 'required|mimes:png,jpg|max:2048';
-        } else {
             $ruleImage = 'nullable|mimes:png,jpg|max:2048';
+        } else {
+            $ruleImage = 'required|mimes:png,jpg|max:2048';
         }
         
         return [
             'name'      => 'required|string|max:255',
             'is_active' => 'required|boolean',
-            'rating'    => 'required|numeric|min:0|max:5',
             'image'     => $ruleImage,
         ];
     }

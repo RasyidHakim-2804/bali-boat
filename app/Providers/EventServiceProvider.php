@@ -58,6 +58,9 @@ class EventServiceProvider extends ServiceProvider
         
         \App\Models\ProductItinerary::class         => [AdminActionObserver::class],
         \App\Models\PivotActivityItinerary::class   => [AdminActionObserver::class],
+
+        \App\Models\Faq::class                      => [AdminActionObserver::class],
+        \App\Models\FaqTranslation::class           => [AdminActionObserver::class],
     ];
 
     /**

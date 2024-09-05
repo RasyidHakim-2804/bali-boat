@@ -27,11 +27,13 @@ class AdminIncludeController extends Controller
     {
         $includes = QueryBuilder::for(ProductInclude::class)
                     ->allowedFilters([
-                        AllowedFilter::exact('type')
+                        AllowedFilter::exact('type'),
+                        AllowedFilter::scope('search'),
                     ])
                     ->with([
-                        'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-                    ])->paginate(25);
+                        'translations' => fn($query) => $query->language('en')
+                    ])
+                    ->paginate(25);
 
         return ListIncludeResource::collection($includes);
     }

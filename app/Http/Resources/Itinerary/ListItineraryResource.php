@@ -19,7 +19,17 @@ class ListItineraryResource extends JsonResource
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
             'image'         => $this->imageUrl('image'),
-            'title'         => $this->translations->first()->translation,
+
+            'title'         => $this->translations
+                                ->where('field', 'title')
+                                ->first()
+                                ->translation,
+
+            'description'   => $this->translations
+                                ->where('field', 'description')
+                                ->first()
+                                ->translation,
+
             $this->mergeWhen(
                 isset($this->pivot),
                 fn() => ['position'  => $this->pivot->position]

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class ProductInclude extends Model
 {
@@ -28,5 +30,16 @@ class ProductInclude extends Model
     public function translations(): HasMany
     {
         return $this->hasMany(IncludeTranslation::class, 'include_id', 'id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->addSelect('*',DB::raw(
+            "( select translation from include_translations " .
+            "where include_id = product_includes.id " .
+            "and field = 'description' " .
+            "and language = 'en' " .
+            "order by id asc limit 1) as description"
+        ))->having('description', 'LIKE','%' . $search . '%');
     }
 }

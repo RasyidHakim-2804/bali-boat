@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Promo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Promo\VerifyPromoRequest;
+use App\Models\FastBoatOrder;
 use App\Models\Order;
 use App\Models\Promo;
 use App\Traits\JsonResponsesTrait;
@@ -25,7 +26,7 @@ class UserPromoController extends Controller
 
         $orderPromoAppliedCounted = 0;
 
-        if ($promo->duration == 'once') $orderPromoAppliedCounted = Order::where('user_id', request()->user()->id)->where('promo_id', $promo->id)->count();
+        if ($promo->duration == 'once') $orderPromoAppliedCounted = FastBoatOrder::where('user_id', request()->user()->id)->where('promo_id', $promo->id)->count();
 
         if ($orderPromoAppliedCounted > 0) return $this->errorValidationResponse('code', 'The promo has been used.');
 

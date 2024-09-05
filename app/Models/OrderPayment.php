@@ -23,9 +23,14 @@ class OrderPayment extends Model
         'url'
     ];
 
-    public function fastBoatOrders()
+    public function fastBoatOrder()
     {
         return $this->belongsTo(FastBoatOrder::class, 'fast_boat_order_id', 'id');
+    }
+
+    public function privateBoatOrder()
+    {
+        return $this->belongsTo(FastBoatOrder::class, 'private_boat_order_id', 'id');
     }
 
     public static function boot()

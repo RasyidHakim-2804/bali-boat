@@ -58,6 +58,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
     // Public - FAQ
     Route::get('/faqs', [FaqController::class, 'index']);
+    Route::get('/faqs-top', [FaqController::class, 'top']);
 
     // Public - FastBoat
     Route::get('/fast-boats', [FastBoatController::class, 'index']);

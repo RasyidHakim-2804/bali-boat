@@ -12,7 +12,7 @@ class PrivateBoatOrderDetailService
         foreach ($productsRequest as $key => $productRequest) {
             $productData    = $product[$key];
             $variantData    = $variant[$key];
-            $productImage   = $productData->images()->where('deleted_at', null)->where('position', 1)->pluck('image')->first();
+            $productImage   = $productData->images()->where('position', 1)->pluck('image')->first();
 
             $totalProductPrice = $variantData->price * $productRequest['quantity'];
 

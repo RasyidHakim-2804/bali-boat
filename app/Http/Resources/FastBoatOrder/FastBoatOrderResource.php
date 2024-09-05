@@ -20,6 +20,7 @@ class FastBoatOrderResource extends JsonResource
             'grand_total_purchased'         => $this->grand_total_purchased,
             'payment_url'                   => (isset($this->payment)) ? $this->payment->url : null,
             'payment_status'                => ($this->payment) ? $this->payment->status : 'not in system',
+            'payment_method'                => ($this->payment) ? str_replace('_', ' ', $this->payment->payment_method) . ' - ' . $this->payment->payment_channel : null,
             'refund_status'                 => $this->refunds()?->orderBy('id', 'DESC')->first()?->status ?? null,
             'status'                        => $this->status,
             'activity_date'                 => $this->activity_date,

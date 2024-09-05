@@ -111,7 +111,7 @@ class AdminController extends Controller
         return $this->successStore();
     }
 
-    protected function saveProficePicture($admin, $uploadedImage)
+    protected function saveProfilePicture($admin, $uploadedImage)
     {
         if (!$uploadedImage) return $admin;
 

@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\V1\Product\Activity\AdminActivityImageController;
 use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
+use App\Http\Controllers\Api\V1\Promo\UserPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\User\AdminUserController;
 use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
@@ -264,6 +265,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::put('/profile', [UserProfileController::class, 'update']);
             Route::post('/change-password', [UserProfileController::class, 'changePassword']);
             Route::post('/change-language', [UserProfileController::class, 'changeLanguage']);
+
+            // Promo
+            Route::post('/apply-promo', UserPromoController::class);
         });
     
         Route::prefix('/{user}')->scopeBindings()->group(function () {

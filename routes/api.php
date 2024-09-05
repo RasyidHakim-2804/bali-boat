@@ -93,7 +93,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
 
     //Admin routes
-    Route::prefix('admins')->middleware('verifyLanguage')->group(function (){
+    Route::prefix('admins')->middleware('verifyLanguage')->group(function () {
 
         // Admin - Login
         Route::post('/login', [AuthAdminController::class, 'login']);

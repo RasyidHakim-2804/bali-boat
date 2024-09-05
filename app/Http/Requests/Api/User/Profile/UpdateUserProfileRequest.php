@@ -33,10 +33,7 @@ class UpdateUserProfileRequest extends FormRequest
                 'email:rfc,dns',
                 Rule::unique('users', 'email')->ignore(request()->user()->id),
             ],
-            'country'                    => 'nullable',
-            'city'                       => 'nullable',
             'phone'                      => 'nullable',
-            'is_profile_picture_deleted' => 'required|boolean',
         ];
     }
 }

@@ -57,7 +57,7 @@ class XenditInvoiceWebhookController extends Controller
 
             $order->save();
 
-            (new OrderPaymentLogService)->store($order->id, 'xendit', $paymentStatus);
+            (new OrderPaymentLogService)->store($order->id, 'xendit', $paymentStatus, $orderPayment->type);
 
             DB::commit();
 

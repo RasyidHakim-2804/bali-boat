@@ -52,7 +52,7 @@ class XenditPayoutLinkService implements PayoutInterface
                 ],
                 'form_params' => [
                     'external_id'   => $referralId,
-                    'amount'        => $amount,
+                    'amount'        => (int)$amount,
                     'email'         => $email
                 ]
             ]);

@@ -19,7 +19,6 @@ class FastBoatScheduleController extends Controller
         ->allowedFilters([
             AllowedFilter::exact('fast_boat_id'),
             AllowedFilter::scope('from_to'),
-            AllowedFilter::scope('select_date'),
             AllowedFilter::scope('departure_time')->default('morning'),
         ])
         ->allowedSorts([

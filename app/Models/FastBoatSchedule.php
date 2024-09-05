@@ -50,20 +50,6 @@ class FastBoatSchedule extends Model
         return $query->where('departure_time', $operator, '12:00');
     }
 
-    public function scopeSelectDate($query, $date)
-    {
-        $date = Carbon::parse($date);
-        
-        if ($date->isToday()) {
-
-            $query->where('departure_time', '>=', Carbon::now('Asia/Makassar')->format('H:i'));
-        
-        } elseif ($date->isPast()) {
-
-            $query->where('departure_time', '=', 'a');
-        }
-    }
-
     public function scopeActive($query, bool $active = true)
     {
         $query->where('is_active', '=', $active);

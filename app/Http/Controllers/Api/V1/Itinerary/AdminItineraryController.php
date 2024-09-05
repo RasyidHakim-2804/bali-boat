@@ -41,8 +41,7 @@ class AdminItineraryController extends Controller
     public function all()
     {
         $itineraries = ProductItinerary::with([
-            'translations' => fn($query) => $query->where('language', '=', app()->getLocale())
-                                                  ->where('field', 'title')
+            'translations' => fn($query) => $query->language('en')->field('title')
         ])->get();
 
         return ListItineraryResource::collection($itineraries);

@@ -30,6 +30,7 @@ class FastBoatOrderDetailService
             $orderDetail->departure_time        = $productData->departure_time;
             $orderDetail->arrival_time          = $productData->arrival_time;
             $orderDetail->name                  = $productData->fastBoat->name;
+            $orderDetail->nationality           = $productRequest['nationality'];
             $orderDetail->passenger_type        = $variantData->passenger_type;
             $orderDetail->age_type              = $variantData->age_type;
             $orderDetail->quantity              = $productRequest['quantity'];

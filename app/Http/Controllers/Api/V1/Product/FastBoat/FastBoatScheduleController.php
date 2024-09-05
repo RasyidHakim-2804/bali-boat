@@ -22,7 +22,8 @@ class FastBoatScheduleController extends Controller
             AllowedFilter::scope('departure_time')->default('morning'),
         ])
         ->allowedSorts([
-            AllowedSort::field('price','variant_price')
+            AllowedSort::field('price','variant_price'),
+            AllowedSort::field('departure_time')
         ])
         ->with([
             'fastBoat',

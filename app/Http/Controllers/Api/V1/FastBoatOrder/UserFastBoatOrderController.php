@@ -120,10 +120,7 @@ class UserFastBoatOrderController extends Controller
 
         DB::beginTransaction();
         try {
-
-            return $fastBoatOrder;
-            
-            (new OrderRefundService)->refund($fastBoatOrder, 'fast_boat');
+            return (new OrderRefundService)->refund($fastBoatOrder, 'fast_boat');
 
             $fastBoatOrder->status = 'refunding';
 

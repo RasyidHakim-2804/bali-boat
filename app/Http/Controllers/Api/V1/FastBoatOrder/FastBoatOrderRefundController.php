@@ -48,7 +48,9 @@ class FastBoatOrderRefundController extends Controller
     {
         if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        $refundRequest = RefundRequestPin::where('fast_boat_order_id', $fastBoatOrder->id)->orderBy('id', 'DESC')->first();
+        $refundRequest = RefundRequestPin::where('fast_boat_order_id', $fastBoatOrder->id)->where('pin', $request->pin)->orderBy('id', 'DESC')->first();
+
+        if (!isset($refundRequest)) return abort(422, 'The pin is invalid.');
 
         if ((isset($refundRequest)) && ($refundRequest->expired_at < Carbon::now())) return abort(422, 'The pin is expired. Please make a new pin.');
 

@@ -44,10 +44,6 @@ class RefundRequestPin extends Model
         if (auth()->guard('api_admin')->check()) {
             $logService = new AdminLogService;
         }
-
-        if (auth()->guard('api_agent')->check()) {
-            $logService = new AgentLogService;
-        }
   
         static::created(function($data) use($logService) {
             $logService->store('create', 'refund request pin', $data->id);

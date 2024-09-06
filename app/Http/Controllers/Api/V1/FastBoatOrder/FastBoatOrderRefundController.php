@@ -54,11 +54,13 @@ class FastBoatOrderRefundController extends Controller
 
         DB::beginTransaction();
         try {
-            (new OrderRefundService)->refund($fastBoatOrder, 'fast_boat');
+            $orderRefund = (new OrderRefundService)->refund($fastBoatOrder, 'fast_boat');
 
             $fastBoatOrder->status = 'refunding';
 
             $fastBoatOrder->save();
+
+            $this->sendEmailRefund($fastBoatOrder, $orderRefund->xendit_payout_link_id);
 
             DB::commit();
 

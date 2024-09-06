@@ -26,7 +26,7 @@ class OrderRefundService
 
             $orderRefund->save();
 
-            return $orderRefund;
+            return $xenditPayoutLink;
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }

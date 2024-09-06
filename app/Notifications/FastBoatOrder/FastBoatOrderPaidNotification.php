@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Order;
+namespace App\Notifications\FastBoatOrder;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -53,10 +53,10 @@ class User extends Authenticatable
         return $this->hasMany(UserEmailVerificationToken::class, 'user_id', 'id');
     }
 
-    // public function forgetPasswordResets()
-    // {
-    //     return $this->hasMany(ForgetUserPasswordReset::class, 'user_id', 'id');
-    // }
+    public function forgetPasswordResets()
+    {
+        return $this->hasMany(ForgetUserPasswordReset::class, 'user_id', 'id');
+    }
 
     // public function cart()
     // {

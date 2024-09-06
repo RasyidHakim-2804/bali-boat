@@ -10,7 +10,7 @@ use App\Models\FastBoatSchedule;
 use App\Models\FastBoatScheduleVariant;
 use App\Models\Promo;
 use App\Models\User;
-use App\Notifications\Order\OrderCreatedNotification;
+use App\Notifications\Order\FastBoatOrderCreatedNotification;
 use App\Services\FastBoatOrder\FastBoatOrderDetailService;
 use App\Services\FastBoatOrder\FastBoatOrderRegistrationService;
 use App\Services\FastBoatOrder\FastBoatOrderService;
@@ -251,7 +251,7 @@ class UserFastBoatOrderController extends Controller
         $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
-        $user->notify(new OrderCreatedNotification($data));
+        $user->notify(new FastBoatOrderCreatedNotification($data));
     }
 
     // protected function sendAdminEmail($order)

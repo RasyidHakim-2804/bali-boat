@@ -256,7 +256,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
         //password controller
         Route::post('/password/forget', [ForgetPasswordController::class, 'forgetPassword']);
-        Route::post('/password/forget/verify-otp', [ForgetPasswordController::class, 'verifyOtp']);
+        Route::post('/password/forget/verify-otp', [ForgetPasswordController::class, 'verifyPin']);
         Route::post('/password/reset/', [ForgetPasswordController::class, 'resetPassword']);
         Route::get('/password/forget/resend', [ForgetPasswordController::class,'forgetPassword']);
 

@@ -10,6 +10,6 @@ class FastBoatController extends Controller
 {   
     public function index()
     {
-        return FastBoatResource::collection(FastBoat::all('id', 'name'));
+        return FastBoatResource::collection(FastBoat::active()->get(['id', 'name']));
     }
 }

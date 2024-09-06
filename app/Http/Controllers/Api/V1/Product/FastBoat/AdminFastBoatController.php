@@ -27,6 +27,10 @@ class AdminFastBoatController extends Controller
     {
         $fastBoat = FastBoat::with([
             'schedules' => fn($query) => $query->limit(3),
+            'schedules' => [
+                'departureHarbor',
+                'arrivalHarbor'
+            ]
         ])->withCount('schedules')->paginate(25);
 
         return AdminFastBoatResource::collection($fastBoat);

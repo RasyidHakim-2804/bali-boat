@@ -2,9 +2,9 @@
 
 namespace App\Services\Email;
 
-use App\Notifications\Order\AdminFastBoatOrderPaidNotification;
-use App\Notifications\Order\FastBoatOrderExpiredNotification;
-use App\Notifications\Order\FastBoatOrderPaidNotification;
+use App\Notifications\FastBoatOrder\AdminFastBoatOrderPaidNotification;
+use App\Notifications\FastBoatOrder\FastBoatOrderExpiredNotification;
+use App\Notifications\FastBoatOrder\FastBoatOrderPaidNotification;
 use Illuminate\Support\Facades\Notification;
 
 class OrderPaymentEmailService 

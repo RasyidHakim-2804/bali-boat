@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\V1\Promo\UserPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\User\AdminUserController;
 use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
+use App\Http\Controllers\Api\V1\User\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\User\UserProfileController;
 use App\Http\Controllers\Api\V1\Webhook\Xendit\XenditInvoiceWebhookController;
 use App\Http\Controllers\Api\V1\Webhook\Xendit\XenditPayoutLinkWebhookController;
@@ -254,10 +255,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
         Route::post('/login', [AuthUserController::class, 'login']);
 
         //password controller
-        Route::post('/password/forget', [UserPasswordController::class, 'forgetPassword']);
-        Route::post('/password/forget/verify-otp', [UserPasswordController::class, 'verifyOtp']);
-        Route::post('/password/reset/', [UserPasswordController::class, 'resetPassword']);
-        Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
+        Route::post('/password/forget', [ForgetPasswordController::class, 'forgetPassword']);
+        Route::post('/password/forget/verify-otp', [ForgetPasswordController::class, 'verifyOtp']);
+        Route::post('/password/reset/', [ForgetPasswordController::class, 'resetPassword']);
+        Route::get('/password/forget/resend', [ForgetPasswordController::class,'forgetPassword']);
 
         Route::middleware(['auth:api_user'])->group(function(){
             //User Profile

@@ -2,42 +2,50 @@
 
 namespace App\Services\Email;
 
-use App\Notifications\Order\AdminOrderPaidNotification;
-use App\Notifications\Order\OrderExpiredNotification;
-use App\Notifications\Order\OrderPaidNotification;
+use App\Notifications\Order\AdminFastBoatOrderPaidNotification;
+use App\Notifications\Order\FastBoatOrderExpiredNotification;
+use App\Notifications\Order\FastBoatOrderPaidNotification;
 use Illuminate\Support\Facades\Notification;
 
 class OrderPaymentEmailService 
 {
-    public function paid($order)
+    public function paid($order, $type)
     {
         $user = $order->user;
 
         $data               = [];
         $data['language']   = $user->language;
         $data['first_name'] = $user->first_name;
-        $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
 
-        $user->notify(new OrderPaidNotification($data));
+        if ($type == 'fast_boat') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
 
+            $user->notify(new FastBoatOrderPaidNotification($data));
+        }
         
-        $dataAdmin              = [];
-        $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/' . $order->uuid . '/detail';
+        $dataAdmin = [];
 
         $adminEmail = env('MAIL_FROM_ADDRESS');
 
-        Notification::route('mail', $adminEmail)->notify((new AdminOrderPaidNotification($dataAdmin)));
+        if ($type == 'fast_boat') {
+            Notification::route('mail', $adminEmail)->notify((new AdminFastBoatOrderPaidNotification($dataAdmin)));
+
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/' . $order->uuid . '/detail';
+        }
     }
 
-    public function expired($order)
+    public function expired($order, $type)
     {
         $user = $order->user;
 
         $data               = [];
         $data['language']   = $user->language;
         $data['first_name'] = $user->first_name;
-        $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
 
-        $user->notify(new OrderExpiredNotification($data));
+        if ($type == 'fast_boat') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
+
+            $user->notify(new FastBoatOrderExpiredNotification($data));
+        }
     }
 }

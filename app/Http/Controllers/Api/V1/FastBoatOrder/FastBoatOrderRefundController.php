@@ -50,7 +50,7 @@ class FastBoatOrderRefundController extends Controller
 
         $refundRequest = RefundRequestPin::where('fast_boat_order_id', $fastBoatOrder->id)->orderBy('id', 'DESC')->first();
 
-        if ((isset($refundRequest)) && ($refundRequest->expired_at < Carbon::now())) return $this->errorMessage('The pin is expired. Please make a new pin.');
+        if ((isset($refundRequest)) && ($refundRequest->expired_at < Carbon::now())) return abort(422, 'The pin is expired. Please make a new pin.');
 
         DB::beginTransaction();
         try {

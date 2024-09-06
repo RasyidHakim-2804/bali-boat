@@ -16,7 +16,7 @@ class ListFastBoatOrderResource extends JsonResource
             'pic_phone_number'          => $this->pic_phone_number,
             'grand_total_purchased'     => $this->grand_total_purchased,
             'status'                    => $this->status,
-            'other_products'            => ($this->details()->count()) - 1,
+            'other_products'            => ($this->details->count()) - 1,
             'product_thumbnail'         => new ListFastBoatOrderDetailResource($this->details()->first()),
             'activity_date'             => $this->activity_date,
             'return_date'               => $this->return_date,

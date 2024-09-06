@@ -19,7 +19,7 @@ class FastBoatOrderFormResource extends JsonResource
             'age_type'       => $this->age_type,
             'is_itas_holder' => $this->is_itas_holder,
             'price'          => $this->scheduleVariant->price,
-            'destination'    => $this->schedule->departureHarbor->name . ' ' . $this->schedule->arrivalHarbor->name,
+            'destination'    => $this->schedule->departureHarbor->name . ' - ' . $this->schedule->arrivalHarbor->name,
             'created_at'     => $this->created_at,
             'updated_at'     => $this->created_at,
         ];

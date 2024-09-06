@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\User\ForgetPassword\ForgetUserPasswordRequest;
 use App\Http\Requests\Api\User\ForgetPassword\ResetPasswordForgetUserPasswordRequest;
-use App\Http\Requests\Api\User\ForgetPassword\VerifyForgetUserPasswordPinTalentRequest;
+use App\Http\Requests\Api\User\ForgetPassword\VerifyForgetUserPasswordPinRequest;
 use App\Mail\User\ForgetUserPasswordMail;
 use App\Models\User;
 use App\Models\ForgetUserPasswordReset;
@@ -58,7 +58,7 @@ class ForgetPasswordController extends Controller
         
     }
 
-    public function verifyPin(VerifyForgetUserPasswordPinTalentRequest $request)
+    public function verifyPin(VerifyForgetUserPasswordPinRequest $request)
     {
         $user = User::where('email', $request->email)->first();
 

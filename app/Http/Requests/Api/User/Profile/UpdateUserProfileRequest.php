@@ -25,15 +25,15 @@ class UpdateUserProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name'                 => 'required|min:1',
-            'last_name'                  => 'required|min:1',
-            'profile_picture'            => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2000',
-            'email'                      => [
+            'first_name'    => 'required|min:1',
+            'last_name'     => 'required|min:1',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2000',
+            'email'         => [
                 'required',
                 'email:rfc,dns',
                 Rule::unique('users', 'email')->ignore(request()->user()->id),
             ],
-            'phone'                      => 'nullable',
+            'phone'         => 'nullable',
         ];
     }
 }

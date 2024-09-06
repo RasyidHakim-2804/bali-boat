@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RefundOrderRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class RefundOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'pin' => 'required|min:6|max:6'
+            'pin' => ['required','min:6','max:6', Rule::exists('refund_request_pins', 'pin')]
         ];
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderRefundNotification extends Notification
+class AdminFastBoatOrderPaidNotification extends Notification
 {
     use Queueable;
 
@@ -44,18 +44,14 @@ class OrderRefundNotification extends Notification
     {
         $lang = $this->data['language'];
 
-        $subject    = ' - Order Refund';
+        $subject    = ' - New Fast Boat Order';
         $button     = 'Order Detail';
-
-        if ($lang == 'id') {
-            $subject    = ' - Pengembalian Dana Order';
-            $button     = 'Detil Order';
-        }
+        $line       = 'You got an order successfully paid. Please clicking the "Order Detail" button to confirm or decline the order. Thankyou.';
 
         return (new MailMessage)
             ->subject(env('APP_EMAIL_COMPANY') . $subject)
             ->greeting('Hi ' . $this->data['first_name'] . ',')
-            ->line($this->data['message'])
+            ->line($line)
             ->action($button, url($this->data['order_url']));
     }
 

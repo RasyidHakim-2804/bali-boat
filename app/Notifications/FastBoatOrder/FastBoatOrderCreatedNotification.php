@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AdminOrderPaidNotification extends Notification
+class FastBoatOrderCreatedNotification extends Notification
 {
     use Queueable;
 
@@ -44,15 +44,21 @@ class AdminOrderPaidNotification extends Notification
     {
         $lang = $this->data['language'];
 
-        $subject    = ' - New Order';
-        $button     = 'Order Detail';
-        $line       = 'You got an order successfully paid. Please clicking the "Order Detail" button to confirm or decline the order. Thankyou.';
+        $subject    = ' - New Fast Boat Order';
+        $button     = 'Payment';
+        $line       = 'Your fast boat order was successfully created. Please complete the payment by clicking the "Payment" button. Thankyou.';
+
+        if ($lang == 'id') {
+            $subject    = ' - Order Fast Boat Baru';
+            $button     = 'Pembayaran';
+            $line       = 'Order "Fast Boat" anda berhasil terbuat. Mohon untuk menyelesaikan pembayaran dengan meng-klik tombol "Pembayaran". Terimakasih.';
+        }
 
         return (new MailMessage)
             ->subject(env('APP_EMAIL_COMPANY') . $subject)
             ->greeting('Hi ' . $this->data['first_name'] . ',')
             ->line($line)
-            ->action($button, url($this->data['order_url']));
+            ->action($button, url($this->data['payment_url']));
     }
 
     /**

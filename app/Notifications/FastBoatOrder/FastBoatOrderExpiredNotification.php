@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderPaidNotification extends Notification
+class FastBoatOrderExpiredNotification extends Notification
 {
     use Queueable;
 
@@ -44,14 +44,14 @@ class OrderPaidNotification extends Notification
     {
         $lang = $this->data['language'];
 
-        $subject    = ' - Order Paid';
+        $subject    = ' - Fast Boat Order Expired';
         $button     = 'Order Detail';
-        $line       = 'Your order was successfully paid. Please clicking the "Order Detail" button to track your order. Thankyou.';
+        $line       = 'Your fast boat order payment is expired, and the order status has changed to failed. Click the "Order Detail" button to view your order information. Thankyou.';
 
         if ($lang == 'id') {
-            $subject    = ' - Order Terbayar';
+            $subject    = ' - Order Fast Boat Kadaluarsa';
             $button     = 'Detil Order';
-            $line       = 'Order anda berhasil terbayarkan. Mohon untuk meng-klik tombol "Order Detil" untuk meninjau order anda. Terimakasih.';
+            $line       = 'Pembayaran order "Fast Boat" anda telah kadaluarsa, dan status order berganti menjadi gagal. Klik tombol "Detil Order" untuk melihat informasi secara detil. Terimakasih.';
         }
 
         return (new MailMessage)

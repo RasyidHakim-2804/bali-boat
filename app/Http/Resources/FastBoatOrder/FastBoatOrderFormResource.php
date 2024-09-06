@@ -11,7 +11,7 @@ class FastBoatOrderFormResource extends JsonResource
         return [
             'id'             => $this->id,
             'order_id'       => $this->order_id,
-            'schedule_id'    => $this->product_id,
+            'schedule_id'    => $this->schedule_id,
             'variant_id'     => $this->variant_id,
             'name'           => $this->name,
             'nationality'    => $this->nationality,

@@ -58,8 +58,7 @@ class FastBoatOrderRefundPinNotification extends Notification
         return (new MailMessage)
             ->subject(env('APP_EMAIL_COMPANY') . $subject)
             ->greeting('Hi ' . $this->data['first_name'] . ',')
-            ->line($message)
-            ->action($button, url($this->data['order_url']));
+            ->line($message);
     }
 
     /**

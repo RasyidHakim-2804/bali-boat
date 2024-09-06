@@ -10,7 +10,7 @@ use App\Models\FastBoatSchedule;
 use App\Models\FastBoatScheduleVariant;
 use App\Models\Promo;
 use App\Models\User;
-use App\Notifications\Order\FastBoatOrderCreatedNotification;
+use App\Notifications\FastBoatOrder\FastBoatOrderCreatedNotification;
 use App\Services\FastBoatOrder\FastBoatOrderDetailService;
 use App\Services\FastBoatOrder\FastBoatOrderRegistrationService;
 use App\Services\FastBoatOrder\FastBoatOrderService;

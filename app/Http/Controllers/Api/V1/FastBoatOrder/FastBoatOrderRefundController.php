@@ -60,7 +60,7 @@ class FastBoatOrderRefundController extends Controller
 
             $fastBoatOrder->save();
 
-            $this->sendEmailRefund($fastBoatOrder, $orderRefund->xendit_payout_link_id);
+            $this->sendEmailRefund($fastBoatOrder, $orderRefund->payout_url);
 
             DB::commit();
 

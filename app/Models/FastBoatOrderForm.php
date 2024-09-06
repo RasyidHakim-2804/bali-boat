@@ -28,6 +28,16 @@ class FastBoatOrderForm extends Model
         return $this->belongsTo(FastBoatOrder::class, 'order_id', 'id');
     }
 
+    public function schedule()
+    {
+        return $this->hasOne(FastBoatSchedule::class, 'schedule_id', 'id');
+    }
+
+    public function scheduleVariant()
+    {
+        return $this->hasOne(FastBoatScheduleVariant::class, 'variant_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();

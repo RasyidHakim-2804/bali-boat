@@ -40,7 +40,7 @@ class UserProfileController extends Controller
 
             // if ($request->is_profile_picture_deleted == 1) $user = $this->deleteProfilePicture($user);
 
-            if ($request->profile_image) $user = $this->saveProfilePicture($user, $request->profile_image);
+            if ($request->image) $user = $this->saveProfilePicture($user, $request->image);
 
             $emailChanges = true;
 
@@ -101,6 +101,8 @@ class UserProfileController extends Controller
 
     protected function saveProfilePicture($user, $uploadedImage)
     {
+        if (isset($user->profile_picture)) $this->deleteProfilePicture($user);
+        
         $image = (new ImageService($user->imagePath(), $uploadedImage));
 
         $image->save();

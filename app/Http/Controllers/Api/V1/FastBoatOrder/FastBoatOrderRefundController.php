@@ -54,7 +54,7 @@ class FastBoatOrderRefundController extends Controller
 
         DB::beginTransaction();
         try {
-            (new OrderRefundService)->refund($fastBoatOrder, $request);
+            (new OrderRefundService)->refund($fastBoatOrder, 'fast_boat');
 
             $fastBoatOrder->status = 'refunding';
 

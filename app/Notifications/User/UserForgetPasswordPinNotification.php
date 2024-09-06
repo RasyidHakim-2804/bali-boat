@@ -42,7 +42,7 @@ class UserForgetPasswordPinNotification extends Notification
         $lang = $this->data['language'];
 
         $subject    = ' - Forgot Password PIN';
-        $line       = new HtmlString('Your forget password request is success. Here we send you 6 digits PIN for next step. The pin is <strong>' . $this->data['pin'] . '</strong>.');
+        $line       = new HtmlString('Your forget password request is success. Here we send you 6 digits PIN for next step. The PIN is <strong>' . $this->data['pin'] . '</strong>.');
 
         if ($lang == 'id') {
             $subject    = ' - PIN Lupa Password';

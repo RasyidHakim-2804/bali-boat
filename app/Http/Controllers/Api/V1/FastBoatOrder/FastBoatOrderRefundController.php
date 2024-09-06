@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\RefundOrderRequest as ApiRefundOrderRequest;
 use App\Models\FastBoatOrder;
 use App\Models\RefundRequestPin;
+use App\Models\User;
 use App\Notifications\FastBoatOrder\FastBoatOrderRefundPinNotification;
 use App\Notifications\FastBoatOrder\FastBoatOrderRefundRequestNotification;
 use App\Services\Order\OrderRefundService;
@@ -16,9 +17,8 @@ class FastBoatOrderRefundController extends Controller
 {
     use JsonResponsesTrait;
     
-    public function request($fastBoatOrder)
+    public function request(User $user, FastBoatOrder $fastBoatOrder)
     {
-        return $fastBoatOrder;
         if ($fastBoatOrder->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
         DB::beginTransaction();
@@ -44,7 +44,7 @@ class FastBoatOrderRefundController extends Controller
         }
     }
 
-    public function refund(ApiRefundOrderRequest $request, FastBoatOrder $fastBoatOrder)
+    public function refund(ApiRefundOrderRequest $request, User $user,  FastBoatOrder $fastBoatOrder)
     {
         if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 

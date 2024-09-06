@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
 use App\Http\Controllers\Api\V1\Faq\AdminFaqController;
 use App\Http\Controllers\Api\V1\Faq\FaqController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
+use App\Http\Controllers\Api\V1\FastBoatOrder\FastBoatOrderRefundController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Include\AdminIncludeController;
@@ -285,7 +286,8 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::get('/fast-boat-orders/{fastBoatOrder}', [UserFastBoatOrderController::class, 'show']);
                 Route::post('/fast-boat-orders', [UserFastBoatOrderController::class, 'store']);
                 Route::post('/fast-boat-orders/{fastBoatOrder}/cancel', [UserFastBoatOrderController::class, 'cancel']);
-                Route::post('/fast-boat-orders/{fastBoatOrder}/refund', [UserFastBoatOrderController::class, 'refund']);
+                Route::post('/fast-boat-orders/{fastBoatOrder}/refund-request', [FastBoatOrderRefundController::class, 'request']);
+                Route::post('/fast-boat-orders/{fastBoatOrder}/refund', [FastBoatOrderRefundController::class, 'refund']);
 
                 Route::get('/private-boat-orders', [UserPrivateBoatOrderController::class, 'index']);
                 Route::get('/private-boat-orders/{fastBoatOrder}', [UserPrivateBoatOrderController::class, 'show']);

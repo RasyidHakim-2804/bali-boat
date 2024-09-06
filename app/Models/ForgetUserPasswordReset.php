@@ -10,7 +10,7 @@ class ForgetUserPasswordReset extends Model
 {
     use HasFactory;
 
-    protected $table = 'forget_password_resets';
+    protected $table = 'forget_user_password_resets';
 
     protected $fillable = [
         'email',

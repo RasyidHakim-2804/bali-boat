@@ -16,8 +16,9 @@ class FastBoatOrderRefundController extends Controller
 {
     use JsonResponsesTrait;
     
-    public function request(FastBoatOrder $fastBoatOrder)
+    public function request($fastBoatOrder)
     {
+        return $fastBoatOrder;
         if ($fastBoatOrder->status != 'declined') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
         DB::beginTransaction();

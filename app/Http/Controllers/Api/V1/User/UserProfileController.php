@@ -105,7 +105,7 @@ class UserProfileController extends Controller
 
         $image->save();
 
-        $user->profile_image = $image->getImageName();
+        $user->profile_picture = $image->getImageName();
 
         return $user;
     }

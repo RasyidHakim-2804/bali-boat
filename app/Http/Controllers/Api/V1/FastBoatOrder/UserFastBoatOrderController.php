@@ -33,7 +33,13 @@ class UserFastBoatOrderController extends Controller
 
     public function index(User $user)
     {
-        return ListFastBoatOrderResource::collection(FastBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
+        return ListFastBoatOrderResource::collection(
+            FastBoatOrder::where('user_id', $user->id)
+            ->with(['details'])
+            ->withCount('forms')
+            ->latest()
+            ->paginate(25)
+        );
     }
     
     public function show(User $user, FastBoatOrder $fastBoatOrder)

@@ -135,6 +135,7 @@ class AdminPrivateBoatController extends Controller
             foreach ($privateBoat->images as $image) {
                 $imageService = new ImageService($image->imagePath());
                 $imageService->delete($image->image);
+                $image->delete();
             }
 
             foreach ($privateBoat->variants as $variant) {

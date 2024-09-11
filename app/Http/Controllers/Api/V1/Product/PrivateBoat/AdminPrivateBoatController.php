@@ -9,6 +9,7 @@ use App\Http\Resources\Product\PrivateBoat\AdminPrivateBoatDetailResource;
 use App\Http\Resources\Product\PrivateBoat\AdminPrivateBoatListResource;
 use App\Models\PrivateBoat;
 use App\Services\Admin\AdminPermissionService;
+use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
@@ -125,14 +126,25 @@ class AdminPrivateBoatController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            $privateBoat = $privateBoat->load([
+                'images',
+                'variants'
+            ]);
+
+            foreach ($privateBoat->images as $image) {
+                $imageService = new ImageService($image->imagePath());
+                $imageService->delete($image->image);
+            }
+
+            foreach ($privateBoat->variants as $variant) {
+                $variant->delete();
+            }
             
             $privateBoat->tags()->detach();
             $privateBoat->includes()->detach();
             $privateBoat->specification()->delete();
             $privateBoat->translations()->delete();
-            $privateBoat->images()->delete();
-            $privateBoat->variants()->delete();
-            $privateBoat->defaultVariant()->delete();
             $privateBoat->delete();
 
             DB::commit();

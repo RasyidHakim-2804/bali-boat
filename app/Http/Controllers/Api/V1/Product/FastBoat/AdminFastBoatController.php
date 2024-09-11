@@ -108,6 +108,9 @@ class AdminFastBoatController extends Controller
             foreach ($fastBoat->schedules as $schedule) {
                 $schedule->variants()->delete();
             }
+
+            $imageService = new ImageService($fastBoat->imagePath());
+            $imageService->delete($fastBoat->image);
     
             $fastBoat->schedules()->delete();
             $fastBoat->delete();

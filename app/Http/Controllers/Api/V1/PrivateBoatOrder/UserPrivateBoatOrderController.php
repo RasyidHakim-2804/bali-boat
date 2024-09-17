@@ -10,7 +10,7 @@ use App\Models\PrivateBoatOrder;
 use App\Models\PrivateBoatVariant;
 use App\Models\Promo;
 use App\Models\User;
-use App\Notifications\Order\OrderCreatedNotification;
+use App\Notifications\PrivateBoatOrder\PrivateBoatOrderCreatedNotification;
 use App\Services\PrivateBoatOrder\PrivateBoatOrderDetailService;
 use App\Services\PrivateBoatOrder\PrivateBoatOrderRegistrationService;
 use App\Services\PrivateBoatOrder\PrivateBoatOrderService;
@@ -239,7 +239,7 @@ class UserPrivateBoatOrderController extends Controller
         $data['order_url']      = env('FRONTEND_URL') . '/user/private-boat-orders/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
-        $user->notify(new OrderCreatedNotification($data));
+        $user->notify(new PrivateBoatOrderCreatedNotification($data));
     }
 
     // protected function sendAdminEmail($order)

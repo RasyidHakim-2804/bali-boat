@@ -106,7 +106,7 @@ class StoreUserPrivateBoatOrderRequest extends FormRequest
 
                     if ($count < 1) $fail(__('validation.in'));
                 },
-                Rule::exists('private_boat_schedule_variants', 'id')->where('private_boat_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
+                Rule::exists('private_boat_variants', 'id')->where('private_boat_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
             ],
             'forms.*.name'              => 'required|string|min:1',
             'forms.*.nationality'       => 'required|min:1',

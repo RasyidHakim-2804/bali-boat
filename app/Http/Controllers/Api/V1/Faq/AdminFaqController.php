@@ -36,7 +36,10 @@ class AdminFaqController extends Controller
     {
         return $this->successGet(
             new AdminDetailFaqResource(
-                $faq->load('translations')
+                $faq->load([
+                    'translations',
+                    'category.translations' => fn($query) => $query->language('en')
+                ])
             )
         );
     }
@@ -47,6 +50,7 @@ class AdminFaqController extends Controller
             DB::beginTransaction();
 
             $faq = new Faq();
+            $faq->category_id = $request->category_id;
             $faq->save();
 
             foreach ($request->validated('question') as $lang => $translation) {
@@ -74,6 +78,7 @@ class AdminFaqController extends Controller
         try {
             DB::beginTransaction();
 
+            $faq->category_id = $request->category_id;
             $faq->save();
 
             foreach ($request->validated('question') as $lang => $translation) {

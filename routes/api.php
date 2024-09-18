@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
 use App\Http\Controllers\Api\V1\Faq\AdminFaqController;
 use App\Http\Controllers\Api\V1\Faq\FaqController;
+use App\Http\Controllers\Api\V1\FaqCategory\AdminFaqCategoryController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\FastBoatOrderRefundController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
@@ -177,6 +178,14 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/tags', [AdminTagController::class, 'store']);
             Route::put('/tags/{tag}', [AdminTagController::class, 'update']);
             Route::delete('/tags/{tag}', [AdminTagController::class, 'destroy']);
+
+            // Admin - Faq Category
+            Route::get('/faq-categories', [AdminFaqCategoryController::class, 'index']);
+            Route::post('/faq-categories', [AdminFaqCategoryController::class, 'store']);
+            Route::get('/faq-categories-all', [AdminFaqCategoryController::class, 'all']);
+            Route::get('/faq-categories/{faqCategory}', [AdminFaqCategoryController::class, 'show']);
+            Route::put('/faq-categories/{faqCategory}', [AdminFaqCategoryController::class, 'update']);
+            Route::delete('/faq-categories/{faqCategory}', [AdminFaqCategoryController::class, 'destroy']);
 
             // Admin - Faq
             Route::get('/faqs', [AdminFaqController::class, 'index']);

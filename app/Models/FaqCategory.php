@@ -12,7 +12,7 @@ class FaqCategory extends Model
 
     public function translations(): HasMany
     {
-        return $this->hasMany(FaqCategoryTranslation::class, ' 	faq_category_id', 'id');
+        return $this->hasMany(FaqCategoryTranslation::class, 'faq_category_id', 'id');
     }
 
     public function faq(): HasMany

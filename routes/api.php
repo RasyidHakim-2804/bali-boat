@@ -280,7 +280,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/logout', [AuthUserController::class, 'logout']);
 
                 //password controller
-                Route::post('/password/change', [UserProfileController::class, 'changePassword']);
+                Route::post('/change-password', [UserProfileController::class, 'changePassword']);
 
                 // Fast Boat Order
                 Route::get('/fast-boat-orders', [UserFastBoatOrderController::class, 'index']);

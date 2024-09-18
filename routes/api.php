@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ActivityOrder\UserActivityOrderController;
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
 use App\Http\Controllers\Api\V1\Admin\AdminFeatureController;
@@ -279,9 +280,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/logout', [AuthUserController::class, 'logout']);
 
                 //password controller
-                Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
+                Route::post('/password/change', [UserProfileController::class, 'changePassword']);
 
-                // Order
+                // Fast Boat Order
                 Route::get('/fast-boat-orders', [UserFastBoatOrderController::class, 'index']);
                 Route::get('/fast-boat-orders/{fastBoatOrder}', [UserFastBoatOrderController::class, 'show']);
                 Route::post('/fast-boat-orders', [UserFastBoatOrderController::class, 'store']);
@@ -289,11 +290,19 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/fast-boat-orders/{fastBoatOrder}/refund-request', [FastBoatOrderRefundController::class, 'request']);
                 Route::post('/fast-boat-orders/{fastBoatOrder}/refund', [FastBoatOrderRefundController::class, 'refund']);
 
+                // Private Boat Order
                 Route::get('/private-boat-orders', [UserPrivateBoatOrderController::class, 'index']);
                 Route::get('/private-boat-orders/{fastBoatOrder}', [UserPrivateBoatOrderController::class, 'show']);
                 Route::post('/private-boat-orders', [UserPrivateBoatOrderController::class, 'store']);
                 Route::post('/private-boat-orders/{fastBoatOrder}/cancel', [UserPrivateBoatOrderController::class, 'cancel']);
                 Route::post('/private-boat-orders/{fastBoatOrder}/refund', [UserPrivateBoatOrderController::class, 'refund']);
+
+                // Activity Order
+                Route::get('/activity-orders', [UserActivityOrderController::class, 'index']);
+                Route::get('/activity-orders/{fastBoatOrder}', [UserActivityOrderController::class, 'show']);
+                Route::post('/activity-orders', [UserActivityOrderController::class, 'store']);
+                Route::post('/activity-orders/{fastBoatOrder}/cancel', [UserActivityOrderController::class, 'cancel']);
+                Route::post('/activity-orders/{fastBoatOrder}/refund', [UserActivityOrderController::class, 'refund']);
             });
         });
     });

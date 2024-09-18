@@ -29,6 +29,8 @@ class FaqRequest extends FormRequest
             $rule['answer.' . $lang]   = 'required|string|max:300';
         }
 
+        $rule['category_id'] = 'required|exists:faq_categories,id';
+
         return $rule;
     }
 }

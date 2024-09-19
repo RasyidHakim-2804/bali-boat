@@ -292,17 +292,17 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
                 // Private Boat Order
                 Route::get('/private-boat-orders', [UserPrivateBoatOrderController::class, 'index']);
-                Route::get('/private-boat-orders/{fastBoatOrder}', [UserPrivateBoatOrderController::class, 'show']);
+                Route::get('/private-boat-orders/{privateBoatOrder}', [UserPrivateBoatOrderController::class, 'show']);
                 Route::post('/private-boat-orders', [UserPrivateBoatOrderController::class, 'store']);
-                Route::post('/private-boat-orders/{fastBoatOrder}/cancel', [UserPrivateBoatOrderController::class, 'cancel']);
-                Route::post('/private-boat-orders/{fastBoatOrder}/refund', [UserPrivateBoatOrderController::class, 'refund']);
+                Route::post('/private-boat-orders/{privateBoatOrder}/cancel', [UserPrivateBoatOrderController::class, 'cancel']);
+                Route::post('/private-boat-orders/{privateBoatOrder}/refund', [UserPrivateBoatOrderController::class, 'refund']);
 
                 // Activity Order
                 Route::get('/activity-orders', [UserActivityOrderController::class, 'index']);
-                Route::get('/activity-orders/{fastBoatOrder}', [UserActivityOrderController::class, 'show']);
+                Route::get('/activity-orders/{activityOrder}', [UserActivityOrderController::class, 'show']);
                 Route::post('/activity-orders', [UserActivityOrderController::class, 'store']);
-                Route::post('/activity-orders/{fastBoatOrder}/cancel', [UserActivityOrderController::class, 'cancel']);
-                Route::post('/activity-orders/{fastBoatOrder}/refund', [UserActivityOrderController::class, 'refund']);
+                Route::post('/activity-orders/{activityOrder}/cancel', [UserActivityOrderController::class, 'cancel']);
+                Route::post('/activity-orders/{activityOrder}/refund', [UserActivityOrderController::class, 'refund']);
             });
         });
     });

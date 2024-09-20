@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Product\FastBoat;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Product\FastBoat\ScheduleResource;
 use App\Http\Resources\Product\FastBoat\ScheduleAndFastBoatResource;
 use App\Models\FastBoat;
 use App\Models\FastBoatSchedule;
@@ -36,13 +37,15 @@ class FastBoatScheduleController extends Controller
         ->active()
         ->paginate(25);
 
-        $fastBoat = FastBoat::active()->get(['id', 'name']);
+        return ScheduleResource::collection($schedules);
 
-        return new ScheduleAndFastBoatResource(
-            (object) [
-                'schedules'     => $schedules,
-                'fast_boats'    => $fastBoat,
-            ]
-        );
+        // $fastBoat = FastBoat::active()->get(['id', 'name']);
+
+        // return new ScheduleAndFastBoatResource(
+        //     (object) [
+        //         'schedules'     => $schedules,
+        //         'fast_boats'    => $fastBoat,
+        //     ]
+        // );
     }
 }

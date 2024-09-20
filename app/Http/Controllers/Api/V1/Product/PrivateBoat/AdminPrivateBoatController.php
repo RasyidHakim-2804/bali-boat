@@ -23,12 +23,10 @@ class AdminPrivateBoatController extends Controller
     {
         $this->permissionService = new AdminPermissionService('privateBoat');
     }
-    
+
     public function index()
     {
-        $privateBoats = PrivateBoat::with([
-            'thumbnailVariant',
-        ])->paginate(25);
+        $privateBoats = PrivateBoat::selectThumbnailVariantPrice()->paginate(25);
 
         return AdminPrivateBoatListResource::collection($privateBoats);
     }
@@ -39,8 +37,8 @@ class AdminPrivateBoatController extends Controller
             'pickupHarbor',
             'translations',
             'tags.translations'     => fn($query) => $query->language(),
-            'includes.translations' => fn($query) => $query->language(), 
-            'specification', 
+            'includes.translations' => fn($query) => $query->language(),
+            'specification',
             'defaultVariant',
         ]);
 
@@ -59,13 +57,13 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->is_active        = $request->is_active;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
-            
+
             $privateBoat->includes()->attach($this->generatePosition($request->includes));
             $privateBoat->tags()->attach($request->tags);
 
             $this->setPrice($privateBoat, $request);
             $this->setSpecification($privateBoat, $request->specification);
-            
+
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($privateBoat, $lang, 'highlight', $highlight);
             }
@@ -81,7 +79,7 @@ class AdminPrivateBoatController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
+
             return $this->errorServer($e->getMessage());
         }
     }
@@ -101,7 +99,7 @@ class AdminPrivateBoatController extends Controller
 
             $this->setPrice($privateBoat, $request);
             $this->setSpecification($privateBoat, $request->specification);
-            
+
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($privateBoat, $lang, 'highlight', $highlight);
             }
@@ -117,7 +115,7 @@ class AdminPrivateBoatController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
+
             return $this->errorServer($e->getMessage());
         }
     }
@@ -141,7 +139,7 @@ class AdminPrivateBoatController extends Controller
             foreach ($privateBoat->variants as $variant) {
                 $variant->delete();
             }
-            
+
             $privateBoat->tags()->detach();
             $privateBoat->includes()->detach();
             $privateBoat->specification()->delete();
@@ -155,7 +153,7 @@ class AdminPrivateBoatController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
+
             return $this->errorServer($e->getMessage());
         }
     }
@@ -179,7 +177,7 @@ class AdminPrivateBoatController extends Controller
     private function setSpecification(PrivateBoat $privateBoat, $request)
     {
         $specification = $privateBoat->specification()->firstOrNew();
-            
+
         $specification->private_boat_id = $privateBoat->id;
         $specification->model     = $request['model'];
         $specification->year      = $request['year'];

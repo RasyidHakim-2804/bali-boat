@@ -2,9 +2,12 @@
 
 namespace App\Services\Email;
 
+use App\Notifications\ActivityOrder\AdminActivityOrderPaidNotification;
 use App\Notifications\FastBoatOrder\AdminFastBoatOrderPaidNotification;
 use App\Notifications\FastBoatOrder\FastBoatOrderExpiredNotification;
 use App\Notifications\FastBoatOrder\FastBoatOrderPaidNotification;
+use App\Notifications\PrivateBoatOrder\AdminPrivateBoatOrderPaidNotification;
+use App\Notifications\PrivateBoatOrder\PrivateBoatOrderExpiredNotification;
 use Illuminate\Support\Facades\Notification;
 
 class OrderPaymentEmailService 
@@ -30,7 +33,19 @@ class OrderPaymentEmailService
         if ($type == 'fast_boat') {
             Notification::route('mail', $adminEmail)->notify((new AdminFastBoatOrderPaidNotification($dataAdmin)));
 
-            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/' . $order->uuid . '/detail';
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/fast-boat-orders/' . $order->uuid . '/detail';
+        }
+
+        if ($type == 'private_boat') {
+            Notification::route('mail', $adminEmail)->notify((new AdminPrivateBoatOrderPaidNotification($dataAdmin)));
+
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/private-boat-orders/' . $order->uuid . '/detail';
+        }
+
+        if ($type == 'activity') {
+            Notification::route('mail', $adminEmail)->notify((new AdminActivityOrderPaidNotification($dataAdmin)));
+
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/activity-orders/' . $order->uuid . '/detail';
         }
     }
 
@@ -46,6 +61,12 @@ class OrderPaymentEmailService
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
 
             $user->notify(new FastBoatOrderExpiredNotification($data));
+        }
+
+        if ($type == 'private_boat') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
+
+            $user->notify(new PrivateBoatOrderExpiredNotification($data));
         }
     }
 }

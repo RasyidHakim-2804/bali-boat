@@ -18,7 +18,7 @@ class AdminFaqController extends Controller
 
     protected $permissionService;
 
-    public function __construct() 
+    public function __construct()
     {
         // $this->permissionService = new AdminPermissionService('faq');
     }
@@ -51,6 +51,7 @@ class AdminFaqController extends Controller
 
             $faq = new Faq();
             $faq->category_id = $request->category_id;
+            $faq->is_top      = $request->is_top;
             $faq->save();
 
             foreach ($request->validated('question') as $lang => $translation) {
@@ -62,11 +63,11 @@ class AdminFaqController extends Controller
             }
 
             DB::commit();
-            
+
             return $this->successStore();
 
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return $this->errorServer($e->getMessage());
@@ -79,6 +80,7 @@ class AdminFaqController extends Controller
             DB::beginTransaction();
 
             $faq->category_id = $request->category_id;
+            $faq->is_top      = $request->is_top;
             $faq->save();
 
             foreach ($request->validated('question') as $lang => $translation) {
@@ -90,11 +92,11 @@ class AdminFaqController extends Controller
             }
 
             DB::commit();
-            
+
             return $this->successResponse();
 
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return $this->errorServer($e->getMessage());
@@ -114,7 +116,7 @@ class AdminFaqController extends Controller
             return $this->successResponse();
 
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return $this->errorServer($e->getMessage());

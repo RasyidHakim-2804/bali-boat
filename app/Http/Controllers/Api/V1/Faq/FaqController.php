@@ -17,16 +17,7 @@ class FaqController extends Controller
         return ListFaqResource::collection(
             Faq::with([
                 'translations' => fn($query) => $query->language()
-            ])->limit(5)->get()
-        );
-    }
-
-    public function list()
-    {
-        return ListFaqResource::collection(
-            Faq::with([
-                'translations' => fn($query) => $query->language()
-            ])->get()
+            ])->where('is_top', '=', true)->get()
         );
     }
 }

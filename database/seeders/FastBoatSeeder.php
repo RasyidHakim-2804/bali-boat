@@ -19,8 +19,7 @@ class FastBoatSeeder extends Seeder
             'name'          => 'Wijaya Buyuk Fast Boat',
             'slug'          => Str::slug('Wijaya Buyuk Fast Boat'),
             'image'         => 'https://source.unsplash.com/random/?Banner&Skincare',
-            'is_active'        => 1,
-            'rating'          => 5.00,
+            'is_active'     => 1,
             'created_at'    => now(),
             'updated_at'    => now(),
         ]);
@@ -30,8 +29,7 @@ class FastBoatSeeder extends Seeder
             'name'          => 'Wanderlust Cruise',
             'slug'          => Str::slug('Wanderlust Cruise'),
             'image'         => 'https://source.unsplash.com/random/?Banner&Skincare',
-            'is_active'        => 1,
-            'rating'          => 5.00,
+            'is_active'     => 1,
             'created_at'    => now(),
             'updated_at'    => now(),
         ]);
@@ -41,8 +39,7 @@ class FastBoatSeeder extends Seeder
             'name'          => 'Starfish Fast Cruise',
             'slug'          => Str::slug('Starfish Fast Cruise'),
             'image'         => 'https://source.unsplash.com/random/?Banner&Skincare',
-            'is_active'        => 1,
-            'rating'          => 5.00,
+            'is_active'     => 1,
             'created_at'    => now(),
             'updated_at'    => now(),
         ]);

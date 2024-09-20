@@ -20,11 +20,15 @@ class AdminPrivateBoatListResource extends JsonResource
         return [
             'id'                => $this->id,
             'name'              => $this->name,
+            'price'         => $this->whenLoaded(
+                'defaultVariant',
+                fn() => $this->defaultVariant->price,
+                $this->price
+            ),
             'slug'              => $this->slug,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-            'thumbnail_variant' => new PrivateBoatVariantResource($this->thumbnailVariant),
         ];
     }
 }

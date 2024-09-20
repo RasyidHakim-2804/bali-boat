@@ -38,4 +38,23 @@ class ScheduleRequest extends FormRequest
 
         return $rule;
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->isMethod('POST')) {
+                $schedule = $this->route('fastBoat')
+                            ->schedules()
+                            ->where('departure_harbor_id', '=', $this->input('departure_harbor_id'))
+                            ->where('arrival_harbor_id', '=', $this->input('arrival_harbor_id'))
+                            ->where('departure_time', '=', $this->input('departure_time'))
+                            ->where('arrival_time', '=', $this->input('arrival_time'))
+                            ->first();
+
+                if ($schedule != null) {
+                    $validator->errors()->add('schedule', __('validation.distinct', ['attribute' => 'schedule']));
+                }
+            }
+        });
+    }
 }

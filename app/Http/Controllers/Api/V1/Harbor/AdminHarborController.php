@@ -9,6 +9,7 @@ use App\Http\Resources\Habor\HarborResource;
 use App\Models\Harbor;
 use App\Services\Admin\AdminPermissionService;
 use App\Traits\JsonResponsesTrait;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -50,7 +51,7 @@ class AdminHarborController extends Controller
     {
         $harbor         = new Harbor();
         $harbor->name   = $request->name;
-        
+
         $harbor->save();
 
         return $this->successStore();
@@ -67,8 +68,31 @@ class AdminHarborController extends Controller
 
     public function destroy(Harbor $harbor)
     {
-        $harbor->delete();
+        try {
+            DB::beginTransaction();
 
-        return new SuccessResource();
+            if ( $harbor->departureSchedules()->exists()||$harbor->arrivalSchedules()->exists()) {
+
+                $message = [
+                    'en'    => 'Harbors cannot be deleted because they are used in scheduled departures or arrivals.',
+                    'id'    => 'Harbor tidak dapat dihapus karena digunakan pada jadwal keberangkatan atau kedatangan.',
+                ];
+
+                return $this->errorMessage(
+                    $message[app()->getLocale()]
+                );
+
+            } else{
+
+                $harbor->delete();
+                DB::commit();
+                return new SuccessResource();
+            }
+
+        } catch (\Throwable $th) {
+
+            throw $th;
+        }
+
     }
 }

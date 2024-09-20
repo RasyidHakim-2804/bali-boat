@@ -14,7 +14,7 @@ class AdminProfileResource extends JsonResource
             'first_name'       => $this->first_name,
             'last_name'        => $this->last_name,
             'email'            => $this->email,
-            'profile_picture'  => $this->imageUrl('profile_picture'),
+            'image'            => $this->imageUrl('profile_picture'),
             'is_active'        => $this->is_active,
             'permissions'      => AdminPermissionResource::collection($this->permissions),
             'created_at'       => $this->created_at,

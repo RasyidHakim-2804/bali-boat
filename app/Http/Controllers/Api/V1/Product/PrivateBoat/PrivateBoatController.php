@@ -27,10 +27,9 @@ class PrivateBoatController extends Controller
         ->with([
             'tags.translations'     => fn($query) => $query->language(),
             'thumbnailImage',
-            'thumbnailVariant',
             'pickupHarbor'
         ])
-        ->selectVariantPrice()
+        ->selectThumbnailVariantPrice()
         ->paginate(25);
 
         return PrivateBoatResource::collection($privateBoats);

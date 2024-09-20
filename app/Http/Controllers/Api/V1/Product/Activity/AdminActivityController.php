@@ -9,6 +9,7 @@ use App\Http\Resources\Product\Activity\AdminActivityDetailResource;
 use App\Http\Resources\Product\Activity\AdminActivityListResource;
 use App\Models\Activity;
 use App\Services\Admin\AdminPermissionService;
+use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
@@ -131,15 +132,27 @@ class AdminActivityController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            $activity = $activity->load([
+                'images',
+                'variants'
+            ]);
+
+            foreach ($activity->images as $image) {
+                $imageService = new ImageService($image->imagePath());
+                $imageService->delete($image->image);
+                $image->delete();
+            }
+
+            foreach ($activity->variants as $variant) {
+                $variant->delete();
+            }
             
             $activity->tags()->detach();
             $activity->includes()->detach();
             $activity->excludes()->detach();
             $activity->itineraries()->detach();
             $activity->translations()->delete();
-            $activity->images()->delete();
-            $activity->variants()->delete();
-            $activity->defaultVariant()->delete();
             $activity->delete();
 
             DB::commit();

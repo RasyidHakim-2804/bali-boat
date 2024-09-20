@@ -24,26 +24,26 @@ class PrivateBoatResource extends JsonResource
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-            
-            'price'     => $this->whenLoaded(
-                'thumbnailVariant',
-                fn() => $this->thumbnailVariant->price
+
+            'price'     => $this->when(
+                $this->price != null,
+                $this->price
             ),
-            
+
             'highlight' => $this->whenLoaded(
                 'translations',
                 fn() => $this->translations->where('field','highlight')->first()->translation
             ),
-            
+
             'meta' => $this->whenLoaded(
                 'translations',
                 fn() => $this->translations->where('field','meta')->first()->translation
             ),
-            
+
             'specifications' => new PrivateBoatSpecificationResource($this->whenLoaded(
                 'specification',
             )),
-            
+
             'pickup_harbor'     => new HarborResource($this->whenLoaded('pickupHarbor')),
             'variants'          => PrivateBoatVariantResource::collection($this->whenLoaded('variants')),
             'images'            => PrivateBoatImageResource::collection($this->whenLoaded('images')),

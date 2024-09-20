@@ -16,9 +16,10 @@ class ListFaqResource extends JsonResource
     {
         return [
             'id'            => $this->id,
+            'is_top'        => $this->is_top,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
-            
+
             'question'      => $this->translations
                                 ->where('field', 'question')
                                 ->first()

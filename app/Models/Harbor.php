@@ -13,4 +13,14 @@ class Harbor extends Model
     {
         return $query->where('name', 'LIKE','%' . $search . '%');
     }
+
+    public function departureSchedules()
+    {
+        return $this->hasMany(FastBoatSchedule::class, 'departure_harbor_id');
+    }
+
+    public function arrivalSchedules()
+    {
+        return $this->hasMany(FastBoatSchedule::class, 'arrival_harbor_id');
+    }
 }

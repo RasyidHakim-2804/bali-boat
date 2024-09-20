@@ -21,8 +21,13 @@ class OrderRefundService
             $orderRefund                        = new OrderRefund();
             $orderRefund->xendit_payout_link_id = $xenditPayoutLink->id;
             $orderRefund->status                = $xenditPayoutLink->status;
-            $orderRefund->fast_boat_order_id    = $order->id;
             $orderRefund->type                  = $type;
+
+            if ($type == 'fast_boat') $orderRefund->fast_boat_order_id = $order->id;
+
+            if ($type == 'private_boat') $orderRefund->private_boat_order_id = $order->id;
+
+            if ($type == 'activity') $orderRefund->activity_order_id = $order->id;
 
             $orderRefund->save();
 
@@ -38,6 +43,8 @@ class OrderRefundService
 
         if ($type == 'private_boat') $orderRefund = OrderRefund::where('private_boat_order_id', $order->id)->orderBy('id', 'DESC')->first();
 
+        if ($type == 'activity') $orderRefund = OrderRefund::where('activity_order_id', $order->id)->orderBy('id', 'DESC')->first();
+
         if ((isset($orderRefund)) && ($orderRefund->status == 'claimed')) abort(422, 'The refund already success.');
 
         if ((isset($orderRefund)) && ($orderRefund->status == 'submitted') && ($orderRefund->expired_at >= Carbon::now())) abort(422, 'The refund already requested. Please check on your email.');
@@ -50,6 +57,8 @@ class OrderRefundService
         if ($type == 'fast_boat') $refundRequest = RefundRequestPin::where('fast_boat_order_id', $order->id)->orderBy('id', 'DESC')->first();
 
         if ($type == 'private_boat') $refundRequest = RefundRequestPin::where('private_boat_order_id', $order->id)->orderBy('id', 'DESC')->first();
+
+        if ($type == 'activity') $refundRequest = RefundRequestPin::where('activity_order_id', $order->id)->orderBy('id', 'DESC')->first();
 
         if ((isset($refundRequest)) && ($refundRequest->expired_at >= Carbon::now())) return abort(422, 'The pin already requested. PLease try again in 1 minute.');
 

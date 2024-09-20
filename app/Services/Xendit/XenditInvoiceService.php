@@ -134,6 +134,8 @@ class XenditInvoiceService implements PaymentInterface
 
         if ($type == 'private_boat') $invoice->private_boat_order_id  = $order->id;
 
+        if ($type == 'activity') $invoice->activity_order_id  = $order->id;
+
         $invoice->save();
 
         return $invoice;

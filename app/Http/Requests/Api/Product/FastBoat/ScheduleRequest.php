@@ -52,7 +52,7 @@ class ScheduleRequest extends FormRequest
                             ->first();
 
                 if ($schedule != null) {
-                    $validator->errors()->add('schedule', __('validation.distinct', ['attribute' => 'schedule']));
+                    $validator->errors()->add('schedule', __('validation.duplicated_data', ['attribute' => 'schedule']));
                 }
             }
         });

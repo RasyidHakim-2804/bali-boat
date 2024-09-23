@@ -36,9 +36,9 @@ class UserPrivateBoatOrderController extends Controller
         return ListPrivateBoatOrderResource::collection(PrivateBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
     }
     
-    public function show(User $user, PrivateBoatOrder $fastBoatOrder)
+    public function show(User $user, PrivateBoatOrder $privateBoatOrder)
     {
-        $order = new PrivateBoatOrderResource($fastBoatOrder);
+        $order = new PrivateBoatOrderResource($privateBoatOrder);
 
         return $this->successGet($order);
     }

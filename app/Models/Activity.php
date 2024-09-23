@@ -71,15 +71,15 @@ class Activity extends Model
         return $this->hasMany(ActivityVariant::class, 'activity_id', 'id');
     }
 
-    public function thumbnailVariant()
+    public function defaultVariant(): HasOne
     {
-        return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->ofMany('price', 'MIN');
+        return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 1);
     }
 
-    public function scopeSelectVariantPrice($query)
+    public function scopeSelectThumbnailVariantPrice($query)
     {
         $query->addSelect('*',DB::raw(
-            '(select price from activity_variants where activity_id = activities.id order by price asc limit 1) as price'
+            '(select price from activity_variants where activity_id = activities.id and deleted_at is null order by price asc limit 1) as price'
         ));
     }
 

@@ -16,11 +16,11 @@ class Harbor extends Model
 
     public function departureSchedules()
     {
-        return $this->hasMany(FastBoatSchedule::class, 'departure_harbor_id')->withTrashed();
+        return $this->hasMany(FastBoatSchedule::class, 'departure_harbor_id');
     }
 
     public function arrivalSchedules()
     {
-        return $this->hasMany(FastBoatSchedule::class, 'arrival_harbor_id')->withTrashed();
+        return $this->hasMany(FastBoatSchedule::class, 'arrival_harbor_id');
     }
 }

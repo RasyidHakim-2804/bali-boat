@@ -91,17 +91,17 @@ class UserActivityOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, ActivityOrder $fastBoatOrder)
+    public function cancel(User $user, ActivityOrder $activityOrder)
     {
         DB::beginTransaction();
         try {
-            if ($fastBoatOrder->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+            if ($activityOrder->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-            $fastBoatOrder->status = 'canceled';
+            $activityOrder->status = 'canceled';
 
-            $fastBoatOrder->save();
+            $activityOrder->save();
 
-            (new PaymentService)->prepare()->expire($fastBoatOrder, 'activity');
+            (new PaymentService)->prepare()->expire($activityOrder, 'activity');
 
             DB::commit();
 
@@ -113,19 +113,19 @@ class UserActivityOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, ActivityOrder $fastBoatOrder)
+    public function refund(Request $request, User $user, ActivityOrder $activityOrder)
     {
-        if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        if ($activityOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        if (!$fastBoatOrder->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        if (!$activityOrder->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
         DB::beginTransaction();
         try {
-            (new OrderRefundService)->refund($fastBoatOrder, 'activity', $request);
+            (new OrderRefundService)->refund($activityOrder, 'activity', $request);
 
-            $fastBoatOrder->status = 'refunding';
+            $activityOrder->status = 'refunding';
 
-            $fastBoatOrder->save();
+            $activityOrder->save();
 
             DB::commit();
 

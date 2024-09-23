@@ -26,9 +26,7 @@ class AdminActivityController extends Controller
     
     public function index()
     {
-        $activities = Activity::with([
-            'thumbnailVariant'
-        ])->paginate(25);
+        $activities = Activity::selectThumbnailVariantPrice()->paginate(25);
 
         return AdminActivityListResource::collection($activities);
     }
@@ -38,14 +36,13 @@ class AdminActivityController extends Controller
         $activity = $activity->load([
             'location',
             'translations',
-            'tags.translations'         => fn($query) => $query->language(),
-            'includes.translations'     => fn($query) => $query->language(),
-            'excludes.translations'     => fn($query) => $query->language(),
-            'itineraries.translations'  => fn($query) => $query->field('title')->language(),
+            'tags.translations'         => fn($query) => $query->language('en'),
+            'includes.translations'     => fn($query) => $query->language('en'),
+            'excludes.translations'     => fn($query) => $query->language('en'),
+            'itineraries.translations'  => fn($query) => $query->field('title')->language('en'),
             'defaultVariant',
-            'variants'
         ]);
-        
+
         return $this->successGet(
             new AdminActivityDetailResource($activity)
         );

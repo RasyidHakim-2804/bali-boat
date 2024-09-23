@@ -19,7 +19,11 @@ class ListIncludeResource extends JsonResource
             'type'          => $this->type,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
-            'description'   => $this->translations->first()->translation,
+
+            'description'   => $this->translations
+                                ->where('field', 'description')
+                                ->pluck('translation')
+                                ->first(),
             $this->mergeWhen(
                 isset($this->pivot),
                 fn() => ['position'  => $this->pivot->position]

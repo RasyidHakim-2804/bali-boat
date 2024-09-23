@@ -68,6 +68,16 @@ class User extends Authenticatable
         return $this->hasMany(FastBoatOrder::class, 'user_id', 'id');
     }
 
+    public function privateBoatOrders()
+    {
+        return $this->hasMany(PrivateBoatOrder::class, 'user_id', 'id');
+    }
+
+    public function ActivityOrders()
+    {
+        return $this->hasMany(ActivityOrder::class, 'user_id', 'id');
+    }
+
     // public function orderReviews()
     // {
     //     return $this->hasMany(OrderReview::class, 'user_id', 'id');

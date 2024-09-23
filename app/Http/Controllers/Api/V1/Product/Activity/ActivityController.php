@@ -28,10 +28,9 @@ class ActivityController extends Controller
         ->with([
             'tags.translations'         => fn($query) => $query->language(),
             'thumbnailImage',
-            'thumbnailVariant',
             'location'
         ])
-        ->selectVariantPrice()
+        ->selectThumbnailVariantPrice()
         ->paginate(25);
 
         return ActivityResource::collection($activities);
@@ -50,7 +49,7 @@ class ActivityController extends Controller
             'itineraries.translations'  => fn($query) => $query->language(),
             'location',
             'images',
-            'variants',
+            'defaultVariant',
         ]);
 
         return $this->successGet(
@@ -63,9 +62,9 @@ class ActivityController extends Controller
         $privateBoats = Activity::with([
             'tags.translations' => fn($query) => $query->language(),
             'thumbnailImage',
-            'thumbnailVariant',
             'location'
         ])
+        ->selectThumbnailVariantPrice()
         ->orderBy('id', 'DESC')
         ->limit(4)
         ->get();

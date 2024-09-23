@@ -75,6 +75,8 @@ class OrderRefundService
 
         if ($type == 'private_boat') $newRefundRequest->private_boat_order_id = $order->id;
 
+        if ($type == 'activity') $newRefundRequest->activity_order_id = $order->id;
+
         $newRefundRequest->save();
 
         return $newRefundRequest;
@@ -88,6 +90,8 @@ class OrderRefundService
             if ($type == 'fast_boat') $samePin = RefundRequestPin::where('pin', $pin)->where('fast_boat_order_id', $order->id)->count();
 
             if ($type == 'private_boat') $samePin = RefundRequestPin::where('pin', $pin)->where('private_boat_order_id', $order->id)->count();
+
+            if ($type == 'activity_boat') $samePin = RefundRequestPin::where('pin', $pin)->where('activity_order_id', $order->id)->count();
 
         } while (($samePin > 0) || (strlen($pin) != 6));
 

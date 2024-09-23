@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\V1\Itinerary\AdminItineraryController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\UserFastBoatOrderController;
+use App\Http\Controllers\Api\V1\PrivateBoatOrder\AdminPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\UserPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminScheduleController;
@@ -243,8 +244,8 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/fast-boat-orders/{order}', [AdminFastBoatOrderController::class, 'show']);
 
             // Admin - Private Boat Order
-            Route::get('/private-boat-orders', [AdminPrivateBoatController::class, 'index']);
-            Route::get('/private-boat-orders/{order}', [AdminPrivateBoatController::class, 'show']);
+            Route::get('/private-boat-orders', [AdminPrivateBoatOrderController::class, 'index']);
+            Route::get('/private-boat-orders/{order}', [AdminPrivateBoatOrderController::class, 'show']);
 
             // Admin - Activity Order
             Route::get('/fast-boat-orders', [AdminActivityOrderController::class, 'index']);

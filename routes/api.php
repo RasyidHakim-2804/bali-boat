@@ -75,7 +75,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::post('/xendit-webhook/payout-link', XenditPayoutLinkWebhookController::class);
 
     // Public - FastBoat
-    Route::get('/fast-boats', [FastBoatController::class, 'index']);
+    // Route::get('/fast-boats', [FastBoatController::class, 'index']);
 
     // Public - FastBoat Schedule
     Route::get('/fast-boat-schedules', [FastBoatScheduleController::class, 'index']);

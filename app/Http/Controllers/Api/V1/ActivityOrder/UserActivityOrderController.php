@@ -37,9 +37,9 @@ class UserActivityOrderController extends Controller
         return ListActivityOrderResource::collection(ActivityOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
     }
     
-    public function show(User $user, ActivityOrder $fastBoatOrder)
+    public function show(User $user, ActivityOrder $activityOrder)
     {
-        $order = new ActivityOrderResource($fastBoatOrder);
+        $order = new ActivityOrderResource($activityOrder);
 
         return $this->successGet($order);
     }

@@ -13,7 +13,8 @@ class ProductExclude extends Model
     use HasFactory;
 
     public const TYPE = [
-        'activity', 'private-boat'
+        'activity', 
+        // 'private-boat'
     ];
 
     public function translations(): HasMany

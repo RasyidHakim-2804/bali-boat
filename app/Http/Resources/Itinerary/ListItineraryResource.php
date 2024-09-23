@@ -22,13 +22,13 @@ class ListItineraryResource extends JsonResource
 
             'title'         => $this->translations
                                 ->where('field', 'title')
-                                ->first()
-                                ->translation,
+                                ->pluck('translation')
+                                ->first(),
 
             'description'   => $this->translations
                                 ->where('field', 'description')
-                                ->first()
-                                ->translation,
+                                ->pluck('translation')
+                                ->first(),
 
             $this->mergeWhen(
                 isset($this->pivot),

@@ -23,15 +23,18 @@ class AdminActivityDetailResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
+            'price'         => $this->whenLoaded(
+                'defaultVariant',
+                fn() => $this->defaultVariant->price,
+                $this->price
+            ),
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'location'          => new LocationResource($this->location),
-            'default_variant'   => new ActivityVariantResource($this->defaultVariant),
-            'variants'          => ActivityVariantResource::collection($this->variants),
 
-            'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
+            'tags'              => ListTagResource::collection($this->tags),
 
             'highlight'        => ActivityTranslationsResource::collection(
                 $this->translations->where('field', 'highlight')

@@ -141,6 +141,9 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+    //custom rule
+    'duplicated_data' => 'A :attribute with the same data is already registered. Please check again.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

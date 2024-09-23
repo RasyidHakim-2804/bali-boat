@@ -36,8 +36,8 @@ class AdminPrivateBoatController extends Controller
         $privateBoat = $privateBoat->load([
             'pickupHarbor',
             'translations',
-            'tags.translations'     => fn($query) => $query->language(),
-            'includes.translations' => fn($query) => $query->language(),
+            'tags.translations'     => fn($query) => $query->language('en'),
+            'includes.translations' => fn($query) => $query->language('en'),
             'specification',
             'defaultVariant',
         ]);
@@ -61,7 +61,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->includes()->attach($this->generatePosition($request->includes));
             $privateBoat->tags()->attach($request->tags);
 
-            $this->setPrice($privateBoat, $request);
+            $this->setDefaultVariant($privateBoat, $request);
             $this->setSpecification($privateBoat, $request->specification);
 
             foreach ($request->highlight as $lang => $highlight) {
@@ -97,7 +97,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->includes()->sync($this->generatePosition($request->includes));
             $privateBoat->tags()->sync($request->tags);
 
-            $this->setPrice($privateBoat, $request);
+            $this->setDefaultVariant($privateBoat, $request);
             $this->setSpecification($privateBoat, $request->specification);
 
             foreach ($request->highlight as $lang => $highlight) {
@@ -199,9 +199,9 @@ class AdminPrivateBoatController extends Controller
         $rentalTranslation->save();
     }
 
-    private function setPrice(PrivateBoat $privateBoat, $request)
+    private function setDefaultVariant(PrivateBoat $privateBoat, $request)
     {
-        $price                  = $privateBoat->variants()->where('is_default', '=', true)->firstOrNew();
+        $price                  = $privateBoat->defaultVariant()->firstOrNew();
         $price->price           = $request->price;
         $price->private_boat_id = $privateBoat->id;
         $price->is_default      = true;

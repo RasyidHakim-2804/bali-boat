@@ -37,15 +37,15 @@ class FastBoatScheduleController extends Controller
         ->active()
         ->paginate(25);
 
-        return ScheduleResource::collection($schedules);
+        // return ScheduleResource::collection($schedules);
 
-        // $fastBoat = FastBoat::active()->get(['id', 'name']);
+        $fastBoat = FastBoat::active()->get(['id', 'name']);
 
-        // return new ScheduleAndFastBoatResource(
-        //     (object) [
-        //         'schedules'     => $schedules,
-        //         'fast_boats'    => $fastBoat,
-        //     ]
-        // );
+        return new ScheduleAndFastBoatResource(
+            (object) [
+                'schedules'     => $schedules,
+                'fast_boats'    => $fastBoat,
+            ]
+        );
     }
 }

@@ -26,9 +26,7 @@ class AdminActivityController extends Controller
     
     public function index()
     {
-        $activities = Activity::with([
-            'thumbnailVariant'
-        ])->paginate(25);
+        $activities = Activity::selectThumbnailVariantPrice()->paginate(25);
 
         return AdminActivityListResource::collection($activities);
     }
@@ -38,14 +36,13 @@ class AdminActivityController extends Controller
         $activity = $activity->load([
             'location',
             'translations',
-            'tags.translations'         => fn($query) => $query->language(),
-            'includes.translations'     => fn($query) => $query->language(),
-            'excludes.translations'     => fn($query) => $query->language(),
-            'itineraries.translations'  => fn($query) => $query->field('title')->language(),
+            'tags.translations'         => fn($query) => $query->language('en'),
+            'includes.translations'     => fn($query) => $query->language('en'),
+            'excludes.translations'     => fn($query) => $query->language('en'),
+            'itineraries.translations'  => fn($query) => $query->field('title')->language('en'),
             'defaultVariant',
-            'variants'
         ]);
-        
+
         return $this->successGet(
             new AdminActivityDetailResource($activity)
         );
@@ -68,7 +65,7 @@ class AdminActivityController extends Controller
             $activity->excludes()->attach($this->generatePosition($request->excludes));
             $activity->itineraries()->attach($this->generatePosition($request->itineraries));
 
-            $this->setPrice($activity, $request);
+            $this->setDefaultVariant($activity, $request);
             
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -106,7 +103,7 @@ class AdminActivityController extends Controller
             $activity->excludes()->sync($this->generatePosition($request->excludes));
             $activity->itineraries()->sync($this->generatePosition($request->itineraries));
 
-            $this->setPrice($activity, $request);
+            $this->setDefaultVariant($activity, $request);
             
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -194,9 +191,9 @@ class AdminActivityController extends Controller
         $rentalTranslation->save();
     }
 
-    protected function setPrice(Activity $activity, $request)
+    protected function setDefaultVariant(Activity $activity, $request)
     {
-        $price              = $activity->variants()->where('is_default', '=', true)->firstOrNew();
+        $price              = $activity->defaultVariant()->firstOrNew();
         $price->price       = $request->price;
         $price->activity_id = $activity->id;
         $price->is_default  = 1;

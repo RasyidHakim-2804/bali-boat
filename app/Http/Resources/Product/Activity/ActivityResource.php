@@ -28,9 +28,10 @@ class ActivityResource extends JsonResource
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             
-            'price'     => $this->whenLoaded(
-                'thumbnailVariant',
-                fn() => $this->thumbnailVariant->price
+            'price'         => $this->whenLoaded(
+                'defaultVariant',
+                fn() => $this->defaultVariant->price,
+                $this->price
             ),
             
             'highlight' => $this->whenLoaded(

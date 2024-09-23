@@ -58,9 +58,9 @@ class PrivateBoatController extends Controller
         $privateBoats = PrivateBoat::with([
             'tags.translations'     => fn($query) => $query->language(),
             'thumbnailImage',
-            'thumbnailVariant',
             'pickupHarbor'
         ])
+        ->selectThumbnailVariantPrice()
         ->orderBy('id', 'DESC')
         ->limit(4)
         ->get();

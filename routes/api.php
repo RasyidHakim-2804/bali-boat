@@ -78,6 +78,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     // Route::get('/fast-boats', [FastBoatController::class, 'index']);
 
     // Public - FastBoat Schedule
+    Route::get('/fast-boat-schedules-first', [FastBoatScheduleController::class, 'firstSearch']);
     Route::get('/fast-boat-schedules', [FastBoatScheduleController::class, 'index']);
 
     // Public - Activity

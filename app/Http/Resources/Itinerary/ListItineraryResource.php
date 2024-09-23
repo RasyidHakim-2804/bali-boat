@@ -21,7 +21,7 @@ class ListItineraryResource extends JsonResource
             'image'         => $this->imageUrl('image'),
 
             'title'         => $this->translations
-                                ->where('field', 'description')
+                                ->where('field', 'title')
                                 ->pluck('translation')
                                 ->first(),
 

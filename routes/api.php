@@ -248,8 +248,8 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::get('/private-boat-orders/{order}', [AdminPrivateBoatOrderController::class, 'show']);
 
             // Admin - Activity Order
-            Route::get('/fast-boat-orders', [AdminActivityOrderController::class, 'index']);
-            Route::get('/fast-boat-orders/{order}', [AdminActivityOrderController::class, 'show']);
+            Route::get('/activity-orders', [AdminActivityOrderController::class, 'index']);
+            Route::get('/activity-orders/{order}', [AdminActivityOrderController::class, 'show']);
 
             // Admin - Promo
             Route::resource('/promos', AdminPromoController::class);

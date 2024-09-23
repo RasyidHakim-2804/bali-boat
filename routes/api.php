@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ActivityOrder\AdminActivityOrderController;
 use App\Http\Controllers\Api\V1\ActivityOrder\UserActivityOrderController;
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
@@ -237,9 +238,17 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/activities/{activity:slug}/images', [AdminActivityImageController::class,'store']);
             Route::post('/activities/{activity:slug}/save-images', [AdminActivityImageController::class, 'saveImages']);
 
-            // Admin - FastBoat Order
+            // Admin - Fast Boat Order
             Route::get('/fast-boat-orders', [AdminFastBoatOrderController::class, 'index']);
             Route::get('/fast-boat-orders/{order}', [AdminFastBoatOrderController::class, 'show']);
+
+            // Admin - Private Boat Order
+            Route::get('/private-boat-orders', [AdminPrivateBoatController::class, 'index']);
+            Route::get('/private-boat-orders/{order}', [AdminPrivateBoatController::class, 'show']);
+
+            // Admin - Activity Order
+            Route::get('/fast-boat-orders', [AdminActivityOrderController::class, 'index']);
+            Route::get('/fast-boat-orders/{order}', [AdminActivityOrderController::class, 'show']);
 
             // Admin - Promo
             Route::resource('/promos', AdminPromoController::class);

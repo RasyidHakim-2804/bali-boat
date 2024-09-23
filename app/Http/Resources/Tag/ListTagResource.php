@@ -19,7 +19,10 @@ class ListTagResource extends JsonResource
             'type'          => $this->type,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
-            'name'   => $this->translations->first()->translation
+            'name'          => $this->translations
+                                ->where('field', 'name')
+                                ->pluck('translation')
+                                ->first(),
         ];
     }
 }

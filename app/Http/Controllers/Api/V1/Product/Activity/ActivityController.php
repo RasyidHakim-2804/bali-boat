@@ -49,7 +49,7 @@ class ActivityController extends Controller
             'itineraries.translations'  => fn($query) => $query->language(),
             'location',
             'images',
-            'defaultVariant',
+            'variants',
         ]);
 
         return $this->successGet(

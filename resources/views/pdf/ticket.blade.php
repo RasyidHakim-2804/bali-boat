@@ -285,5 +285,3 @@
         </div>
     </body>
 </html>
-
-{{-- @dd($fastBoatOrder) --}}

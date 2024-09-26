@@ -22,7 +22,7 @@ class ListFastBoatOrderResource extends JsonResource
             'return_date'               => $this->return_date,
             'type'                      => $this->return_date ? 'round_trip' : 'one_way',
             'totalForms'                => $this->forms_count,
-            'total_passenger'           => $this->forms_count,
+            'total_passenger'           => $this->return_date ? $this->forms_count : $this->forms_count,
             'created_at'                => $this->created_at,
             'updated_at'                => $this->updated_at,
         ];

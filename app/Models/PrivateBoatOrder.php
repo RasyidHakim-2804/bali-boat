@@ -57,7 +57,7 @@ class PrivateBoatOrder extends Model
 
     public function forms()
     {
-        return $this->hasMany(privateBoatOrderForm::class, 'order_id', 'id');
+        return $this->hasMany(PrivateBoatOrderForm::class, 'order_id', 'id');
     }
 
     // public function paymentHistories()

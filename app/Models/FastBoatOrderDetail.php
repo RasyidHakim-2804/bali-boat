@@ -45,7 +45,7 @@ class FastBoatOrderDetail extends Model
 
     public function variant()
     {
-        return $this->belongsTo(FastBoatScheduleVariant::class, 'fast_boat_variant_id', 'id');
+        return $this->belongsTo(FastBoatScheduleVariant::class, 'fast_boat_variant_id', 'id')->withTrashed();
     }
 
     public static function boot()

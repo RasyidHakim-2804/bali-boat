@@ -30,12 +30,12 @@ class FastBoatOrderForm extends Model
 
     public function schedule()
     {
-        return $this->hasOne(FastBoatSchedule::class, 'id', 'schedule_id');
+        return $this->hasOne(FastBoatSchedule::class, 'id', 'schedule_id')->withTrashed();
     }
 
     public function scheduleVariant()
     {
-        return $this->hasOne(FastBoatScheduleVariant::class, 'id', 'variant_id');
+        return $this->hasOne(FastBoatScheduleVariant::class, 'id', 'variant_id')->withTrashed();
     }
 
     public static function boot()

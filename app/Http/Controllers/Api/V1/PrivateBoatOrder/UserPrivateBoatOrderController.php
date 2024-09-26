@@ -90,17 +90,17 @@ class UserPrivateBoatOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, PrivateBoatOrder $fastBoatOrder)
+    public function cancel(User $user, PrivateBoatOrder $privateBoatOrder)
     {
         DB::beginTransaction();
         try {
-            if ($fastBoatOrder->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+            if ($privateBoatOrder->status != 'waiting_for_payment') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-            $fastBoatOrder->status = 'canceled';
+            $privateBoatOrder->status = 'canceled';
 
-            $fastBoatOrder->save();
+            $privateBoatOrder->save();
 
-            (new PaymentService)->prepare()->expire($fastBoatOrder, 'private_boat');
+            (new PaymentService)->prepare()->expire($privateBoatOrder, 'private_boat');
 
             DB::commit();
 
@@ -112,19 +112,19 @@ class UserPrivateBoatOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, PrivateBoatOrder $fastBoatOrder)
+    public function refund(Request $request, User $user, PrivateBoatOrder $privateBoatOrder)
     {
-        if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        if ($privateBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        if (!$fastBoatOrder->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
+        if (!$privateBoatOrder->payment) return $this->errorValidationResponse('order_id', 'Order is not paid in system. Please contact us by email or phone for refund this order.');
 
         DB::beginTransaction();
         try {
-            (new OrderRefundService)->refund($fastBoatOrder, 'private_boat', $request);
+            (new OrderRefundService)->refund($privateBoatOrder, 'private_boat', $request);
 
-            $fastBoatOrder->status = 'refunding';
+            $privateBoatOrder->status = 'refunding';
 
-            $fastBoatOrder->save();
+            $privateBoatOrder->save();
 
             DB::commit();
 

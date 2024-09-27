@@ -103,7 +103,7 @@
         </style>
     </head>
     <body>
-        <div style="page-break-before:always;">
+        <div style="page-break-before:auto;">
             <div class="header">
                 <img src="{{public_path() . '/storage/assets/images/logo_black.png'}}" alt="Bali Boat" class="logo">
                 <div class="title font-bold block">E-Ticket Fast Boat</div>

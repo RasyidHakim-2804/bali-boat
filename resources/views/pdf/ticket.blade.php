@@ -102,7 +102,7 @@
             }
         </style>
     </head>
-    <body>
+    <body class="ticket-container">
         <div>
             <div class="header">
                 <img src="{{public_path() . '/storage/assets/images/logo_black.png'}}" alt="Bali Boat" class="logo">

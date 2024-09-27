@@ -27,9 +27,9 @@ class UserTicketController extends Controller
             ]
         ]);
 
-        $pdf = Pdf::setOptions(['isRemoteEnabled' => true]);
+        $pdf = Pdf::getDomPDF()->setHttpContext($contxt);
 
-        $pdf->getDomPDF()->setHttpContext($contxt);
+        // $pdf->getDomPDF()->setHttpContext($contxt);
 
         $pdf->loadView('pdf.ticket', $data);
 

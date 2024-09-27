@@ -97,6 +97,9 @@
                 font-weight: 1000;
                 color: #00A59A;
             }
+            .ticket-container {
+                padding: 20px;
+            }
         </style>
     </head>
     <body>
@@ -243,44 +246,44 @@
                 <hr>
                 <ul class="opacity-medium">
                     <li>
-                        <p>Please check-in at least <span class="highlight">60 minutes</span> before departure time at the appropriate fast boat counter.</p>
+                        Please check-in at least <span class="highlight">60 minutes</span> before departure time at the appropriate fast boat counter.
                     </li>
                     <li>
-                        <p>Passengers are required to show proof of identity along with this e-voucher.</p>
+                        Passengers are required to show proof of identity along with this e-voucher.
                     </li>
                     <li>
-                        <p>Passengers are required to show ITAS Card if you buy tickets as an ITAS Holder.</p>
+                        Passengers are required to show ITAS Card if you buy tickets as an ITAS Holder.
                     </li>
                     <li>
-                        <p>Please note there are additional retribution fees applicable for certain destinations:</p>
+                        Please note there are additional retribution fees applicable for certain destinations:
                     </li>
                     <ul>
                         <li>
-                            <p>Nusa Penida: Adult IDR 25,000, Child IDR 15,000.</p>
+                            Nusa Penida: Adult IDR 25,000, Child IDR 15,000.
                         </li>
-                        <li><p>Padang Bay: IDR 10,000 per person. Pay cash upon arrival.</p>
+                        <li>Padang Bay: IDR 10,000 per person. Pay cash upon arrival.
                         </li>
                         <li>
-                            <p>Gili Islands: ARRIVAL - IDR 20,000 per person, DEPARTURE - IDR 20,000 per person. Pay cash upon arrival & departure.</p>
+                            Gili Islands: ARRIVAL - IDR 20,000 per person, DEPARTURE - IDR 20,000 per person. Pay cash upon arrival & departure.
                         </li>
                     </ul>
                     <li>
-                        <p>Each passenger is allowed to carry a maximum of two pieces of luggage, free of charge, with a combined weight not exceeding 20 kg.</p>
+                        Each passenger is allowed to carry a maximum of two pieces of luggage, free of charge, with a combined weight not exceeding 20 kg.
                     </li>
                     <li>
-                        <p>All timing listed are WITA (Central Indonesian Time) / UTC+08:00.</p>
+                        All timing listed are WITA (Central Indonesian Time) / UTC+08:00.
                     </li>
                     <li>
-                        <p>Reschedule and cancellation conditions follow the provisions from Bali Boat.</p>
+                        Reschedule and cancellation conditions follow the provisions from Bali Boat.
                     </li>
                     <li>
-                        <p>Failure to adhere to check-in or boarding times may result in missing your boat and forfeiting the fare paid.</p>
+                        Failure to adhere to check-in or boarding times may result in missing your boat and forfeiting the fare paid.
                     </li>
                 </ul>
             </div>
 
             <div class="footer">
-                <p>&copy; 2024 Bali Boat. All rights reserved.</p>
+                &copy; 2024 Bali Boat. All rights reserved.
             </div>
         </div>
     </body>

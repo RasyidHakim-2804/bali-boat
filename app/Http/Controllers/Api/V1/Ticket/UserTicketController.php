@@ -28,9 +28,14 @@ class UserTicketController extends Controller
         ]);
 
         $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+
         $pdf->getDomPDF()->setHttpContext($contxt);
 
-        return $pdf->loadView('pdf.ticket', $data)->stream('ticket.pdf');
+        $pdf->loadView('pdf.ticket', $data);
+
+        $pdf->setOptions(['dpi' => 97 ]);
+        
+        return $pdf->stream('ticket.pdf');
     }
 
     // private function

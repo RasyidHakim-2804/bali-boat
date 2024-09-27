@@ -27,11 +27,11 @@ class UserTicketController extends Controller
             ]
         ]);
 
-        $pdf = Pdf::getDomPDF()->setHttpContext($contxt);
+        $pdf = Pdf::loadView('pdf.ticket', $data);
 
         // $pdf->getDomPDF()->setHttpContext($contxt);
 
-        $pdf->loadView('pdf.ticket', $data);
+        // $pdf->loadView('pdf.ticket', $data);
 
         $pdf->setOptions(['dpi' => 97 ]);
         

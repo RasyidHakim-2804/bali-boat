@@ -98,12 +98,12 @@
                 color: #00A59A;
             }
             .ticket-container {
-                padding: 50px;
+                padding: 20px;
             }
         </style>
     </head>
     <body>
-        <div class="ticket-container">
+        <div style="page-break-before:always;">
             <div class="header">
                 <img src="{{public_path() . '/storage/assets/images/logo_black.png'}}" alt="Bali Boat" class="logo">
                 <div class="title font-bold block">E-Ticket Fast Boat</div>

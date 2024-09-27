@@ -123,7 +123,7 @@
                     
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Ship Name</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->first()->name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->name}}</div>
                     </div>
                     
                     <div class="mb-1">
@@ -133,12 +133,12 @@
 
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Time</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->first()->departure_time}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->departure_time}}</div>
                     </div>
 
                     <div>
                         <div class="font-tiny opacity-light">Destination</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->first()->departure_harbor_name}} - {{ $fastBoatOrder->details->first()->arrival_harbor_name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->departure_harbor_name}} - {{ $fastBoatOrder->details->arrival_harbor_name}}</div>
                     </div>
                                     
                 </div>
@@ -150,7 +150,7 @@
                     
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Ship Name</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->last()->name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->name}}</div>
                     </div>
                     
                     <div class="mb-1">
@@ -160,12 +160,12 @@
 
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Time</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->last()->departure_time}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->departure_time}}</div>
                     </div>
 
                     <div>
                         <div class="font-tiny opacity-light">Destination</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->last()->departure_harbor_name}} - {{ $fastBoatOrder->details->last()->arrival_harbor_name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->departure_harbor_name}} - {{ $fastBoatOrder->details->arrival_harbor_name}}</div>
                     </div>
                                     
                 </div>
@@ -182,23 +182,23 @@
                     <tr class="mb-minus-10">
                         <td>
                             <div class="card" style="page-break-before:auto;">
-                                <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->first()->age_type}}</div>
+                                <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
                                 
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Full Name</div>
-                                    <div class="font-bold">{{$forms->first()->name}}</div>
+                                    <div class="font-bold">{{$forms->name}}</div>
                                 </div>
         
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Nationality</div>
-                                    <div class="font-bold">{{$forms->first()->nationality}}</div>
+                                    <div class="font-bold">{{$forms->nationality}}</div>
                                 </div>
         
                                 <div>
                                     <div class="font-tiny opacity-light">ITAS Holder</div>
                                     <div class="font-bold">
-                                        @if ($forms->first()->is_itas_holder)
+                                        @if ($forms->is_itas_holder)
                                             Yes
                                         @else
                                             No
@@ -212,23 +212,23 @@
                     <td>
                             @if ($forms->count() > 1)
                             <div class="card" style="page-break-before:auto;">
-                                <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->last()->age_type}}</div>
+                                <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
                                 
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Full Name</div>
-                                    <div class="font-bold">{{$forms->last()->name}}</div>
+                                    <div class="font-bold">{{$forms->name}}</div>
                                 </div>
         
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Nationality</div>
-                                    <div class="font-bold">{{$forms->last()->nationality}}</div>
+                                    <div class="font-bold">{{$forms->nationality}}</div>
                                 </div>
         
                                 <div>
                                     <div class="font-tiny opacity-light">ITAS Holder</div>
                                     <div class="font-bold">
-                                        @if ($forms->last()->is_itas_holder)
+                                        @if ($forms->is_itas_holder)
                                             Yes
                                         @else
                                             No

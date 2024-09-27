@@ -235,11 +235,10 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
                         </td>
-                        @endif
-                        </tr>
+                    @endif
                     @endforeach
+                    </tr>
                 </table>
             </div>
 

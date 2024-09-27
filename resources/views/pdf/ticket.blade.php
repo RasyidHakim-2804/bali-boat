@@ -14,7 +14,7 @@
             }
             body {
                 font-family: 'Montserrat', Arial, sans-serif;
-                font-size: 8px;
+                font-size: 12px;
                 margin: 0;
                 margin-top: -50px;
                 padding-bottom: 32px;

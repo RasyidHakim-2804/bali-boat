@@ -181,7 +181,7 @@
                     <tr class="mb-minus-10">
                         <td>
                             <div class="card" style="page-break-before:auto;">
-                                <div class="font-bold opacity-light">Passenger 1 - {{$forms->first()->age_type}}</div>
+                                <div class="font-bold opacity-light">Passenger @iterator_count - {{$forms->first()->age_type}}</div>
                                 <br>
                                 
                                 <div class="mb-1">

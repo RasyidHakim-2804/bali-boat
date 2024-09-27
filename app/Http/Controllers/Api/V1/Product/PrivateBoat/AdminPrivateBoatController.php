@@ -32,7 +32,9 @@ class AdminPrivateBoatController extends Controller
             QueryBuilder::for(PrivateBoat::class)
             ->allowedFilters([
                 AllowedFilter::scope('search')
-            ])->paginate(25)
+            ])
+            ->selectThumbnailVariantPrice()
+            ->paginate(25)
         );
     }
 

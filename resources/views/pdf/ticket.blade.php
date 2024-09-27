@@ -179,9 +179,7 @@
                 <table>
                     @foreach ($fastBoatOrder->forms as $forms)
                     @if(($loop->index+1)%2 == 1)
-                    @if($loop->index+1 != 1)
-                    </tr>
-                    @endif
+                    @if($loop->index+1 != 1)</tr>@endif
                     <tr class="mb-minus-10">
                         <td>
                             <div class="card" style="page-break-before:auto;">

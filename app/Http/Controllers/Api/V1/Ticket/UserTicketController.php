@@ -19,23 +19,7 @@ class UserTicketController extends Controller
             'fastBoatOrder' => $this->generateTicketData($fastBoatOrder)
         ];
 
-        $contxt = stream_context_create([
-            'ssl' => [
-                'verify_peer' => FALSE,
-                'verify_peer_name' => FALSE,
-                'allow_self_signed'=> TRUE
-            ]
-        ]);
-
-        $pdf = Pdf::loadView('pdf.ticket', $data);
-
-        // $pdf->getDomPDF()->setHttpContext($contxt);
-
-        // $pdf->loadView('pdf.ticket', $data);
-
-        $pdf->setOptions(['dpi' => 97 ]);
-        
-        return $pdf->stream('ticket.pdf');
+        return Pdf::loadView('pdf.ticket', $data)->stream('ticket.pdf');
     }
 
     // private function

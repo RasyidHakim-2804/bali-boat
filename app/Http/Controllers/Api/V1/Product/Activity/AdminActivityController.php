@@ -12,6 +12,8 @@ use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminActivityController extends Controller
 {
@@ -26,9 +28,14 @@ class AdminActivityController extends Controller
     
     public function index()
     {
-        $activities = Activity::selectThumbnailVariantPrice()->paginate(25);
-
-        return AdminActivityListResource::collection($activities);
+        return AdminActivityListResource::collection(
+            QueryBuilder::for(Activity::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])
+            ->selectThumbnailVariantPrice()
+            ->paginate(25)
+        );
     }
 
     public function show(Activity $activity)

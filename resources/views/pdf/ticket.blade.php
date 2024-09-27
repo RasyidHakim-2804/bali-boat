@@ -241,7 +241,7 @@
             </div>
 
             {{-- Important Information --}}
-            <div class="section" style="page-break-before:auto;">
+            <div class="section">
                 <div class="font-bold">Important Information</div>
                 <hr>
                 <ul class="opacity-medium">

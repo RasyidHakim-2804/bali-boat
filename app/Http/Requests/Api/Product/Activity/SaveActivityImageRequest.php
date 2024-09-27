@@ -24,7 +24,7 @@ class SaveActivityImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images_id'      => 'array',
+            'images_id'      => 'array|required|max:5',
             'images_id.*'    => [
                 'required',
                 'numeric',

@@ -47,6 +47,7 @@ use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Promo\UserPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
+use App\Http\Controllers\Api\V1\Ticket\UserTicketController;
 use App\Http\Controllers\Api\V1\User\AdminUserController;
 use App\Http\Controllers\Api\V1\User\Auth\AuthUserController;
 use App\Http\Controllers\Api\V1\User\ForgetPasswordController;
@@ -307,6 +308,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
                 //password controller
                 Route::post('/change-password', [UserProfileController::class, 'changePassword']);
+
+                // FastBoat - ticket
+                Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf']);
 
                 // Fast Boat Order
                 Route::get('/fast-boat-orders', [UserFastBoatOrderController::class, 'index']);

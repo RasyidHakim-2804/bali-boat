@@ -98,7 +98,7 @@
                 color: #00A59A;
             }
             .ticket-container {
-                margin: 50px;
+                padding: 50px;
             }
         </style>
     </head>

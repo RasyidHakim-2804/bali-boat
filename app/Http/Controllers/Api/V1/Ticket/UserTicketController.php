@@ -15,7 +15,7 @@ class UserTicketController extends Controller
     {
         $fastBoatOrder = $fastBoatOrder->load('details', 'payment', 'forms');
 
-        $data = [
+        return $data = [
             'fastBoatOrder' => $this->generateTicketData($fastBoatOrder)
         ];
 

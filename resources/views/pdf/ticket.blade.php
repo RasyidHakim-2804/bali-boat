@@ -179,6 +179,9 @@
                 <table>
                     @foreach ($fastBoatOrder->forms as $forms)
                     @if(($loop->index+1)%2 == 1)
+                    @if($loop->index+1 != 1)
+                    </tr>
+                    @endif
                     <tr class="mb-minus-10">
                         <td>
                             <div class="card" style="page-break-before:auto;">
@@ -207,10 +210,8 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
                     @else
-                    <td>
-                            @if ($forms->count() > 1)
+                        <td>
                             <div class="card" style="page-break-before:auto;">
                                 <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
@@ -239,6 +240,7 @@
                             @endif
                         </td>
                         @endif
+                        </tr>
                     @endforeach
                 </table>
             </div>

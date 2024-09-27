@@ -19,7 +19,9 @@ class UserTicketController extends Controller
             'fastBoatOrder' => $this->generateTicketData($fastBoatOrder)
         ];
 
-        return Pdf::loadView('pdf.ticket', $data)->stream('ticket.pdf');
+        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+
+        return $pdf->loadView('pdf.ticket', $data)->stream('ticket.pdf');
     }
 
     // private function

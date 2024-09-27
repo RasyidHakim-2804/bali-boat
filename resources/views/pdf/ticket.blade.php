@@ -103,7 +103,7 @@
         </style>
     </head>
     <body>
-        <div style="page-break-before:auto;">
+        <div>
             <div class="header">
                 <img src="{{public_path() . '/storage/assets/images/logo_black.png'}}" alt="Bali Boat" class="logo">
                 <div class="title font-bold block">E-Ticket Fast Boat</div>
@@ -180,7 +180,7 @@
                     @foreach ($fastBoatOrder->forms as $forms)
                     <tr class="mb-minus-10">
                         <td>
-                            <div class="card">
+                            <div class="card" style="page-break-before:auto;">
                                 <div class="font-bold opacity-light">Passenger 1 - {{$forms->first()->age_type}}</div>
                                 <br>
                                 
@@ -208,7 +208,7 @@
                         </td>
                         <td>
                             @if ($forms->count() > 1)
-                            <div class="card">
+                            <div class="card" style="page-break-before:auto;">
                                 <div class="font-bold opacity-light">Passenger 1 - {{$forms->last()->age_type}}</div>
                                 <br>
                                 
@@ -241,7 +241,7 @@
             </div>
 
             {{-- Important Information --}}
-            <div class="section">
+            <div class="section" style="page-break-before:auto;">
                 <div class="font-bold">Important Information</div>
                 <hr>
                 <ul class="opacity-medium">

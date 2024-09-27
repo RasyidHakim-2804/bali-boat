@@ -70,7 +70,7 @@ class AdminController extends Controller
         $admin->is_active           = 0;
         $admin->email_verified_at   = now();
 
-        $admin = $this->saveProficePicture($admin, $request->profile_picture);
+        $admin = $this->saveProfilePicture($admin, $request->profile_picture);
 
         $admin->save();
 

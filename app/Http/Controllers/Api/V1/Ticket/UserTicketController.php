@@ -33,7 +33,7 @@ class UserTicketController extends Controller
 
         $pdf->loadView('pdf.ticket', $data);
 
-        $pdf->setOptions(['dpi' => 97 ]);
+        // $pdf->setOptions(['dpi' => 97 ]);
         
         return $pdf->stream('ticket.pdf');
     }

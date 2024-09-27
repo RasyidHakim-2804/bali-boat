@@ -123,7 +123,7 @@
                     
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Ship Name</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->first()->name}}</div>
                     </div>
                     
                     <div class="mb-1">
@@ -150,7 +150,7 @@
                     
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Ship Name</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->last()->name}}</div>
                     </div>
                     
                     <div class="mb-1">
@@ -160,12 +160,12 @@
 
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Time</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->departure_time}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->last()->departure_time}}</div>
                     </div>
 
                     <div>
                         <div class="font-tiny opacity-light">Destination</div>
-                        <div class="font-bold">{{ $fastBoatOrder->details->departure_harbor_name}} - {{ $fastBoatOrder->details->arrival_harbor_name}}</div>
+                        <div class="font-bold">{{ $fastBoatOrder->details->last()->departure_harbor_name}} - {{ $fastBoatOrder->details->last()->arrival_harbor_name}}</div>
                     </div>
                                     
                 </div>

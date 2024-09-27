@@ -12,6 +12,8 @@ use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminPrivateBoatController extends Controller
 {
@@ -26,9 +28,12 @@ class AdminPrivateBoatController extends Controller
 
     public function index()
     {
-        $privateBoats = PrivateBoat::selectThumbnailVariantPrice()->paginate(25);
-
-        return AdminPrivateBoatListResource::collection($privateBoats);
+        return AdminPrivateBoatListResource::collection(
+            QueryBuilder::for(PrivateBoat::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])->paginate(25)
+        );
     }
 
     public function show(PrivateBoat $privateBoat)

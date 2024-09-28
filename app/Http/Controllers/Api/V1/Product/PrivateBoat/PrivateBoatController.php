@@ -19,7 +19,8 @@ class PrivateBoatController extends Controller
     {
         $privateBoats = QueryBuilder::for(PrivateBoat::class)
         ->allowedFilters([
-            AllowedFilter::partial('harbor_id', 'pickup_harbor_id')
+            AllowedFilter::partial('harbor_id', 'pickup_harbor_id'),
+            AllowedFilter::scope('people_count'),
         ])
         ->allowedSorts([
             AllowedSort::field('price')

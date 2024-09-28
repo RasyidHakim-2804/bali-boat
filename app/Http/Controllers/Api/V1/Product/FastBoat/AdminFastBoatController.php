@@ -11,6 +11,8 @@ use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminFastBoatController extends Controller
 {
@@ -25,13 +27,17 @@ class AdminFastBoatController extends Controller
 
     public function index()
     {
-        $fastBoat = FastBoat::with([
-            'schedules' => fn($query) => $query->limit(3),
-            'schedules' => [
-                'departureHarbor',
-                'arrivalHarbor'
-            ]
-        ])->withCount('schedules')->paginate(25);
+        $fastBoat = QueryBuilder::for(FastBoat::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])
+            ->with([
+                    'schedules' => fn($query) => $query->limit(3),
+                    'schedules' => [
+                        'departureHarbor',
+                        'arrivalHarbor'
+                ]
+            ])->withCount('schedules')->paginate(25);
 
         return AdminFastBoatResource::collection($fastBoat);
     }

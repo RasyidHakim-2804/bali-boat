@@ -40,4 +40,8 @@ class FastBoat extends Model
         $query->where('is_active', '=', $active);
     }
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'LIKE','%' . $search . '%');
+    }
 }

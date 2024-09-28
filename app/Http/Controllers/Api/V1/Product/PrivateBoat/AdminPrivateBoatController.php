@@ -12,6 +12,8 @@ use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class AdminPrivateBoatController extends Controller
 {
@@ -26,9 +28,15 @@ class AdminPrivateBoatController extends Controller
 
     public function index()
     {
-        $privateBoats = PrivateBoat::selectThumbnailVariantPrice()->paginate(25);
-
-        return AdminPrivateBoatListResource::collection($privateBoats);
+        return AdminPrivateBoatListResource::collection(
+            QueryBuilder::for(PrivateBoat::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])
+            ->selectThumbnailVariantPrice()
+            ->orderBy('id', 'DESC')
+            ->paginate(25)
+        );
     }
 
     public function show(PrivateBoat $privateBoat)
@@ -55,6 +63,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat                   = new PrivateBoat();
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
+            $privateBoat->max_person       = $request->max_person;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
 
@@ -91,6 +100,7 @@ class AdminPrivateBoatController extends Controller
 
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
+            $privateBoat->max_person       = $request->max_person;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
 

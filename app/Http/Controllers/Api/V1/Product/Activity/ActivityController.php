@@ -20,7 +20,7 @@ class ActivityController extends Controller
         $activities = QueryBuilder::for(Activity::class)
         ->allowedFilters([
             AllowedFilter::exact('location_id'),
-            AllowedFilter::scope('people_count',)
+            AllowedFilter::scope('people_count'),
         ])
         ->allowedSorts([
             AllowedSort::field('price')

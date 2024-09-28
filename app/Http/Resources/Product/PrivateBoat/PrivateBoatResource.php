@@ -22,6 +22,7 @@ class PrivateBoatResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'is_active'         => $this->is_active,
+            'max_person'        => $this->max_person,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
 

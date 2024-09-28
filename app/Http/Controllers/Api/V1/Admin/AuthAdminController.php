@@ -85,6 +85,7 @@ class AuthAdminController extends Controller
         try {
             $admin                    = $tokenVerification->admin;
             $admin->email_verified_at = date('Y-m-d H:i:s');
+            $admin->is_active          = 1;
 
             $admin->save();
 

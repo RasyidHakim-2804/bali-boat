@@ -11,16 +11,11 @@ class AdminEmailChangesSuccessNotification extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct(
-        private string $name,
-    )
+    private $data;
+
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -42,10 +37,20 @@ class AdminEmailChangesSuccessNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $lang = $this->data['language'];
+
+        $subject    = ' - Admin Email Changes Success';
+        $line       = 'Your email changes request for admin account to this email is success. For the next email changes will be available after 1 month from last email changes. Thankyou.';
+
+        if ($lang == 'id') {
+            $subject    = ' - Perubahan Email Admin Berhasil';
+            $line       = 'Perubahan email untuk akun admin anda berhasil. Untuk perubahan email anda akan tersedia setelah 1 bulan dari perubahan email ana yang terakhir. Terimakasih.';
+        }
+
         return (new MailMessage)
-                    ->subject('Admin Email Changes Success')
-                    ->greeting('Hi' . $this->name . ',')
-                    ->line('Your email changes request for admin account to this email is success. For the next email changes will be available after 1 month from last email changes. Thankyou.');
+                    ->subject(env('APP_EMAIL_COMPANY') . $subject)
+                    ->greeting('Hi' . $this->data['first_admin'])
+                    ->line($line);
     }
 
     /**

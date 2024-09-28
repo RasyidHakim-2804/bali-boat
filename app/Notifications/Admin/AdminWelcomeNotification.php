@@ -10,24 +10,13 @@ use Illuminate\Notifications\Notification;
 
 class AdminWelcomeNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
-    private $translations = [
-        'en' => [
-            'line_1' => 'We warmly welcome you as an admin to our eCommerce platform, and you are just one step away from creating your first move by clicking the "Login" button.'
-        ],
-        'id' => [
-            'line_1' => 'Kami menyambut Anda dengan hangat sebagai admin di platform eCommerce kami, dan Anda tinggal selangkah lagi untuk melakukan langkah pertama dengan mengklik tombol “Login”.'
-        ],
-    ];
+    private $data;
 
-    private $firstName;
-    private $loginUrl;
-    
-    public function __construct($firstName, $loginUrl)
+    public function __construct($data)
     {
-        $this->firstName = $firstName;
-        $this->loginUrl  = $loginUrl;
+        $this->data = $data;
     }
 
     /**
@@ -49,10 +38,20 @@ class AdminWelcomeNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $lang = $this->data['language'];
+
+        $subject    = ' - Welcome to Bali Boat';
+        $line       = 'We warmly welcome you as an admin to our eCommerce platform, and you are just one step away from creating your first move by clicking the "Login" button.';
+
+        if ($lang == 'id') {
+            $subject    = ' - Selamat Datang di Bali Boat';
+            $line       = 'Kami menyambut Anda dengan hangat sebagai admin di platform eCommerce kami, dan Anda tinggal selangkah lagi untuk melakukan langkah pertama dengan mengklik tombol “Login”.';
+        }
+       
         return (new MailMessage)
-                    ->subject(env('APP_EMAIL_COMPANY') . ' - Welcome to Bali Boat')
-                    ->line($this->getTranslations('line_1'))
-                    ->action('Login', $this->loginUrl);
+                    ->subject(env('APP_EMAIL_COMPANY') . $subject)
+                    ->line($line)
+                    ->action('Login', $this->data['login_page_url']);
     }
 
     /**

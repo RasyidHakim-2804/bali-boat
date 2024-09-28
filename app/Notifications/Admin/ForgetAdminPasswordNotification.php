@@ -2,28 +2,21 @@
 
 namespace App\Notifications\Admin;
 
-use App\Traits\NotificationHasTranslationsTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class ForgetAdminPasswordNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
-    private $translations = [
-        'en' => [
-            'line_1' => 'Your forget password request for admin account is success. Here we send you 6 digits PIN for the next step.'
-        ],
-        'id' => [
-            'line_1' => 'Permintaan lupa kata sandi untuk akun admin Anda berhasil. Di sini kami mengirimkan 6 digit PIN untuk langkah selanjutnya.'
-        ],
-    ];
+    private $data;
 
-    public function __construct(private string $name, private string $pin)
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -45,11 +38,20 @@ class ForgetAdminPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $lang = $this->data['language'];
+
+        $subject    = ' - Admin Forget Password Pin';
+        $line       = new HtmlString('Your forget password request is success. Here we send you 6 digits PIN for next step. The PIN is <strong>' . $this->data['pin'] . '</strong>.');
+
+        if ($lang == 'id') {
+            $subject    = ' - Pin Lupa Password Admin';
+            $line       = new HtmlString('Anda melakukan permintaan pergantian kata sandi. Berikut 6 dikit PIN untuk melanjutkan ke tahap berikutnya. PIN tersebut yaitu <strong>' . $this->data['pin'] . '</strong>.');
+        }
+
         return (new MailMessage)
-                    ->subject('Admin Forget Password Pin')
-                    ->greeting('Hi ' . $this->name . ',')
-                    ->line($this->getTranslations('line_1'))
-                    ->line('# ' . $this->pin);
+                    ->subject(env('APP_EMAIL_COMPANY') . $subject)
+                    ->greeting('Hi ' . $this->data['first_name'])
+                    ->line($line);
     }
 
     /**

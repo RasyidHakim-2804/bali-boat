@@ -2,6 +2,7 @@
 
 namespace App\Services\Email;
 
+use App\Notifications\ActivityOrder\ActivityOrderExpiredNotification;
 use App\Notifications\ActivityOrder\AdminActivityOrderPaidNotification;
 use App\Notifications\FastBoatOrder\AdminFastBoatOrderPaidNotification;
 use App\Notifications\FastBoatOrder\FastBoatOrderExpiredNotification;
@@ -58,15 +59,21 @@ class OrderPaymentEmailService
         $data['first_name'] = $user->first_name;
 
         if ($type == 'fast_boat') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/fast-boat-orders/' . $order->uuid;
 
             $user->notify(new FastBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'private_boat') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/private-boat-orders/' . $order->uuid;
 
             $user->notify(new PrivateBoatOrderExpiredNotification($data));
+        }
+
+        if ($type == 'activity') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/activity-orders/' . $order->uuid;
+
+            $user->notify(new ActivityOrderExpiredNotification($data));
         }
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Services\Email;
 
+use App\Notifications\ActivityOrder\ActivityOrderRefundNotification;
+use App\Notifications\FastBoatOrder\FastBoatOrderRefundNotification;
 use App\Notifications\Order\OrderRefundNotification;
+use App\Notifications\PrivateBoatOrder\PrivateBoatOrderRefundNotification;
 use Illuminate\Support\Facades\Notification;
 
 class OrderRefundEmailService 
 {
-    public function success($order)
+    public function success($order, $type)
     {
         $user = $order->user;
 
@@ -18,10 +21,14 @@ class OrderRefundEmailService
 
         if ($user->language == 'id') $data['message'] = 'Pengembalian dana pada pesanan anda telah diproses. Proses akan selesai dalam 5 - 10 hari. Terimakasih.';
 
-        $user->notify(new OrderRefundNotification($data));
+        if ($type == 'fast_boat') $user->notify(new FastBoatOrderRefundNotification($data));
+
+        if ($type == 'private_boat') $user->notify(new PrivateBoatOrderRefundNotification($data));
+
+        if ($type == 'activity') $user->notify(new ActivityOrderRefundNotification($data));
     }
 
-    public function pending($order)
+    public function pending($order, $type)
     {
         $user = $order->user;
 
@@ -32,10 +39,14 @@ class OrderRefundEmailService
 
         if ($user->language == 'id') $data['message'] = 'Permintaan request anda sedang berlangsung. Butuh konfirmasi dari anda untuk menyelesaikan proses refund. Terimakasih.';
 
-        $user->notify(new OrderRefundNotification($data));
+        if ($type == 'fast_boat') $user->notify(new FastBoatOrderRefundNotification($data));
+
+        if ($type == 'private_boat') $user->notify(new PrivateBoatOrderRefundNotification($data));
+
+        if ($type == 'activity') $user->notify(new ActivityOrderRefundNotification($data));
     }
 
-    public function failed($order, $message)
+    public function failed($order, $type, $message)
     {
         $user = $order->user;
 
@@ -44,10 +55,14 @@ class OrderRefundEmailService
         $data['order_url']  = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
         $data['message']    = $message;
 
-        $user->notify(new OrderRefundNotification($data));
+        if ($type == 'fast_boat') $user->notify(new FastBoatOrderRefundNotification($data));
+
+        if ($type == 'private_boat') $user->notify(new PrivateBoatOrderRefundNotification($data));
+
+        if ($type == 'activity') $user->notify(new ActivityOrderRefundNotification($data));
     }
 
-    public function failedForAdmin($order)
+    public function failedForAdmin($order, $type)
     {
         $email = env('MAIL_FROM_ADDRESS');
 
@@ -56,10 +71,14 @@ class OrderRefundEmailService
         $data['message']    = 'Your xendit balance is insufficient for this order. Please click "Order Detail" button for more information. Thankyou.';
         $data['order_url']  = env('FRONTEND_URL') . '/admin/orders/' . $order->uuid;
 
-        Notification::route('mail', $email)->notify(new OrderRefundNotification($data));
+        if ($type == 'fast_boat') Notification::route('mail', $email)->notify(new FastBoatOrderRefundNotification($data));
+
+        if ($type == 'private_boat') Notification::route('mail', $email)->notify(new PrivateBoatOrderRefundNotification($data));
+
+        if ($type == 'activity') Notification::route('mail', $email)->notify(new ActivityOrderRefundNotification($data));
     }
 
-    public function expired($order)
+    public function expired($order, $type)
     {
         $user = $order->user;
 
@@ -70,6 +89,10 @@ class OrderRefundEmailService
 
         if ($user->language == 'id') $data['message'] = 'Permintaan refund anda telah kadaluarsa dan link refund yang telah dikirim ke email anda tidak dapat digunakan lagi. Anda dapat melakukan request untuk refund kembali dengan mngklik tombol "Order Detail" lalu mengklik tombol "Refund". Terimakasih.';
 
-        $user->notify(new OrderRefundNotification($data));
+        if ($type == 'fast_boat') $user->notify(new FastBoatOrderRefundNotification($data));
+
+        if ($type == 'private_boat') $user->notify(new PrivateBoatOrderRefundNotification($data));
+
+        if ($type == 'activity') $user->notify(new ActivityOrderRefundNotification($data));
     }
 }

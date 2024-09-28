@@ -26,16 +26,18 @@ class AdminEmailChangesVerificationController extends Controller
 
         // $this->sendEmailAdminEmailChangesSuccess($admin->first_name, $admin->email);
 
-        $admin->notify(new AdminEmailChangesSuccessNotification($admin->first_name)); 
+        $admin->notify(new AdminEmailChangesSuccessNotification($admin)); 
 
         return $this->successStore();
     }
 
-    protected function sendEmailAdminEmailChangesSuccess($firstName, $email)
+    protected function sendEmailAdminEmailChangesSuccess($admin)
     {
         $data                = [];
-        $data['first_name']  = $firstName;
+        $data['first_name']  = $admin->first_name;
 
-        Mail::to($email)->send((new AdminEmailChangesSuccessMail($data)));
+        $admin->notify(new AdminEmailChangesSuccessNotification($data));
+
+        // Mail::to($email)->send((new AdminEmailChangesSuccessMail($data)));
     }
 }

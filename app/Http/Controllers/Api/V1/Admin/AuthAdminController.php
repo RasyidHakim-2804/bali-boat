@@ -117,29 +117,25 @@ class AuthAdminController extends Controller
     protected function sendEmail($admin, $token)
     {
         $data                         = [];
+        $data['language']             = 'en';
         $data['first_name']           = $admin->first_name;
         $data['email_validation_url'] = env('FRONTEND_URL') . '/admin/email-verification/' . $token;
 
         // Mail::to($admin->email)->send((new AdminRegisterVerificationMail($data)));
         
-        $admin->notify(new AdminRegisterVerificationNotification(
-            $data['first_name'],
-            $data['email_validation_url']
-        ));
+        $admin->notify(new AdminRegisterVerificationNotification($data));
     }
 
     protected function sendWelcomeEmail($admin)
     {
         $data                        = [];
+        $data['language']            = 'en';
         $data['first_name']          = $admin->first_name;
         $data['login_page_url']      = env('FRONTEND_URL') . '/sign-in';
 
         // Mail::to($admin->email)->send((new AdminWelcomeMail($data)));
         
-        $admin->notify(new AdminWelcomeNotification(
-            $data['first_name'],
-            $data['login_page_url']
-        ));
+        $admin->notify(new AdminWelcomeNotification($data));
     }
 
     protected function generateUuid()

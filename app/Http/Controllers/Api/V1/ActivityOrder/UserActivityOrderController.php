@@ -236,7 +236,7 @@ class UserActivityOrderController extends Controller
         $data                   = [];
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
-        $data['order_url']      = env('FRONTEND_URL') . '/user/activity-orders/' . $order->uuid;
+        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/tours/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
         $user->notify(new ActivityOrderCreatedNotification($data));

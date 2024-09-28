@@ -41,8 +41,9 @@ class OrderPaymentEmailService
             $user->notify(new ActivityOrderPaidNotification($data));
         }
         
-        $dataAdmin              = [];
-        $dataAdmin['language']  = 'en';
+        $dataAdmin                  = [];
+        $dataAdmin['language']      = 'en';
+        $dataAdmin['first_name']    = 'Admin';
         $adminEmail = env('MAIL_FROM_ADDRESS');
 
         if ($type == 'fast_boat') {

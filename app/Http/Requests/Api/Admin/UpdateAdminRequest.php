@@ -29,7 +29,7 @@ class UpdateAdminRequest extends FormRequest
             'last_name'             => 'required|min:1',
             'email'                 => ['required','email:rfc,dns', Rule::unique('admins', 'email')->whereNot('id', $this->route('admin')->id)],
             'is_active'             => 'required|boolean',
-            'profile_picture'       => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2000',
+            'image'                 => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2000',
             // 'permissions'           => 'required|array',
             // 'permissions.*.id'        => ['nullable', Rule::exists('admin_permissions', 'id')->where('admin_id', $this->route('admin')->id)],
             // 'permissions.*.feature_id'=> 'required|exists:admin_features,id|distinct',

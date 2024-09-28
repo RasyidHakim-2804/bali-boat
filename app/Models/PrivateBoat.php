@@ -87,4 +87,8 @@ class PrivateBoat extends Model
         return $query->where('name', 'LIKE','%' . $search . '%');
     }
 
+    public function scopePeopleCount($query, $person)
+    {
+        $query->where('max_person', '>=', $person);
+    }
 }

@@ -34,6 +34,7 @@ class AdminActivityController extends Controller
                 AllowedFilter::scope('search')
             ])
             ->selectThumbnailVariantPrice()
+            ->orderBy('id', 'DESC')
             ->paginate(25)
         );
     }

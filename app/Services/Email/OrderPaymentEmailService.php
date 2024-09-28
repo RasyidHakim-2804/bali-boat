@@ -3,12 +3,14 @@
 namespace App\Services\Email;
 
 use App\Notifications\ActivityOrder\ActivityOrderExpiredNotification;
+use App\Notifications\ActivityOrder\ActivityOrderPaidNotification;
 use App\Notifications\ActivityOrder\AdminActivityOrderPaidNotification;
 use App\Notifications\FastBoatOrder\AdminFastBoatOrderPaidNotification;
 use App\Notifications\FastBoatOrder\FastBoatOrderExpiredNotification;
 use App\Notifications\FastBoatOrder\FastBoatOrderPaidNotification;
 use App\Notifications\PrivateBoatOrder\AdminPrivateBoatOrderPaidNotification;
 use App\Notifications\PrivateBoatOrder\PrivateBoatOrderExpiredNotification;
+use App\Notifications\PrivateBoatOrder\PrivateBoatOrderPaidNotification;
 use Illuminate\Support\Facades\Notification;
 
 class OrderPaymentEmailService 
@@ -21,13 +23,45 @@ class OrderPaymentEmailService
         $data['language']   = $user->language;
         $data['first_name'] = $user->first_name;
 
-        $this->sendUserMail($data, $type, $user, $order->uuid);
+        if ($type == 'fast_boat') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
+
+            $user->notify(new FastBoatOrderPaidNotification($data));
+        }
+
+        if ($type == 'private_boat') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
+
+            $user->notify(new PrivateBoatOrderPaidNotification($data));
+        }
+
+        if ($type == 'activity') {
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $order->uuid;
+
+            $user->notify(new ActivityOrderPaidNotification($data));
+        }
         
         $dataAdmin = [];
 
         $adminEmail = env('MAIL_FROM_ADDRESS');
 
-        $this->sendAdminMail($dataAdmin, $type, $adminEmail, $order->uuid);
+        if ($type == 'fast_boat') {
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/fast-boats/' . $order->uuid;
+
+            Notification::route('mail', $adminEmail)->notify((new AdminFastBoatOrderPaidNotification($dataAdmin)));
+        }
+
+        if ($type == 'private_boat') {
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/private-boats/' . $order->uuid;
+
+            Notification::route('mail', $adminEmail)->notify((new AdminPrivateBoatOrderPaidNotification($dataAdmin)));
+        }
+
+        if ($type == 'activity') {
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/tour/' . $order->uuid;
+
+            Notification::route('mail', $adminEmail)->notify((new AdminActivityOrderPaidNotification($dataAdmin)));
+        }
     }
 
     public function expired($order, $type)
@@ -38,46 +72,22 @@ class OrderPaymentEmailService
         $data['language']   = $user->language;
         $data['first_name'] = $user->first_name;
 
-        $this->sendUserMail($data, $type, $user, $order->uuid);
-    }
-
-    protected function sendUserMail($data, $type, $user, $orderUuid) {
         if ($type == 'fast_boat') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $orderUuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
 
             $user->notify(new FastBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'private_boat') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $orderUuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
 
             $user->notify(new PrivateBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'activity') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $orderUuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $order->uuid;
 
             $user->notify(new ActivityOrderExpiredNotification($data));
-        }
-    }
-
-    protected function sendAdminMail($data, $type, $adminEmail, $orderUuid) {
-        if ($type == 'fast_boat') {
-            $data['order_url'] = env('FRONTEND_URL') . '/admin/orders/fast-boats/' . $orderUuid;
-
-            Notification::route('mail', $adminEmail)->notify((new AdminFastBoatOrderPaidNotification($data)));
-        }
-
-        if ($type == 'private_boat') {
-            $data['order_url'] = env('FRONTEND_URL') . '/admin/orders/private-boats/' . $orderUuid;
-
-            Notification::route('mail', $adminEmail)->notify((new AdminPrivateBoatOrderPaidNotification($data)));
-        }
-
-        if ($type == 'activity') {
-            $data['order_url'] = env('FRONTEND_URL') . '/admin/orders/tour/' . $orderUuid;
-
-            Notification::route('mail', $adminEmail)->notify((new AdminActivityOrderPaidNotification($data)));
         }
     }
 }

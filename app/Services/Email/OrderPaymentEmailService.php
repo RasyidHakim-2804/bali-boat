@@ -27,7 +27,7 @@ class OrderPaymentEmailService
 
         $adminEmail = env('MAIL_FROM_ADDRESS');
 
-        
+        $this->sendAdminMail($dataAdmin, $type, $adminEmail, $order->uuid);
     }
 
     public function expired($order, $type)

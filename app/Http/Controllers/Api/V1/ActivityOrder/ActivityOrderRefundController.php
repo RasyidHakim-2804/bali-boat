@@ -17,22 +17,22 @@ class ActivityOrderRefundController extends Controller
 {
     use JsonResponsesTrait;
     
-    public function request(User $user, ActivityOrder $fastBoatOrder)
+    public function request(User $user, ActivityOrder $activityOrder)
     {
-        if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        if ($activityOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
         DB::beginTransaction();
         try {
             $orderRefundService = (new OrderRefundService);
 
-            $orderRefund    = $orderRefundService->getOrderRefund($fastBoatOrder, 'activity');
-            $refundRequest  = $orderRefundService->getRefundRequest($fastBoatOrder, 'activity');
+            $orderRefund    = $orderRefundService->getOrderRefund($activityOrder, 'activity');
+            $refundRequest  = $orderRefundService->getRefundRequest($activityOrder, 'activity');
 
             if (isset($refundRequest)) $refundRequest->delete();
         
-            $newRefundRequest = $orderRefundService->createRefundRequestPin($fastBoatOrder, 'activity');
+            $newRefundRequest = $orderRefundService->createRefundRequestPin($activityOrder, 'activity');
 
-            $this->sendEmailPin($fastBoatOrder, $newRefundRequest->pin);
+            $this->sendEmailPin($activityOrder, $newRefundRequest->pin);
 
             DB::commit();
 
@@ -44,11 +44,11 @@ class ActivityOrderRefundController extends Controller
         }
     }
 
-    public function refund(ApiRefundOrderRequest $request, User $user,  ActivityOrder $fastBoatOrder)
+    public function refund(ApiRefundOrderRequest $request, User $user,  ActivityOrder $activityOrder)
     {
-        if ($fastBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
+        if ($activityOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 
-        $refundRequest = RefundRequestPin::where('activity_order_id', $fastBoatOrder->id)->where('pin', $request->pin)->orderBy('id', 'DESC')->first();
+        $refundRequest = RefundRequestPin::where('activity_order_id', $activityOrder->id)->where('pin', $request->pin)->orderBy('id', 'DESC')->first();
 
         if (!isset($refundRequest)) return abort(422, 'The pin is invalid.');
 
@@ -56,13 +56,13 @@ class ActivityOrderRefundController extends Controller
 
         DB::beginTransaction();
         try {
-            $orderRefund = (new OrderRefundService)->refund($fastBoatOrder, 'activity');
+            $orderRefund = (new OrderRefundService)->refund($activityOrder, 'activity');
 
-            $fastBoatOrder->status = 'refunding';
+            $activityOrder->status = 'refunding';
 
-            $fastBoatOrder->save();
+            $activityOrder->save();
 
-            $this->sendEmailRefund($fastBoatOrder, $orderRefund->payout_url);
+            $this->sendEmailRefund($activityOrder, $orderRefund->payout_url);
 
             DB::commit();
 

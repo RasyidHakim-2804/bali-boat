@@ -28,14 +28,14 @@ class AdminController extends Controller
 
     protected $permissionService;
 
-    public function __construct()
-    {
-        $this->permissionService = (new AdminPermissionService('admins'));
-    }
+    // public function __construct()
+    // {
+    //     $this->permissionService = (new AdminPermissionService('admins'));
+    // }
 
     public function index()
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         return AdminResource::collection(
             QueryBuilder::for(Admin::class)
@@ -50,7 +50,7 @@ class AdminController extends Controller
 
     public function show(Admin $admin)
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         $admin = new AdminResource($admin);
 
@@ -59,7 +59,7 @@ class AdminController extends Controller
 
     public function store(StoreAdminRequest $request, Admin $admin)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $admin = new Admin();
 
@@ -87,7 +87,7 @@ class AdminController extends Controller
 
     public function update(UpdateAdminRequest $request, Admin $admin)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $admin->fill($request->validated());
 
@@ -104,7 +104,7 @@ class AdminController extends Controller
 
     public function destroy(Admin $admin)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $admin->delete();
 

@@ -13,9 +13,6 @@ use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleController;
 use App\Http\Controllers\Api\V1\Article\AdminArticleImagesController;
 use App\Http\Controllers\Api\V1\Article\ArticleCommentController;
-use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
-use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
-
 use App\Http\Controllers\Api\V1\Article\ArticleController;
 use App\Http\Controllers\Api\V1\Exclude\AdminExcludeController;
 use App\Http\Controllers\Api\V1\Faq\AdminFaqController;

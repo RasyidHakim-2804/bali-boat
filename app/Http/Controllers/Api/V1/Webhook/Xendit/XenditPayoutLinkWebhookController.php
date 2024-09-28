@@ -33,7 +33,7 @@ class XenditPayoutLinkWebhookController extends Controller
         $updateStatus     = strtolower($request->status);
 
         if ($updateStatus == 'completed') {
-            (new OrderRefundEmailService)->success($order);
+            (new OrderRefundEmailService)->success($order, $orderRefund->type);
 
             $order->status = 'refunded';
 
@@ -44,12 +44,12 @@ class XenditPayoutLinkWebhookController extends Controller
             $failureMessage = $this->generateFailedMessage($request->failure_code, $user);
 
             if (strtoupper($request->error_code) == 'INSUFFICIENT_BALANCE') {
-                (new OrderRefundEmailService)->failedForAdmin($order);
+                (new OrderRefundEmailService)->failedForAdmin($order, $orderRefund->type);
             }
 
             $xenditPayoutLink->failure_reason = $failureMessage;
 
-            (new OrderRefundEmailService)->failed($order, $failureMessage);
+            (new OrderRefundEmailService)->failed($order, $orderRefund->type, $failureMessage);
 
             $order->status = 'declined';
         }
@@ -57,7 +57,7 @@ class XenditPayoutLinkWebhookController extends Controller
         if (($updateStatus == 'voided') || ($updateStatus == 'expired')) {
             $order->status = 'declined';
 
-            (new OrderRefundEmailService)->failed($order, $failureMessage);
+            (new OrderRefundEmailService)->failed($order, $orderRefund->type, $failureMessage);
         }
 
         DB::beginTransaction();

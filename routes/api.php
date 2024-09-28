@@ -322,16 +322,16 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::get('/private-boat-orders/{privateBoatOrder}', [UserPrivateBoatOrderController::class, 'show']);
                 Route::post('/private-boat-orders', [UserPrivateBoatOrderController::class, 'store']);
                 Route::post('/private-boat-orders/{privateBoatOrder}/cancel', [UserPrivateBoatOrderController::class, 'cancel']);
-                Route::post('/private-boat-orders/{fastBoatOrder}/refund-request', [PrivateBoatOrderRefundController::class, 'request']);
-                Route::post('/private-boat-orders/{fastBoatOrder}/refund', [PrivateBoatOrderRefundController::class, 'refund']);
+                Route::post('/private-boat-orders/{privateBoatOrder}/refund-request', [PrivateBoatOrderRefundController::class, 'request']);
+                Route::post('/private-boat-orders/{privateBoatOrder}/refund', [PrivateBoatOrderRefundController::class, 'refund']);
 
                 // Activity Order
                 Route::get('/activity-orders', [UserActivityOrderController::class, 'index']);
                 Route::get('/activity-orders/{activityOrder}', [UserActivityOrderController::class, 'show']);
                 Route::post('/activity-orders', [UserActivityOrderController::class, 'store']);
                 Route::post('/activity-orders/{activityOrder}/cancel', [UserActivityOrderController::class, 'cancel']);
-                Route::post('/activity-orders/{fastBoatOrder}/refund-request', [ActivityOrderRefundController::class, 'request']);
-                Route::post('/activity-orders/{fastBoatOrder}/refund', [ActivityOrderRefundController::class, 'refund']);
+                Route::post('/activity-orders/{activityOrder}/refund-request', [ActivityOrderRefundController::class, 'request']);
+                Route::post('/activity-orders/{activityOrder}/refund', [ActivityOrderRefundController::class, 'refund']);
             });
         });
     });

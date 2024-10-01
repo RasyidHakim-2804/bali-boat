@@ -8,6 +8,7 @@ use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Location\LocationResource;
 use App\Models\Location;
 use App\Traits\JsonResponsesTrait;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -64,6 +65,30 @@ class AdminLocationController extends Controller
 
     public function destroy(Location $location)
     {
-        
+        try {
+            DB::beginTransaction();
+
+            if ( $location->activities()->exists()) {
+
+                $message = [
+                    'en'    => 'Location cannot be deleted because they are used in activities.',
+                    'id'    => 'Lokasi tidak dapat dihapus karena digunakan pada jadwal aktivitas.',
+                ];
+
+                return $this->errorMessage(
+                    $message[app()->getLocale()]
+                );
+
+            } else{
+
+                $location->delete();
+                DB::commit();
+                return new SuccessResource();
+            }
+
+        } catch (\Throwable $th) {
+
+            throw $th;
+        }
     }
 }

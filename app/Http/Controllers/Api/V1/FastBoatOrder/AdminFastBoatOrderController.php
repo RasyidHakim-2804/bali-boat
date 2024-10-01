@@ -27,8 +27,6 @@ class AdminFastBoatOrderController extends Controller
     {
         // $this->permissionService->check('order');
 
-        FastBoatOrder::where('status', 'complete')->update(['status' => 'success']);
-
         return AdminListFastBoatOrderResource::collection(
             QueryBuilder::for(FastBoatOrder::class)
             ->allowedFilters([

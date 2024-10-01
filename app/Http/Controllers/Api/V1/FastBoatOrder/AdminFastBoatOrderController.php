@@ -27,7 +27,7 @@ class AdminFastBoatOrderController extends Controller
     {
         // $this->permissionService->check('order');
 
-        FastBoatOrder::where('status', 'paid')->whereDate('activity_date', '<=', date('Y-m-d', strtotime("-1 days")))->update(['status' => 'complete']);
+        FastBoatOrder::where('status', 'complete')->update(['status' => 'success']);
 
         return AdminListFastBoatOrderResource::collection(
             QueryBuilder::for(FastBoatOrder::class)

@@ -14,9 +14,7 @@ class Article extends Model
     use HasFactory, ImageStorageTrait, HasSlug;
 
     protected $fillable = [
-        'title',
-        'type',
-        'tag'
+        'type'
     ];
 
     public function getSlugOptions() : SlugOptions
@@ -34,6 +32,16 @@ class Article extends Model
     public function category()
     {
         return $this->belongsTo(ArticleCategory::class, 'category_id', 'id');
+    }
+
+    public function titleTranslations()
+    {
+        return $this->hasMany(ArticleTranslation::class, 'article_id', 'id')->where('field', 'title');
+    }
+
+    public function tagTranslations()
+    {
+        return $this->hasMany(ArticleTranslation::class, 'article_id', 'id')->where('field', 'tag');
     }
 
     public function bodyTranslations()

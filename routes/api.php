@@ -28,6 +28,9 @@ use App\Http\Controllers\Api\V1\Itinerary\AdminItineraryController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Location\LocationController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\UserFastBoatOrderController;
+use App\Http\Controllers\Api\V1\InactiveActivityCalender\AdminInactiveActivityCalenderController;
+use App\Http\Controllers\Api\V1\InactiveFastBoatCalender\AdminInactiveFastBoatCalenderController;
+use App\Http\Controllers\Api\V1\InactivePrivateBoatCalender\AdminInactivePrivateBoatCalenderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\AdminPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\PrivateBoatOrderRefundController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\UserPrivateBoatOrderController;
@@ -42,6 +45,7 @@ use App\Http\Controllers\Api\V1\Product\Activity\AdminActivityImageController;
 use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
+use App\Http\Controllers\Api\V1\Promo\AdminPromoHighlightController;
 use App\Http\Controllers\Api\V1\Promo\UserPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\Ticket\UserTicketController;
@@ -257,6 +261,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             // Admin - Promo
             Route::resource('/promos', AdminPromoController::class);
+            Route::resource('/promo-highlights', AdminPromoHighlightController::class)->only('index', 'store');
 
             // Admin - User
             Route::get('/users', [AdminUserController::class, 'index']);
@@ -264,6 +269,18 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             // Admin - Feature
             Route::get('/admin-features', [AdminFeatureController::class, 'index']);
+
+            // Admin - Inactive Fast Boat Calenders
+            Route::post('/get-inactive-fast-boat-calenders', [AdminInactiveFastBoatCalenderController::class, 'index']);
+            Route::post('/inactive-fast-boat-calenders', [AdminInactiveFastBoatCalenderController::class, 'store']);
+
+            // Admin - Inactive Private Boat Calenders
+            Route::post('/get-inactive-private-boat-calenders', [AdminInactivePrivateBoatCalenderController::class, 'index']);
+            Route::post('/inactive-private-boat-calenders', [AdminInactivePrivateBoatCalenderController::class, 'store']);
+
+            // Admin - Inactive Activity Calenders
+            Route::post('/get-inactive-activity-calenders', [AdminInactiveActivityCalenderController::class, 'index']);
+            Route::post('/inactive-activity-calenders', [AdminInactiveActivityCalenderController::class, 'store']);
 
             // Admin - Admin
             Route::get('/', [AdminController::class, 'index']);

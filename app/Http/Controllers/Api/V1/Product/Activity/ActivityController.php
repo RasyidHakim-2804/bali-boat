@@ -21,6 +21,7 @@ class ActivityController extends Controller
         ->allowedFilters([
             AllowedFilter::exact('location_id'),
             AllowedFilter::scope('people_count'),
+            AllowedFilter::scope('date')
         ])
         ->allowedSorts([
             AllowedSort::field('price')

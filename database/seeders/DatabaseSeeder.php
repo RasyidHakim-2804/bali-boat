@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         (new HarborSeeder)->run();
         (new LocationSeeder)->run();
         (new TagSeeder)->run();
+        (new PromoSeeder)->run();
 
         // Product Atribute
         (new ProductIncludeWithTranslationSeeder)->run();

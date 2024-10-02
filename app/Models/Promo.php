@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Services\Logs\AdminLogService;
+use App\Traits\ImageStorageTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promo extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ImageStorageTrait;
 
     protected $fillable = [
         'code',
@@ -18,14 +19,29 @@ class Promo extends Model
         'duration',
         'amount',
         'is_active',
-        'is_new_user_promo',
+        'is_all_date',
+        'is_all_day',
         'start_at',
         'expired_at',
+        'for_start_date',
+        'for_end_date',
     ];
 
     public function getRouteKeyName()
     {
         return 'uuid';
+    }
+
+    protected $imageSetting = [
+        'folder' => 'promo',
+        'field'  => [
+            'image',
+        ],
+    ];
+
+    public function days()
+    {
+        return $this->hasMany(PromoDay::class, 'promo_id', 'id');
     }
 
     public static function boot()

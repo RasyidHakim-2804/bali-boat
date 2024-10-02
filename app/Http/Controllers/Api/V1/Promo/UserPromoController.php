@@ -24,6 +24,10 @@ class UserPromoController extends Controller
 
         if ($promo->start_at > now()) return $this->errorValidationResponse('code', 'The promo code is not active.');
 
+        if (($promo->is_all_date == 1) && ($promo->for_start_date >= $request->activity_date)) return $this->errorValidationResponse('code', 'The promo code is invalid.');
+
+        if (($promo->is_all_date == 1) && ($promo->for_end_date <= $request->activity_date)) return $this->errorValidationResponse('code', 'The promo code is invalid.');
+
         $orderPromoAppliedCounted = 0;
 
         if ($promo->duration == 'once') $orderPromoAppliedCounted = FastBoatOrder::where('user_id', request()->user()->id)->where('promo_id', $promo->id)->count();

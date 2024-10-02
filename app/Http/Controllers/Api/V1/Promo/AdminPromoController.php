@@ -7,6 +7,8 @@ use App\Http\Requests\Api\Promo\StorePromoRequest;
 use App\Http\Requests\Api\Promo\UpdatePromoRequest;
 use App\Http\Resources\Promo\PromoResource;
 use App\Models\Promo;
+use App\Models\PromoDay;
+use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -22,7 +24,7 @@ class AdminPromoController extends Controller
 
     public function show(Promo $promo)
     {
-        $promo = new PromoResource($promo);
+        $promo = new PromoResource($promo->load('days'));
     
         return $this->successGet($promo);
     }
@@ -31,12 +33,16 @@ class AdminPromoController extends Controller
     {
         DB::beginTransaction();
         try {
-            $promo       = new Promo();
-            $promo->uuid = $this->generateUuid();
+            $promo          = new Promo();
+            $promo->uuid    = $this->generateUuid();
+
+            if (isset($request->image)) $promo->image = $this->saveImage($promo, $request->image);
 
             $promo->fill($request->validated());
 
             $promo->save();
+
+            $this->saveDays($promo->id, $request->days);
 
             DB::commit();
 
@@ -51,17 +57,30 @@ class AdminPromoController extends Controller
 
     public function update(UpdatePromoRequest $request, Promo $promo)
     {
-        $startAt = date("Y-m-d", strtotime($promo->start_at));
+        DB::beginTransaction();
+        try {
+            $startAt = date("Y-m-d", strtotime($promo->start_at));
 
-        if (($request->start_at != $startAt) && ($request->start_at  < date('Y-m-d'))) return $this->errorValidationResponse('start_at', 'The start at must be a date after or equal to today.');
+            if (($request->start_at != $startAt) && ($request->start_at  < date('Y-m-d'))) return $this->errorValidationResponse('start_at', 'The start at must be a date after or equal to today.');
 
-        if ($request->expired_at <= $request->start_at) return $this->errorValidationResponse('expired_at', 'The expired at must be a date after to start_at.');
+            if ($request->expired_at <= $request->start_at) return $this->errorValidationResponse('expired_at', 'The expired at must be a date after to start_at.');
 
-        $promo->fill($request->validated());
+            $promo->fill($request->validated());
 
-        $promo->save();
+            if (isset($request->image)) $promo->image = $this->saveImage($promo, $request->image);
 
-        return $this->successStore();
+            $promo->save();
+
+            $this->saveDays($promo->id, $request->days);
+            
+            DB::commit();
+
+            return $this->successStore();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $this->errorMessage($e->getMessage());
+        }
     }
 
     public function destroy(Promo $promo)
@@ -80,6 +99,19 @@ class AdminPromoController extends Controller
         }
     }
 
+    protected function saveImage($fastBoat, $requestImage)
+    {
+        $image = new ImageService($fastBoat->imagePath());
+        
+        if ($fastBoat->image) {
+            $image->delete($fastBoat->image);
+        }
+
+        $image->save($requestImage);
+
+        return $image->getImageName();
+    }
+
     protected function generateUuid()
     {
         $sameUuid = 1;
@@ -90,5 +122,20 @@ class AdminPromoController extends Controller
         }
         
         return $uuid;
+    }
+
+    protected function saveDays($promoId, $days)
+    {
+        $promos = PromoDay::where('promo_id', $promoId)->get();
+
+        if (isset($promos)) $promos->map->delete();
+
+        foreach ($days as $key => $day) {
+            $promoDay           = new PromoDay();
+            $promoDay->promo_id = $promoId;
+            $promoDay->day      = $day;
+
+            $promoDay->save();
+        }
     }
 }

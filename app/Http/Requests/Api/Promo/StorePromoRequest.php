@@ -32,8 +32,14 @@ class StorePromoRequest extends FormRequest
             'duration'          => 'required|in:once,repeat',
             'amount'            => 'required|numeric|integer|gt:0',
             'is_active'         => 'required|boolean',
+            'is_all_date'       => 'required|boolean',
+            'is_all_day'        => 'required|boolean',
             'start_at'          => 'required|date|after_or_equal:today',
             'expired_at'        => 'required|date|after:start_at',
+            'for_start_date'    => 'required_if:is_all_date,0|date|after_or_equal:today',
+            'for_end_date'      => 'required_if:is_all_date,0|date|after:for_start_date',
+            'days'              => 'required_if:is_all_day,0|array',
+            'days.*'            => 'required|distinct:strict|min:1|max:7|numeric',
         ];
     }
 

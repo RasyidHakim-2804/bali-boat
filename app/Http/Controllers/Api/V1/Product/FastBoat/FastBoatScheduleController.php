@@ -22,6 +22,7 @@ class FastBoatScheduleController extends Controller
             AllowedFilter::exact('fast_boat_id'),
             AllowedFilter::scope('from_to'),
             AllowedFilter::scope('departure_time'),
+            AllowedFilter::scope('date')
         ])
         ->allowedSorts([
             AllowedSort::field('price','variant_price'),
@@ -56,6 +57,7 @@ class FastBoatScheduleController extends Controller
             AllowedFilter::exact('fast_boat_id'),
             AllowedFilter::scope('from_to'),
             AllowedFilter::scope('departure_time'),
+            AllowedFilter::scope('date')
         ])
         ->allowedSorts([
             AllowedSort::field('price','variant_price'),

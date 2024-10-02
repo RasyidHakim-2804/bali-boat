@@ -21,6 +21,7 @@ class PrivateBoatController extends Controller
         ->allowedFilters([
             AllowedFilter::partial('harbor_id', 'pickup_harbor_id'),
             AllowedFilter::scope('people_count'),
+            AllowedFilter::scope('date'),
         ])
         ->allowedSorts([
             AllowedSort::field('price')

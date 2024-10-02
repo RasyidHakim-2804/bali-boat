@@ -77,6 +77,13 @@ class Activity extends Model
         return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 1);
     }
 
+    public function inactiveCalender(): HasMany
+    {
+        return $this->hasMany(InactiveActivityCalender::class, 'product_id', 'id');
+    }
+
+    // Scope function
+
     public function scopeSelectThumbnailVariantPrice($query)
     {
         $query->addSelect('*',DB::raw(
@@ -99,4 +106,10 @@ class Activity extends Model
         return $query->where('name', 'LIKE','%' . $search . '%');
     }
 
+    public function scopeDate($query, $date)
+    {
+        $query->whereDoesntHave('inactiveCalender', function ($query) use ($date) {
+            $query->where('date', $date);
+        });
+    }
 }

@@ -19,6 +19,7 @@ class ListActivityOrderResource extends JsonResource
             'other_products'            => ($this->details()->count()) - 1,
             'product_thumbnail'         => new ListActivityOrderDetailResource($this->details()->first()),
             'activity_date'             => $this->activity_date,
+            'total_passenger'           => $this->forms_count,
             'created_at'                => $this->created_at,
             'updated_at'                => $this->updated_at,
         ];

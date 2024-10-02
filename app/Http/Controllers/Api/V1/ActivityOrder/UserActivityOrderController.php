@@ -11,7 +11,6 @@ use App\Models\ActivityVariant;
 use App\Models\Promo;
 use App\Models\User;
 use App\Notifications\ActivityOrder\ActivityOrderCreatedNotification;
-use App\Notifications\Order\OrderCreatedNotification;
 use App\Services\ActivityOrder\ActivityOrderDetailService;
 use App\Services\ActivityOrder\ActivityOrderRegistrationService;
 use App\Services\ActivityOrder\ActivityOrderService;
@@ -34,7 +33,7 @@ class UserActivityOrderController extends Controller
 
     public function index(User $user)
     {
-        return ListActivityOrderResource::collection(ActivityOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
+        return ListActivityOrderResource::collection(ActivityOrder::where('user_id', $user->id)->with('details')->withCount('forms')->latest()->paginate(25));
     }
     
     public function show(User $user, ActivityOrder $activityOrder)
@@ -237,7 +236,7 @@ class UserActivityOrderController extends Controller
         $data                   = [];
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
-        $data['order_url']      = env('FRONTEND_URL') . '/user/activity-orders/' . $order->uuid;
+        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/tours/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
         $user->notify(new ActivityOrderCreatedNotification($data));

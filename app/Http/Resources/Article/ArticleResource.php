@@ -11,9 +11,9 @@ class ArticleResource extends JsonResource
         return [
             'id'            => $this->id,
             'slug'          => $this->slug,
-            'title'         => $this->title,
+            'title'         => ArticleTranslationResource::collection($this->titleTranslations),
             'type'          => $this->type,
-            'tag'           => $this->tag,
+            'tag'           => ArticleTranslationResource::collection($this->tagTranslations),
             'body'          => ArticleTranslationResource::collection($this->bodyTranslations),
             'meta'          => ArticleTranslationResource::collection($this->metaTranslations),
             'total_view'    => $this->total_view,

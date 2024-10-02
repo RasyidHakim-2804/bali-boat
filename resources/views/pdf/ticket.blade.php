@@ -14,7 +14,7 @@
             }
             body {
                 font-family: 'Montserrat', Arial, sans-serif;
-                font-size: 8px;
+                font-size: 12px;
                 margin: 0;
                 margin-top: -50px;
                 padding-bottom: 32px;
@@ -97,10 +97,13 @@
                 font-weight: 1000;
                 color: #00A59A;
             }
+            .ticket-container {
+                padding: 50px;
+            }
         </style>
     </head>
-    <body>
-        <div class="ticket-container">
+    <body class="ticket-container">
+        <div>
             <div class="header">
                 <img src="{{public_path() . '/storage/assets/images/logo_black.png'}}" alt="Bali Boat" class="logo">
                 <div class="title font-bold block">E-Ticket Fast Boat</div>
@@ -175,26 +178,28 @@
                 <hr>
                 <table>
                     @foreach ($fastBoatOrder->forms as $forms)
+                    @if(($loop->index+1)%2 == 1)
+                    @if($loop->index+1 != 1)</tr>@endif
                     <tr class="mb-minus-10">
                         <td>
-                            <div class="card">
-                                <div class="font-bold opacity-light">Passenger 1 - {{$forms->first()->age_type}}</div>
+                            <div class="card" style="page-break-before:auto;">
+                                <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
                                 
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Full Name</div>
-                                    <div class="font-bold">{{$forms->first()->name}}</div>
+                                    <div class="font-bold">{{$forms->name}}</div>
                                 </div>
         
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Nationality</div>
-                                    <div class="font-bold">{{$forms->first()->nationality}}</div>
+                                    <div class="font-bold">{{$forms->nationality}}</div>
                                 </div>
         
                                 <div>
                                     <div class="font-tiny opacity-light">ITAS Holder</div>
                                     <div class="font-bold">
-                                        @if ($forms->first()->is_itas_holder)
+                                        @if ($forms->is_itas_holder)
                                             Yes
                                         @else
                                             No
@@ -203,26 +208,26 @@
                                 </div>
                             </div>
                         </td>
+                    @else
                         <td>
-                            @if ($forms->count() > 1)
-                            <div class="card">
-                                <div class="font-bold opacity-light">Passenger 1 - {{$forms->last()->age_type}}</div>
+                            <div class="card" style="page-break-before:auto;">
+                                <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
                                 
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Full Name</div>
-                                    <div class="font-bold">{{$forms->last()->name}}</div>
+                                    <div class="font-bold">{{$forms->name}}</div>
                                 </div>
         
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Nationality</div>
-                                    <div class="font-bold">{{$forms->last()->nationality}}</div>
+                                    <div class="font-bold">{{$forms->nationality}}</div>
                                 </div>
         
                                 <div>
                                     <div class="font-tiny opacity-light">ITAS Holder</div>
                                     <div class="font-bold">
-                                        @if ($forms->last()->is_itas_holder)
+                                        @if ($forms->is_itas_holder)
                                             Yes
                                         @else
                                             No
@@ -230,10 +235,10 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
                         </td>
-                    </tr>
+                    @endif
                     @endforeach
+                    </tr>
                 </table>
             </div>
 
@@ -243,44 +248,44 @@
                 <hr>
                 <ul class="opacity-medium">
                     <li>
-                        <p>Please check-in at least <span class="highlight">60 minutes</span> before departure time at the appropriate fast boat counter.</p>
+                        Please check-in at least <span class="highlight">60 minutes</span> before departure time at the appropriate fast boat counter.
                     </li>
                     <li>
-                        <p>Passengers are required to show proof of identity along with this e-voucher.</p>
+                        Passengers are required to show proof of identity along with this e-voucher.
                     </li>
                     <li>
-                        <p>Passengers are required to show ITAS Card if you buy tickets as an ITAS Holder.</p>
+                        Passengers are required to show ITAS Card if you buy tickets as an ITAS Holder.
                     </li>
                     <li>
-                        <p>Please note there are additional retribution fees applicable for certain destinations:</p>
+                        Please note there are additional retribution fees applicable for certain destinations:
                     </li>
                     <ul>
                         <li>
-                            <p>Nusa Penida: Adult IDR 25,000, Child IDR 15,000.</p>
+                            Nusa Penida: Adult IDR 25,000, Child IDR 15,000.
                         </li>
-                        <li><p>Padang Bay: IDR 10,000 per person. Pay cash upon arrival.</p>
+                        <li>Padang Bay: IDR 10,000 per person. Pay cash upon arrival.
                         </li>
                         <li>
-                            <p>Gili Islands: ARRIVAL - IDR 20,000 per person, DEPARTURE - IDR 20,000 per person. Pay cash upon arrival & departure.</p>
+                            Gili Islands: ARRIVAL - IDR 20,000 per person, DEPARTURE - IDR 20,000 per person. Pay cash upon arrival & departure.
                         </li>
                     </ul>
                     <li>
-                        <p>Each passenger is allowed to carry a maximum of two pieces of luggage, free of charge, with a combined weight not exceeding 20 kg.</p>
+                        Each passenger is allowed to carry a maximum of two pieces of luggage, free of charge, with a combined weight not exceeding 20 kg.
                     </li>
                     <li>
-                        <p>All timing listed are WITA (Central Indonesian Time) / UTC+08:00.</p>
+                        All timing listed are WITA (Central Indonesian Time) / UTC+08:00.
                     </li>
                     <li>
-                        <p>Reschedule and cancellation conditions follow the provisions from Bali Boat.</p>
+                        Reschedule and cancellation conditions follow the provisions from Bali Boat.
                     </li>
                     <li>
-                        <p>Failure to adhere to check-in or boarding times may result in missing your boat and forfeiting the fare paid.</p>
+                        Failure to adhere to check-in or boarding times may result in missing your boat and forfeiting the fare paid.
                     </li>
                 </ul>
             </div>
 
             <div class="footer">
-                <p>&copy; 2024 Bali Boat. All rights reserved.</p>
+                &copy; 2024 Bali Boat. All rights reserved.
             </div>
         </div>
     </body>

@@ -2,7 +2,6 @@
 
 namespace App\Notifications\Admin;
 
-use App\Traits\NotificationHasTranslationsTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,27 +9,13 @@ use Illuminate\Notifications\Notification;
 
 class AdminEmailChangesVerificationNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
-    private $translations = [
-        'en' => [
-            'line_1' => 'Your admin account has email changes request to this email. Please verify this email by click \'Verify\' button to make the email changes successful.',
-            'button' => 'Verify'
-        ],
+    private $data;
 
-        'id' => [
-            'line_1' => 'Akun admin Anda memiliki permintaan perubahan email ke email ini. Silakan verifikasi email ini dengan mengklik tombol \'Verifikasi\' agar perubahan email berhasil.',
-            'button' => 'Verifikasi'
-        ]
-    ];
-
-    private $verifyUrl;
-    private $firstName;
-
-    public function __construct($url, $firstName)
+    public function __construct($data)
     {
-        $this->verifyUrl = $url;
-        $this->firstName = $firstName;
+        $this->data = $data;
     }
 
     /**
@@ -52,11 +37,23 @@ class AdminEmailChangesVerificationNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $lang = $this->data['language'];
+
+        $subject    = ' - Admin Email Changes';
+        $line       = 'Your admin account has email changes request to this email. Please verify this email by click "Verify" button to make the email changes successful.';
+        $button     = 'Verify';
+
+        if ($lang == 'id') {
+            $subject    = ' - Perubahan Email Admin';
+            $line       = 'Akun admin Anda memiliki permintaan perubahan email ke email ini. Silakan verifikasi email ini dengan mengklik tombol "Verifikasi" agar perubahan email berhasil.';
+            $button     = 'Verifikasi';
+        }
+
         return (new MailMessage)
-                    ->subject(env('APP_EMAIL_COMPANY') . ' - Admin Email Changes')
-                    ->greeting('Hi ' . $this->firstName . ',')
-                    ->line($this->getTranslations('line_1'))
-                    ->action($this->getTranslations('button'), url('/'));
+                    ->subject(env('APP_EMAIL_COMPANY') . $subject)
+                    ->greeting('Hi ' . $this->data['firstName'] . ',')
+                    ->line($line)
+                    ->action($button, $this->data['email_validation_url']);
     }
 
     /**

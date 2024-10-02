@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ForgetPassword\ForgetAdminPasswordRequest;
 use App\Http\Requests\Api\Admin\ForgetPassword\ResetPasswordForgetAdminPasswordRequest;
 use App\Http\Requests\Api\Admin\ForgetPassword\VerifyForgetAdminPasswordPinRequest;
-use App\Mail\Admin\ForgetAdminPasswordMail;
 use App\Models\Admin;
 use App\Models\ForgetAdminPasswordReset;
 use App\Notifications\Admin\ForgetAdminPasswordNotification;
@@ -43,9 +42,8 @@ class ForgetAdminPasswordController extends Controller
 
             $forgetPasswordReset->save();
 
-            // $this->sendEmail($admin, $pin);
-            $admin->notify(new ForgetAdminPasswordNotification($admin->first_name, $pin));
-
+            $this->sendEmail($admin, $pin);
+            
             DB::commit();
 
             return $this->successStore();
@@ -114,11 +112,12 @@ class ForgetAdminPasswordController extends Controller
     public function sendEmail($admin, $pin)
     {
         $data               = [];
+        $data['language']   = 'en';
         $data['pin']        = $pin;
         $data['email']      = $admin->email;
         $data['first_name'] = $admin->first_name;
 
-        Mail::to($admin->email)->send((new ForgetAdminPasswordMail($data)));
+        $admin->notify(new ForgetAdminPasswordNotification($data));
     }
 
     protected function errorInvalidPin()

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Services\Logs\AdminLogService;
-use App\Services\Logs\AgentLogService;
 use App\Services\Logs\UserLogService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,7 +29,12 @@ class OrderPayment extends Model
 
     public function privateBoatOrder()
     {
-        return $this->belongsTo(FastBoatOrder::class, 'private_boat_order_id', 'id');
+        return $this->belongsTo(PrivateBoatOrder::class, 'private_boat_order_id', 'id');
+    }
+
+    public function activityOrder()
+    {
+        return $this->belongsTo(ActivityOrder::class, 'activity_order_id', 'id');
     }
 
     public static function boot()

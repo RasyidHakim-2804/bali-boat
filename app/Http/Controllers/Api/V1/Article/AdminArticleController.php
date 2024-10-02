@@ -55,6 +55,7 @@ class AdminArticleController extends Controller
             // $this->permissionService->check('full');
 
             $article                = new Article();
+            $article->title         = $request->title['en'];
             $article->total_view    = 0;
 
             $article->fill($request->validated());
@@ -62,6 +63,14 @@ class AdminArticleController extends Controller
             $article = $this->saveThumbnail($article, $request->thumbnail);
 
             $article->save();
+
+            foreach ($request->title as $lang => $title) {
+                $this->saveArticleTranslation($article->id, 'title', $lang, $title);
+            }
+
+            foreach ($request->tag as $lang => $tag) {
+                $this->saveArticleTranslation($article->id, 'tag', $lang, $tag);
+            }
 
             foreach ($request->body as $lang => $body) {
                 $this->saveArticleTranslation($article->id, 'body', $lang, $body);
@@ -91,13 +100,23 @@ class AdminArticleController extends Controller
 
             $article->fill($request->validated());
 
-            if ($request->image) {
+            if ($request->thumbnail) {
                 $this->deleteImage($article);
 
                 $article = $this->saveThumbnail($article, $request->thumbnail);
             }
 
+            $article->title = $request->title['en'];
+            
             $article->save();
+
+            foreach ($request->title as $lang => $title) {
+                $this->saveArticleTranslation($article->id, 'title', $lang, $title);
+            }
+
+            foreach ($request->tag as $lang => $tag) {
+                $this->saveArticleTranslation($article->id, 'tag', $lang, $tag);
+            }
 
             foreach ($request->body as $lang => $body) {
                 $this->saveArticleTranslation($article->id, 'body', $lang, $body);

@@ -24,9 +24,13 @@ class UpdateArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'         => 'required|min:1',
+            'title'         => 'required|array',
+            'title.en'      => 'required|min:1',
+            'title.id'      => 'required|min:1',
             'type'          => 'required|in:travel,about_bali',
-            'tag'           => 'required|min:1',
+            'tag'           => 'required|array',
+            'tag.en'        => 'required|min:1',
+            'tag.id'        => 'required|min:1',
             'body'          => 'required|array',
             'body.en'       => 'required|min:1',
             'body.id'       => 'required|min:1',

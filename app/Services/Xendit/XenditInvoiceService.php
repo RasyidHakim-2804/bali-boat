@@ -57,7 +57,7 @@ class XenditInvoiceService implements PaymentInterface
     public function pay($order, $type)
     {
         try {
-            $data     = $this->generateRequestData($order);
+            $data     = $this->generateRequestData($order, $type);
             $response = $this->invoiceApi->createInvoice($data);
 
             $this->createXenditPayment($order, $type, $response);
@@ -96,7 +96,7 @@ class XenditInvoiceService implements PaymentInterface
         }
     }
 
-    protected function generateRequestData($order)
+    protected function generateRequestData($order, $type)
     {
         $user = $order->user;
         
@@ -105,8 +105,8 @@ class XenditInvoiceService implements PaymentInterface
             "description"          => 'Bali Boat Invoice',
             "amount"               => intval($order->grand_total_purchased),
             "currency"             => "IDR",
-            "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid,
-            "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid,
+            "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,
+            "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid . '&Type=' . $type,
             "customer" => [
                 'given_names'   => $user->first_name,
                 'surname'       => $user->last_name,

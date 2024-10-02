@@ -28,14 +28,14 @@ class AdminController extends Controller
 
     protected $permissionService;
 
-    public function __construct()
-    {
-        $this->permissionService = (new AdminPermissionService('admins'));
-    }
+    // public function __construct()
+    // {
+    //     $this->permissionService = (new AdminPermissionService('admins'));
+    // }
 
     public function index()
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         return AdminResource::collection(
             QueryBuilder::for(Admin::class)
@@ -50,7 +50,7 @@ class AdminController extends Controller
 
     public function show(Admin $admin)
     {
-        $this->permissionService->check('view');
+        // $this->permissionService->check('view');
 
         $admin = new AdminResource($admin);
 
@@ -59,7 +59,7 @@ class AdminController extends Controller
 
     public function store(StoreAdminRequest $request, Admin $admin)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $admin = new Admin();
 
@@ -70,7 +70,7 @@ class AdminController extends Controller
         $admin->is_active           = 0;
         $admin->email_verified_at   = now();
 
-        $admin = $this->saveProficePicture($admin, $request->profile_picture);
+        $admin = $this->saveProfilePicture($admin, $request->image);
 
         $admin->save();
 
@@ -87,9 +87,11 @@ class AdminController extends Controller
 
     public function update(UpdateAdminRequest $request, Admin $admin)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $admin->fill($request->validated());
+
+        $admin = $this->saveProfilePicture($admin, $request->image);
 
         $admin->save();
 
@@ -102,7 +104,7 @@ class AdminController extends Controller
 
     public function destroy(Admin $admin)
     {
-        $this->permissionService->check('full');
+        // $this->permissionService->check('full');
 
         $admin->delete();
 
@@ -162,11 +164,12 @@ class AdminController extends Controller
     protected function sendEmail($admin, $token)
     {
         $data                         = [];
+        $data['language']             = 'en';
         $data['first_name']           = $admin->first_name;
         $data['email_validation_url'] = env('FRONTEND_URL') . '/admin/email-verification/' . $token;
 
         // Mail::to($admin->email)->send((new AdminRegisterVerificationMail($data)));
-        $admin->notify(new AdminRegisterVerificationNotification($data['first_name'], $data['email_validation_url']));
+        $admin->notify(new AdminRegisterVerificationNotification($data));
     }
 
     protected function createEmailChangesVerification($admin, $newEmail)

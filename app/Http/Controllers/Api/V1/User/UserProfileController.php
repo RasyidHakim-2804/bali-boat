@@ -7,8 +7,6 @@ use App\Http\Requests\Api\User\Profile\ResetPasswordUserProfileRequest;
 use App\Http\Requests\Api\User\Profile\SetPasswordUserProfileRequest;
 use App\Http\Requests\Api\User\Profile\UpdateUserLanguageRequest;
 use App\Http\Requests\Api\User\Profile\UpdateUserProfileRequest;
-use App\Http\Requests\Api\V1\Profile\User\UserUpdateRequest;
-use App\Http\Resources\Api\V1\Common\SuccessResource;
 use App\Http\Resources\Profile\UserProfileResource;
 use App\Models\User;
 use App\Services\Images\ImageService;

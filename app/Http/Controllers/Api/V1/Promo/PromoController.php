@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\V1\Promo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Promo\VerifyPromoRequest;
+use App\Models\ActivityOrder;
+use App\Models\FastBoatOrder;
 use App\Models\Order;
+use App\Models\PrivateBoatOrder;
 use App\Models\Promo;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
@@ -25,11 +28,19 @@ class PromoController extends Controller
 
         $orderPromoAppliedCounted = 0;
 
-        if (($request->user_id) && ($promo->duration == 'once')) $orderPromoAppliedCounted = Order::where('user_id', $request->user_id)->where('promo_id', $promo->id)->count();
+        $user = request()->user();
 
-        if (($request->email) && (!$request->user_id) && ($promo->duration == 'once')) $orderPromoAppliedCounted = Order::where('guest_email', $request->email)->where('promo_id', $promo->id)->count();
+        if (($user) && ($promo->duration == 'once')) {
+            $orderPromoAppliedCounted = FastBoatOrder::where('user_id', $user->id)->where('promo_id', $promo->id)->count();
 
-        if ($orderPromoAppliedCounted > 0) return $this->errorValidationResponse('code', 'The promo has been used.');
+            if ($orderPromoAppliedCounted == 0) $orderPromoAppliedCounted = PrivateBoatOrder::where('user_id', $user->id)->where('promo_id', $promo->id)->count();
+
+            if ($orderPromoAppliedCounted == 0) $orderPromoAppliedCounted = ActivityOrder::where('user_id', $user->id)->where('promo_id', $promo->id)->count();
+        }
+
+        // if (($request->email) && (!$request->user_id) && ($promo->duration == 'once')) $orderPromoAppliedCounted = Order::where('guest_email', $request->email)->where('promo_id', $promo->id)->count();
+
+        // if ($orderPromoAppliedCounted > 0) return $this->errorValidationResponse('code', 'The promo has been used.');
 
         return $this->successGet($promo);
     }

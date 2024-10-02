@@ -30,7 +30,8 @@ class VerifyPromoRequest extends FormRequest
                 'min:1',
                 Rule::exists('promos', 'code')->where('is_active', 1)->where('deleted_at', null)
             ],
-            // 'total_purchased' => 'nullable|numeric|min:1'
+            'email' => ,
+            'activity_date' => 'required|date|after_or_equal:today'
         ];
     }
 }

@@ -254,7 +254,7 @@ class UserFastBoatOrderController extends Controller
         $data                   = [];
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
-        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/' . $order->uuid;
+        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
         $user->notify(new FastBoatOrderCreatedNotification($data));

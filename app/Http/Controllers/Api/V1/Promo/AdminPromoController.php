@@ -24,7 +24,7 @@ class AdminPromoController extends Controller
 
     public function list()
     {
-        return PromoResource::collection(Promo::orderBy('name', 'ASC')->get());
+        return PromoResource::collection(Promo::orderBy('code', 'ASC')->get());
     }
 
 

@@ -142,6 +142,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
 
             // Admin - Promo
+            Route::get('/list-promos', [AdminPromoController::class, 'list']);
             Route::resource('/promos', AdminPromoController::class);
 
             // Admin - Article

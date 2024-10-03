@@ -22,6 +22,12 @@ class AdminPromoController extends Controller
         return PromoResource::collection(Promo::orderBy('id', 'DESC')->paginate(25));
     }
 
+    public function list()
+    {
+        return PromoResource::collection(Promo::orderBy('name', 'ASC')->get());
+    }
+
+
     public function show(Promo $promo)
     {
         $promo = new PromoResource($promo->load('days'));

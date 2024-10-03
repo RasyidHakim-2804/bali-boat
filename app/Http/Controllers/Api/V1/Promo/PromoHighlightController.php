@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Promo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Promo\PromoHighlightResource;
+use App\Http\Resources\Promo\PromoResource;
 use App\Models\Promo;
 use App\Models\PromoHighlight;
 use App\Traits\JsonResponsesTrait;
@@ -20,6 +21,6 @@ class PromoHighlightController extends Controller
 
     public function show(Promo $promo)
     {
-        return new PromoHighlightResource($promo);
+        return new PromoResource($promo);
     }
 }

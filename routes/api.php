@@ -46,6 +46,7 @@ use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoHighlightController;
+use App\Http\Controllers\Api\V1\Promo\PromoHighlightController;
 use App\Http\Controllers\Api\V1\Promo\UserPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\Ticket\UserTicketController;
@@ -111,6 +112,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
     // FastBoat - ticket
     Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf']);
+
+    // Promo Highlight
+    Route::get('/promo-highlight', [PromoHighlightController::class, 'index']);
+    Route::get('/promo-highlight/{promo}', [PromoHighlightController::class, 'show']);
 
     //Admin routes
     Route::prefix('admins')->middleware('verifyLanguage')->group(function () {

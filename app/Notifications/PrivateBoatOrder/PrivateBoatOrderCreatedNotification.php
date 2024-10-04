@@ -46,7 +46,7 @@ class PrivateBoatOrderCreatedNotification extends Notification
 
         $subject    = ' - New Private Boat Order';
         // $button     = 'Payment';
-        $line       = 'Your private boat order was successfully created. We will process your inquiry order as soon as possible. Thankyou.';
+        $line       = 'Your private boat order was successfully created. We will process your order inquiry as soon as possible. Thankyou.';
 
         if ($lang == 'id') {
             $subject    = ' - Order Private Boat Baru';

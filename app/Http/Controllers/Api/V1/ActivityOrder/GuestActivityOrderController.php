@@ -16,6 +16,7 @@ use App\Services\ActivityOrder\ActivityOrderRegistrationService;
 use App\Services\ActivityOrder\ActivityOrderService;
 use App\Services\Order\OrderRefundService;
 use App\Services\Payment\PaymentService;
+use App\Services\User\UserService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,7 @@ class GuestActivityOrderController extends Controller
     
     public function store(StoreUserActivityOrderRequest $request, User $user)
     {
-        $user = request()->user();
+        $user = $this->createUser($request);
 
         // Validation
         $promo = $this->verifyPromo($request->promo_uuid);
@@ -231,12 +232,12 @@ class GuestActivityOrderController extends Controller
     
     protected function sendEmail($order)
     {
-        $user = request()->user();
+        $user = $order->user;
         
         $data                   = [];
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
-        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/tours/' . $order->uuid;
+        $data['order_url']      = env('FRONTEND_URL') . '/orders/tours/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
         $user->notify(new ActivityOrderCreatedNotification($data));
@@ -284,5 +285,14 @@ class GuestActivityOrderController extends Controller
         return $promo;
     }
 
+    protected function createUser($request)
+    {
+        $name       = explode(' ', $request->pic_name, 2);
+        $lastName  = $firstName = $name[0];
+
+        if (count($name) > 1) $lastName = $name[1];
+
+        return (new UserService)->create($request->pic_email, $firstName, $lastName);
+    }
     
 }

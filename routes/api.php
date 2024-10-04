@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ActivityOrder\ActivityOrderRefundController;
 use App\Http\Controllers\Api\V1\ActivityOrder\AdminActivityOrderController;
+use App\Http\Controllers\Api\V1\ActivityOrder\GuestActivityOrderController;
 use App\Http\Controllers\Api\V1\ActivityOrder\UserActivityOrderController;
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Api\V1\InactiveActivityCalender\AdminInactiveActivityCa
 use App\Http\Controllers\Api\V1\InactiveFastBoatCalender\AdminInactiveFastBoatCalenderController;
 use App\Http\Controllers\Api\V1\InactivePrivateBoatCalender\AdminInactivePrivateBoatCalenderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\AdminPrivateBoatOrderController;
+use App\Http\Controllers\Api\V1\PrivateBoatOrder\GuestPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\PrivateBoatOrderRefundController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\UserPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
@@ -118,9 +120,17 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::get('/promo-highlight', [PromoHighlightController::class, 'index']);
     Route::get('/promo-highlight/{promo}', [PromoHighlightController::class, 'show']);
 
-    // Public - FastBoat Order
+    // Public - Fast Boat Order
     Route::get('/fast-boat-orders/{fastBoatOrder}', [GuestFastBoatOrderController::class, 'show']);
     Route::post('/fast-boat-orders', [GuestFastBoatOrderController::class, 'store']);
+
+    // Public - Private Boat Order
+    Route::get('/private-boat-orders/{fastBoatOrder}', [GuestPrivateBoatOrderController::class, 'show']);
+    Route::post('/private-boat-orders', [GuestPrivateBoatOrderController::class, 'store']);
+
+    // Public - Activity Order
+    Route::get('/activity-orders/{fastBoatOrder}', [GuestActivityOrderController::class, 'show']);
+    Route::post('/activity-orders', [GuestActivityOrderController::class, 'store']);
 
     //Admin routes
     Route::prefix('admins')->middleware('verifyLanguage')->group(function () {

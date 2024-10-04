@@ -69,9 +69,9 @@ class UserPrivateBoatOrderController extends Controller
 
             $responseData = ['order_uuid' => $order->uuid];
 
-            (new PaymentService)->prepare()->pay($order, 'private_boat');
+            // (new PaymentService)->prepare()->pay($order, 'private_boat');
 
-            $responseData['payment_url'] = $order->payment->url;
+            // $responseData['payment_url'] = $order->payment->url;
 
             $this->sendEmail($order);
 
@@ -236,7 +236,7 @@ class UserPrivateBoatOrderController extends Controller
         $data                   = [];
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
-        $data['order_url']      = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
+        // $data['order_url']      = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
         $data['payment_url']    = $order->payment->url;
         
         $user->notify(new PrivateBoatOrderCreatedNotification($data));

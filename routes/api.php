@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\FaqCategory\AdminFaqCategoryController;
 use App\Http\Controllers\Api\V1\FaqCategory\FaqCategoryController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\FastBoatOrderRefundController;
+use App\Http\Controllers\Api\V1\FastBoatOrder\GuestFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Include\AdminIncludeController;
@@ -116,6 +117,10 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     // Promo Highlight
     Route::get('/promo-highlight', [PromoHighlightController::class, 'index']);
     Route::get('/promo-highlight/{promo}', [PromoHighlightController::class, 'show']);
+
+    // Public - FastBoat Order
+    Route::get('/fast-boat-orders/{fastBoatOrder}', [GuestFastBoatOrderController::class, 'show']);
+    Route::post('/fast-boat-orders', [GuestFastBoatOrderController::class, 'store']);
 
     //Admin routes
     Route::prefix('admins')->middleware('verifyLanguage')->group(function () {

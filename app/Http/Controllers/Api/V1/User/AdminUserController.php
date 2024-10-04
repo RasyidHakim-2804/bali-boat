@@ -32,6 +32,7 @@ class AdminUserController extends Controller
                 AllowedFilter::scope('search'),
             ])
             ->allowedSorts('name', 'id')
+            ->where('email_verified_at', '!=', null)
             ->paginate(25)
         );
     }

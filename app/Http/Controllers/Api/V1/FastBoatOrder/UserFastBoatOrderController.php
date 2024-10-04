@@ -44,7 +44,7 @@ class UserFastBoatOrderController extends Controller
     
     public function show(User $user, FastBoatOrder $fastBoatOrder)
     {
-        $order = new FastBoatOrderResource($fastBoatOrder->load('details', 'payment', 'forms'));
+        $order = new FastBoatOrderResource($fastBoatOrder->load('user', 'details', 'payment', 'forms'));
 
         return $this->successGet($order);
     }

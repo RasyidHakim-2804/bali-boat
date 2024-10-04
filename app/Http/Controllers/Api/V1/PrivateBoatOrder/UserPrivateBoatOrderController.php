@@ -56,7 +56,7 @@ class UserPrivateBoatOrderController extends Controller
 
         $this->checkFormValidity($request);
 
-        $this->checkFormQuantity($request);
+        // $this->checkFormQuantity($request);
 
         DB::beginTransaction();
         try {

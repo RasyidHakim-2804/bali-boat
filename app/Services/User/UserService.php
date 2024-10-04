@@ -9,6 +9,10 @@ class UserService
 {
     public function create($email, $firstName, $lastName = null, $password = null)
     {
+        $user = User::where('email', $email)->first();
+
+        if ($user) return $user;
+
         $user               = new User();
         $user->first_name   = $firstName;
         $user->last_name    = $lastName;

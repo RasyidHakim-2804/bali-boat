@@ -48,7 +48,7 @@ class AdminPromoController extends Controller
 
             $promo->save();
 
-            $this->saveDays($promo->id, $request->days);
+            if ($request->is_all_day == 0) $this->saveDays($promo->id, $request->days);
 
             DB::commit();
 
@@ -77,7 +77,7 @@ class AdminPromoController extends Controller
 
             $promo->save();
 
-            $this->saveDays($promo->id, $request->days);
+            if ($request->is_all_day == 0) $this->saveDays($promo->id, $request->days);
             
             DB::commit();
 

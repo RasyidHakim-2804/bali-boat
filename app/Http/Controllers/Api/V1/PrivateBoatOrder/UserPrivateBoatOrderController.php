@@ -54,9 +54,9 @@ class UserPrivateBoatOrderController extends Controller
 
         $this->checkProductAvailability($request);
 
-        // $this->checkFormValidity($request);
+        $this->checkFormValidity($request);
 
-        // $this->checkFormQuantity($request);
+        $this->checkFormQuantity($request);
 
         DB::beginTransaction();
         try {
@@ -65,7 +65,7 @@ class UserPrivateBoatOrderController extends Controller
 
             (new PrivateBoatOrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
 
-            // (new PrivateBoatOrderRegistrationService)->create($order->id, $request->forms);
+            (new PrivateBoatOrderRegistrationService)->create($order->id, $request->forms);
 
             $responseData = ['order_uuid' => $order->uuid];
 

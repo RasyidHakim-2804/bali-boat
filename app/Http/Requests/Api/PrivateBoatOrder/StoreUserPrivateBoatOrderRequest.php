@@ -83,33 +83,33 @@ class StoreUserPrivateBoatOrderRequest extends FormRequest
                 Rule::exists('private_boat_variants', 'id')->where('private_boat_id', $this->input('products.*.id'))->whereNull('deleted_at'),
             ],
             'products.*.quantity'       => 'required|integer|gt:0',
-            // 'forms'                     => 'required|array',
-            // 'forms.*.product_id'        => ['required',
-            //     function ($attr, $value, $fail) {
-            //         $count = collect($this->input('products'))
-            //             ->filter(function ($products) use ($value) {
-            //                 if (array_key_exists('id', $products)) return ($products['id'] === $value);
-            //             })
-            //             ->count();
+            'forms'                     => 'required|array',
+            'forms.*.product_id'        => ['required',
+                function ($attr, $value, $fail) {
+                    $count = collect($this->input('products'))
+                        ->filter(function ($products) use ($value) {
+                            if (array_key_exists('id', $products)) return ($products['id'] === $value);
+                        })
+                        ->count();
 
-            //         if ($count < 1) $fail(__('validation.in'));
-            //     },
-            // ],
-            // 'forms.*.variant_id'        => [
-            //     'nullable',
-            //     function ($attr, $value, $fail) {
-            //         $count = collect($this->input('products'))
-            //             ->filter(function ($products) use ($value) {
-            //                 return ((isset($products['variant_id'])) && ($products['variant_id'] === $value));
-            //             })
-            //             ->count();
+                    if ($count < 1) $fail(__('validation.in'));
+                },
+            ],
+            'forms.*.variant_id'        => [
+                'nullable',
+                function ($attr, $value, $fail) {
+                    $count = collect($this->input('products'))
+                        ->filter(function ($products) use ($value) {
+                            return ((isset($products['variant_id'])) && ($products['variant_id'] === $value));
+                        })
+                        ->count();
 
-            //         if ($count < 1) $fail(__('validation.in'));
-            //     },
-            //     Rule::exists('private_boat_variants', 'id')->where('private_boat_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
-            // ],
-            // 'forms.*.name'              => 'required|string|min:1',
-            // 'forms.*.nationality'       => 'required|min:1',
+                    if ($count < 1) $fail(__('validation.in'));
+                },
+                Rule::exists('private_boat_variants', 'id')->where('private_boat_id', $this->input('forms.*.product_id'))->whereNull('deleted_at'),
+            ],
+            'forms.*.name'              => 'required|string|min:1',
+            'forms.*.nationality'       => 'required|min:1',
         ];
     }
 }

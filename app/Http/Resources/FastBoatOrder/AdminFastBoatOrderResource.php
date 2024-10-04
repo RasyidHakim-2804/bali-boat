@@ -11,7 +11,7 @@ class AdminFastBoatOrderResource extends JsonResource
         return [
             'id'                            => $this->id,
             'uuid'                          => $this->uuid,
-            'user'                          => $this->user,
+            'user'                          => $this->whenLoaded('user',$this->user),
             'pic_name'                      => $this->pic_name,
             'pic_email'                     => $this->pic_email,
             'pic_phone_number'              => $this->pic_phone_number,

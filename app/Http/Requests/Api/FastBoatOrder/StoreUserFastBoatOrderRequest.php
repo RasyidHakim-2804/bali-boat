@@ -42,7 +42,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
                 },
             ],
             'pic_name'          => 'required|min:1',
-            'pic_email'         => 'required|min:1',
+            'pic_email'         => 'required|email:dns:src',
             'pic_phone_number'  => 'required|min:1',
             'promo_uuid'        => ['nullable', Rule::exists('promos', 'uuid')->where('is_active', 1)],
             'products'          => 'required|array',

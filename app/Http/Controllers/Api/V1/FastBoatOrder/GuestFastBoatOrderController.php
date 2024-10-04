@@ -239,7 +239,7 @@ class GuestFastBoatOrderController extends Controller
     
     protected function sendEmail($order)
     {
-        $user = request()->user();
+        $user = $order->user;
         
         $data                   = [];
         $data['language']       = config('app.locale');

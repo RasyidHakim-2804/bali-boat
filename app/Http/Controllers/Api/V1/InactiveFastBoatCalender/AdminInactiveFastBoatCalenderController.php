@@ -28,9 +28,6 @@ class AdminInactiveFastBoatCalenderController extends Controller
     public function store(StoreInactiveFastBoatCalenderRequest $request)
     {
         // DB::beginTransaction();
-
-        InactiveFastBoatCalender::where('product_id', $request->product_id)->delete();
-
         try {
             if (isset($request->dates)) {
                 foreach ($request->dates as $key => $date) {
@@ -41,7 +38,7 @@ class AdminInactiveFastBoatCalenderController extends Controller
                     $calender->save();
                 }
             } else {
-                // InactiveFastBoatCalender::where('product_id', $request->product_id)->where('date', '>=', $request->year . '-' . $request->month . '-01')->where('date', '<=', $request->year . '-' . $request->month . '-31')->delete();
+                InactiveFastBoatCalender::where('product_id', $request->product_id)->whereYear('date', $request->year)->whereMonth('date', $request->month)->delete();
             }
 
             DB::commit();

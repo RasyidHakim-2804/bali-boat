@@ -29,8 +29,6 @@ class AdminInactiveActivityCalenderController extends Controller
     {
         // DB::beginTransaction();
 
-        InactiveActivityCalender::where('product_id', $request->product_id)->delete();
-
         try {
             if (isset($request->dates)) {
                 foreach ($request->dates as $key => $date) {

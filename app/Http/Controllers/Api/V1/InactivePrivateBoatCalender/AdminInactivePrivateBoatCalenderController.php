@@ -29,8 +29,6 @@ class AdminInactivePrivateBoatCalenderController extends Controller
     {
         // DB::beginTransaction();
 
-        InactivePrivateBoatCalender::where('product_id', $request->product_id)->delete();
-
         try {
             if (isset($request->dates)) {
                 foreach ($request->dates as $key => $date) {

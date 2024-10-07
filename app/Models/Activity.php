@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Activity extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory, HasSlug, SoftDeletes;
 
     public function getSlugOptions(): SlugOptions
     {
@@ -76,6 +77,13 @@ class Activity extends Model
         return $this->hasOne(ActivityVariant::class, 'activity_id', 'id')->where('is_default', '=', 1);
     }
 
+    public function inactiveCalender(): HasMany
+    {
+        return $this->hasMany(InactiveActivityCalender::class, 'product_id', 'id');
+    }
+
+    // Scope function
+
     public function scopeSelectThumbnailVariantPrice($query)
     {
         $query->addSelect('*',DB::raw(
@@ -98,4 +106,10 @@ class Activity extends Model
         return $query->where('name', 'LIKE','%' . $search . '%');
     }
 
+    public function scopeDate($query, $date)
+    {
+        $query->whereDoesntHave('inactiveCalender', function ($query) use ($date) {
+            $query->where('date', $date);
+        });
+    }
 }

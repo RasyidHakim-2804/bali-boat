@@ -70,6 +70,13 @@ class PrivateBoat extends Model
         return $this->hasOne(PrivateBoatVariant::class, 'private_boat_id', 'id')->where('is_default', '=', 1);
     }
 
+    public function inactiveCalender(): HasMany
+    {
+        return $this->hasMany(InactivePrivateBoatCalender::class, 'product_id', 'id');
+    }
+
+    // Scope function
+
     public function scopeSelectThumbnailVariantPrice($query)
     {
         $query->addSelect('*',DB::raw(
@@ -90,5 +97,12 @@ class PrivateBoat extends Model
     public function scopePeopleCount($query, $person)
     {
         $query->where('max_person', '>=', $person);
+    }
+
+    public function scopeDate($query, $date)
+    {
+        $query->whereDoesntHave('inactiveCalender', function ($query) use ($date) {
+            $query->where('date', $date);
+        });
     }
 }

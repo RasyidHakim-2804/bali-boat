@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,6 +35,13 @@ class FastBoatSchedule extends Model
     {
         return $this->hasMany(FastBoatScheduleVariant::class);
     }
+
+    public function inactiveCalender(): HasMany
+    {
+        return $this->hasMany(InactiveFastBoatCalender::class, 'product_id', 'id');
+    }
+
+    // Scope Function
 
     public function scopeFromTo($query, $from, $to)
     {
@@ -71,5 +79,12 @@ class FastBoatSchedule extends Model
             ' and passenger_type = "local"' .
             '  limit 1) as variant_price'
         ));
+    }
+
+    public function scopeDate(Builder $query, $date)
+    {
+        $query->whereDoesntHave('inactiveCalender', function ($query) use ($date) {
+            $query->where('date', $date);
+        });
     }
 }

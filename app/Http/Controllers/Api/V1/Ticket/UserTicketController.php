@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 
 class UserTicketController extends Controller
 {
-    public function pdf(User $user, FastBoatOrder $fastBoatOrder)
+    public function pdf(FastBoatOrder $fastBoatOrder)
     {
         $fastBoatOrder = $fastBoatOrder->load('details', 'payment', 'forms');
 

@@ -31,20 +31,15 @@ class GuestPrivateBoatOrderController extends Controller
     protected $variants;
 
     protected $totalProductQuantity;
-
-    public function index(User $user)
-    {
-        return ListPrivateBoatOrderResource::collection(PrivateBoatOrder::where('user_id', $user->id)->with('details')->latest()->paginate(25));
-    }
     
-    public function show(User $user, PrivateBoatOrder $privateBoatOrder)
+    public function show(PrivateBoatOrder $privateBoatOrder)
     {
         $order = new PrivateBoatOrderResource($privateBoatOrder);
 
         return $this->successGet($order);
     }
     
-    public function store(StoreUserPrivateBoatOrderRequest $request, User $user)
+    public function store(StoreUserPrivateBoatOrderRequest $request)
     {
         $user = $this->createUser($request);
 
@@ -91,7 +86,7 @@ class GuestPrivateBoatOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, PrivateBoatOrder $privateBoatOrder)
+    public function cancel(PrivateBoatOrder $privateBoatOrder)
     {
         DB::beginTransaction();
         try {
@@ -113,7 +108,7 @@ class GuestPrivateBoatOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, PrivateBoatOrder $privateBoatOrder)
+    public function refund(Request $request, PrivateBoatOrder $privateBoatOrder)
     {
         if ($privateBoatOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 

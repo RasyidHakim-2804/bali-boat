@@ -109,9 +109,6 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::get('/private-boats', [PrivateBoatController::class, 'search']);
     Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
 
-    // FastBoat - ticket
-    Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf']);
-
     //Admin routes
     Route::prefix('admins')->middleware('verifyLanguage')->group(function () {
 
@@ -333,6 +330,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
                 Route::post('/fast-boat-orders/{fastBoatOrder}/cancel', [UserFastBoatOrderController::class, 'cancel']);
                 Route::post('/fast-boat-orders/{fastBoatOrder}/refund-request', [FastBoatOrderRefundController::class, 'request']);
                 Route::post('/fast-boat-orders/{fastBoatOrder}/refund', [FastBoatOrderRefundController::class, 'refund']);
+
+                // FastBoat - ticket
+                Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf'])->scopeBindings();
 
                 // Private Boat Order
                 Route::get('/private-boat-orders', [UserPrivateBoatOrderController::class, 'index']);

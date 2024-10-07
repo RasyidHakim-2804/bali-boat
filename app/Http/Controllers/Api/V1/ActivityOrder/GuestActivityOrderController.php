@@ -31,20 +31,15 @@ class GuestActivityOrderController extends Controller
     protected $variants;
 
     protected $totalProductQuantity;
-
-    public function index(User $user)
-    {
-        return ListActivityOrderResource::collection(ActivityOrder::where('user_id', $user->id)->with('details')->withCount('forms')->latest()->paginate(25));
-    }
     
-    public function show(User $user, ActivityOrder $activityOrder)
+    public function show(ActivityOrder $activityOrder)
     {
         $order = new ActivityOrderResource($activityOrder);
 
         return $this->successGet($order);
     }
     
-    public function store(StoreUserActivityOrderRequest $request, User $user)
+    public function store(StoreUserActivityOrderRequest $request)
     {
         $user = $this->createUser($request);
 
@@ -91,7 +86,7 @@ class GuestActivityOrderController extends Controller
         }
     }
 
-    public function cancel(User $user, ActivityOrder $activityOrder)
+    public function cancel(ActivityOrder $activityOrder)
     {
         DB::beginTransaction();
         try {
@@ -113,7 +108,7 @@ class GuestActivityOrderController extends Controller
         }
     }
 
-    public function refund(Request $request, User $user, ActivityOrder $activityOrder)
+    public function refund(Request $request, ActivityOrder $activityOrder)
     {
         if ($activityOrder->status != 'paid') return $this->errorValidationResponse('order_id', 'Order is invalid.');
 

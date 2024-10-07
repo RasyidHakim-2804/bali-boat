@@ -26,7 +26,9 @@ class StoreInactivePrivateBoatCalenderRequest extends FormRequest
     {
         return [
             'product_id'    => 'required|exists:private_boats,id',
-            'dates'         => 'required|array',
+            'month'         => 'required|numeric|gte:1|lte:12',
+            'year'          => 'required|numeric|digits:4',
+            'dates'         => 'nullable|array',
             'dates.*'       => ['required','date_format:Y-m-d','after_or_equal:today'],
         ];
     }

@@ -41,7 +41,7 @@ class AdminInactiveFastBoatCalenderController extends Controller
                     $calender->save();
                 }
             } else {
-                InactiveFastBoatCalender::where('product_id', $request->product_id)->whereYear('date', $request->year)->whereMonth('date', $request->month)->delete();
+                InactiveFastBoatCalender::where('product_id', $request->product_id)->whereMonth('date', $request->month)->delete();
             }
 
             DB::commit();

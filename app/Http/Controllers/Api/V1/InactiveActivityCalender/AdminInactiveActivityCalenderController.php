@@ -32,12 +32,16 @@ class AdminInactiveActivityCalenderController extends Controller
         InactiveActivityCalender::where('product_id', $request->product_id)->delete();
 
         try {
-            foreach ($request->dates as $key => $date) {
-                $calender             = new InactiveActivityCalender();
-                $calender->product_id = $request->product_id;
-                $calender->date       = $date;
+            if (isset($request->dates)) {
+                foreach ($request->dates as $key => $date) {
+                    $calender             = InactiveActivityCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();
+                    $calender->product_id = $request->product_id;
+                    $calender->date       = $date;
 
-                $calender->save();
+                    $calender->save();
+                }
+            } else {
+                InactiveActivityCalender::where('product_id', $request->product_id)->whereMonth('date', $request->month)->whereYear('date', $request->year)->delete();
             }
 
             DB::commit();

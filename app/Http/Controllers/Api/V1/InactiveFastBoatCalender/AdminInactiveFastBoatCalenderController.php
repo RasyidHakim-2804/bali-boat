@@ -32,12 +32,16 @@ class AdminInactiveFastBoatCalenderController extends Controller
         InactiveFastBoatCalender::where('product_id', $request->product_id)->delete();
 
         try {
-            foreach ($request->dates as $key => $date) {
-                $calender             = new InactiveFastBoatCalender();
-                $calender->product_id = $request->product_id;
-                $calender->date       = $date;
+            if (isset($request->dates)) {
+                foreach ($request->dates as $key => $date) {
+                    $calender             = InactiveFastBoatCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();
+                    $calender->product_id = $request->product_id;
+                    $calender->date       = $date;
 
-                $calender->save();
+                    $calender->save();
+                }
+            } else {
+                InactiveFastBoatCalender::where('product_id', $request->product_id)->whereMonth('date', $request->month)->whereYear('date', $request->year)->delete();
             }
 
             DB::commit();

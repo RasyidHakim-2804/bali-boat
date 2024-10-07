@@ -125,11 +125,11 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::post('/fast-boat-orders', [GuestFastBoatOrderController::class, 'store']);
 
     // Public - Private Boat Order
-    Route::get('/private-boat-orders/{fastBoatOrder}', [GuestPrivateBoatOrderController::class, 'show']);
+    Route::get('/private-boat-orders/{privateBoatOrder}', [GuestPrivateBoatOrderController::class, 'show']);
     Route::post('/private-boat-orders', [GuestPrivateBoatOrderController::class, 'store']);
 
     // Public - Activity Order
-    Route::get('/activity-orders/{fastBoatOrder}', [GuestActivityOrderController::class, 'show']);
+    Route::get('/activity-orders/{activityOrder}', [GuestActivityOrderController::class, 'show']);
     Route::post('/activity-orders', [GuestActivityOrderController::class, 'store']);
 
     //Admin routes

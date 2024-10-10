@@ -30,7 +30,7 @@ class AdminInactiveFastBoatCalenderController extends Controller
         // DB::beginTransaction();
         try {
             if (isset($request->dates)) {
-                InactiveFastBoatCalender::whereIn('date', '!=', $request->dates)->delete();
+                // InactiveFastBoatCalender::whereIn('date', '!=', $request->dates)->delete();
 
                 foreach ($request->dates as $key => $date) {
                     $calender             = InactiveFastBoatCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();

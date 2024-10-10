@@ -27,6 +27,7 @@ class AdminInactiveFastBoatCalenderController extends Controller
 
     public function store(StoreInactiveFastBoatCalenderRequest $request)
     {
+        return count($request->dates);
         // DB::beginTransaction();
         try {
             if (isset($request->dates)) {

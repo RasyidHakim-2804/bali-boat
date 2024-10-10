@@ -232,7 +232,7 @@ class GuestPrivateBoatOrderController extends Controller
         $data                   = [];
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
-        // $data['order_url']      = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
+        $data['order_url']      = env('FRONTEND_URL') . '/orders/private-boats/' . $order->uuid;
         // $data['payment_url']    = $order->payment->url;
         
         $user->notify(new PrivateBoatOrderCreatedNotification($data));

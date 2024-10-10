@@ -69,7 +69,7 @@ class ActivityController extends Controller
         ])
         ->selectThumbnailVariantPrice()
         ->orderBy('id', 'DESC')
-        ->limit(4)
+        ->limit(3)
         ->get();
 
         return ActivityResource::collection($privateBoats);

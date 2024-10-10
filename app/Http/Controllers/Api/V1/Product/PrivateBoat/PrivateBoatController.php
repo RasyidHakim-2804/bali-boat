@@ -66,7 +66,7 @@ class PrivateBoatController extends Controller
         ])
         ->selectThumbnailVariantPrice()
         ->orderBy('id', 'DESC')
-        ->limit(4)
+        ->limit(3)
         ->get();
 
         return PrivateBoatResource::collection($privateBoats);

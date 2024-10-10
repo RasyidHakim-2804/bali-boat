@@ -123,14 +123,17 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     // Public - Fast Boat Order
     Route::get('/fast-boat-orders/{fastBoatOrder}', [GuestFastBoatOrderController::class, 'show']);
     Route::post('/fast-boat-orders', [GuestFastBoatOrderController::class, 'store']);
+    Route::post('/fast-boat-inactive-calenders', [AdminInactiveFastBoatCalenderController::class, 'index']);
 
     // Public - Private Boat Order
     Route::get('/private-boat-orders/{privateBoatOrder}', [GuestPrivateBoatOrderController::class, 'show']);
     Route::post('/private-boat-orders', [GuestPrivateBoatOrderController::class, 'store']);
+    Route::post('/private-boat-inactive-calenders', [AdminInactivePrivateBoatCalenderController::class, 'index']);
 
     // Public - Activity Order
     Route::get('/activity-orders/{activityOrder}', [GuestActivityOrderController::class, 'show']);
     Route::post('/activity-orders', [GuestActivityOrderController::class, 'store']);
+    Route::post('/activity-inactive-calenders', [AdminInactiveActivityCalenderController::class, 'index']);
 
     //Admin routes
     Route::prefix('admins')->middleware('verifyLanguage')->group(function () {

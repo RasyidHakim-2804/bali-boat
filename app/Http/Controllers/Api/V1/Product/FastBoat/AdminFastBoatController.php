@@ -41,7 +41,7 @@ class AdminFastBoatController extends Controller
 
         return AdminFastBoatResource::collection($fastBoat);
     }
-    
+
     public function show(FastBoat $fastBoat)
     {
         // $this->permissionService->check('view');
@@ -60,14 +60,15 @@ class AdminFastBoatController extends Controller
             $fastBoat->image     = $this->setImage($fastBoat, $request->image);
             $fastBoat->name      = $request->name;
             $fastBoat->is_active = $request->is_active;
+            $fastBoat->rating    = $request->rating;
             $fastBoat->save();
 
             DB::commit();
-            
+
             return $this->successStore();
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
 
             throw $th;
@@ -81,19 +82,20 @@ class AdminFastBoatController extends Controller
 
             $fastBoat->name      = $request->name;
             $fastBoat->is_active = $request->is_active;
-            
+            $fastBoat->rating    = $request->rating;
+
             if ($request->image != null) {
                 $fastBoat->image = $this->setImage($fastBoat, $request->image);
             }
-            
+
             $fastBoat->save();
 
             DB::commit();
-            
+
             return $this->successResponse();
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
 
             throw $th;
@@ -108,16 +110,16 @@ class AdminFastBoatController extends Controller
             $fastBoat = $fastBoat->load([
                 'schedules'
             ]);
-    
+
             // soft delete schedule_variants
-            
+
             foreach ($fastBoat->schedules as $schedule) {
                 $schedule->variants()->delete();
             }
 
             $imageService = new ImageService($fastBoat->imagePath());
             $imageService->delete($fastBoat->image);
-    
+
             $fastBoat->schedules()->delete();
             $fastBoat->delete();
 
@@ -126,18 +128,18 @@ class AdminFastBoatController extends Controller
             return $this->successResponse();
 
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return $this->errorServer($e->getMessage());
-            
+
         }
     }
 
     protected function setImage(FastBoat $fastBoat, $requestImage)
     {
         $image = new ImageService($fastBoat->imagePath());
-        
+
         if ($fastBoat->image) {
             $image->delete($fastBoat->image);
         }

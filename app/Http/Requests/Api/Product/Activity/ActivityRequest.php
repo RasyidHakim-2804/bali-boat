@@ -36,7 +36,7 @@ class ActivityRequest extends FormRequest
             'name'              => 'required|string|max:100',
             'price'             => 'required|numeric|min:0',
             'is_active'         => 'required|boolean',
-            'rating'    => 'required|numeric|min:0|max:5',
+            'rating'            => 'required|integer|min:0|max:5',
             'location_id'       => [
                 'required',
                 Rule::exists('locations', 'id')->where('deleted_at', null)

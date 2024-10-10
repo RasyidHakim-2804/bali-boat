@@ -92,6 +92,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::get('/top-activities', [ActivityController::class, 'top']);
     Route::get('/activities', [ActivityController::class, 'search']);
     Route::get('/activities/{activity:slug}', [ActivityController::class, 'show']);
+    Route::post('/activities/{activity:slug}/validate-date', [ActivityController::class, 'validateDate']);
 
     // Public - Harbor
     Route::get('/harbors', [HarborController::class, 'index']);
@@ -108,6 +109,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::get('/top-private-boats', [PrivateBoatController::class, 'top']);
     Route::get('/private-boats', [PrivateBoatController::class, 'search']);
     Route::get('/private-boats/{privateBoat:slug}', [PrivateBoatController::class, 'show']);
+    Route::post('/private-boats/{privateBoat:slug:slug}/validate-date', [PrivateBoatController::class, 'validateDate']);
 
     // FastBoat - ticket
     Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf']);

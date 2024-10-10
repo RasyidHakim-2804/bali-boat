@@ -25,25 +25,26 @@ class ActivityResource extends JsonResource
             'slug'              => $this->slug,
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
+            'rating'            => $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-            
+
             'price'         => $this->whenLoaded(
                 'defaultVariant',
                 fn() => $this->defaultVariant->price,
                 $this->price
             ),
-            
+
             'highlight' => $this->whenLoaded(
                 'translations',
                 fn() => $this->translations->where('field','highlight')->first()->translation
             ),
-            
+
             'description' => $this->whenLoaded(
                 'translations',
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
-            
+
             'variants'          => ActivityVariantResource::collection($this->whenLoaded('variants')),
             'location'          => new LocationResource($this->whenLoaded('location')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),

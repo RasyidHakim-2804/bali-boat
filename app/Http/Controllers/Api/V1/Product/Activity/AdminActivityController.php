@@ -25,7 +25,7 @@ class AdminActivityController extends Controller
     {
         $this->permissionService = new AdminPermissionService('activity');
     }
-    
+
     public function index()
     {
         return AdminActivityListResource::collection(
@@ -66,6 +66,7 @@ class AdminActivityController extends Controller
             $activity->is_active    = $request->is_active;
             $activity->max_person   = $request->max_person;
             $activity->location_id  = $request->location_id;
+            $activity->rating       = $request->rating;
             $activity->save();
 
             $activity->tags()->attach($request->tags);
@@ -74,7 +75,7 @@ class AdminActivityController extends Controller
             $activity->itineraries()->attach($this->generatePosition($request->itineraries));
 
             $this->setDefaultVariant($activity, $request);
-            
+
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
             }
@@ -90,7 +91,7 @@ class AdminActivityController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
+
             return $this->errorServer($e->getMessage());
         }
     }
@@ -104,6 +105,7 @@ class AdminActivityController extends Controller
             $activity->is_active    = $request->is_active;
             $activity->max_person   = $request->max_person;
             $activity->location_id  = $request->location_id;
+            $activity->rating       = $request->rating;
             $activity->save();
 
             $activity->tags()->sync($request->tags);
@@ -112,7 +114,7 @@ class AdminActivityController extends Controller
             $activity->itineraries()->sync($this->generatePosition($request->itineraries));
 
             $this->setDefaultVariant($activity, $request);
-            
+
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
             }
@@ -128,7 +130,7 @@ class AdminActivityController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
+
             return $this->errorServer($e->getMessage());
         }
     }
@@ -152,7 +154,7 @@ class AdminActivityController extends Controller
             foreach ($activity->variants as $variant) {
                 $variant->delete();
             }
-            
+
             $activity->tags()->detach();
             $activity->includes()->detach();
             $activity->excludes()->detach();
@@ -167,7 +169,7 @@ class AdminActivityController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
+
             return $this->errorServer($e->getMessage());
         }
     }

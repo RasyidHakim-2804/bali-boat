@@ -26,11 +26,12 @@ class FastBoatRequest extends FormRequest
         } else {
             $ruleImage = 'required|mimes:png,jpg|max:2048';
         }
-        
+
         return [
             'name'      => 'required|string|max:255',
             'is_active' => 'required|boolean',
             'image'     => $ruleImage,
+            'rating'    => 'required|numeric|min:0|max:5',
         ];
     }
 }

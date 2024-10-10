@@ -30,6 +30,7 @@ class AdminActivityDetailResource extends JsonResource
             ),
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
+            'rating'            => $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'location'          => new LocationResource($this->location),
@@ -43,7 +44,7 @@ class AdminActivityDetailResource extends JsonResource
             'description'       => ActivityTranslationsResource::collection(
                 $this->translations->where('field', 'description')
             ),
-                                    
+
             'excludes'          => ListExcludeResource::collection($this->excludes),
             'includes'          => ListIncludeResource::collection($this->includes),
             'itineraries'       => ListItineraryResource::collection($this->itineraries),

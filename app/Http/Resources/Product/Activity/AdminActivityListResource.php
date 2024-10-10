@@ -25,6 +25,7 @@ class AdminActivityListResource extends JsonResource
             'slug'          => $this->slug,
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
+            'rating'            => $this->rating,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
         ];

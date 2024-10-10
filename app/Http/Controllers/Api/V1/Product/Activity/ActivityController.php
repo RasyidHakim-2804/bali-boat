@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Product\Activity;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\InactiveActivityCalender\TopActivityDateRequest;
 use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\Activity\ActivityResource;
 use App\Models\Activity;
+use App\Models\InactiveActivityCalender;
 use App\Traits\JsonResponsesTrait;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -71,5 +73,22 @@ class ActivityController extends Controller
         ->get();
 
         return ActivityResource::collection($privateBoats);
+    }
+
+    public function validateDate(Activity $activity, TopActivityDateRequest $request)
+    {
+        if (!InactiveActivityCalender::where('date', $request->date)->where('product_id', $activity->id)->exists()) {
+            return $this->successResponse();
+        }
+
+        if (app()->getLocale() == 'id') {
+            return $this->errorMessage(
+                'Mohon maaf, tanggal yang anda minta tidak aktif. Coba pesan di tanggal lain'
+            );
+        } else {
+            return $this->errorMessage(
+                'Sorry, the date you requested is not active. Try to book on another date'
+            );
+        }
     }
 }

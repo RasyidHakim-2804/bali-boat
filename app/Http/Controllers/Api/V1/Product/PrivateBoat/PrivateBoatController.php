@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1\Product\PrivateBoat;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\InactivePrivateBoatCalender\TopPrivateBoatDateRequest;
 use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\PrivateBoat\PrivateBoatResource;
+use App\Models\InactivePrivateBoatCalender;
 use App\Models\PrivateBoat;
 use App\Traits\JsonResponsesTrait;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -68,5 +70,23 @@ class PrivateBoatController extends Controller
         ->get();
 
         return PrivateBoatResource::collection($privateBoats);
+    }
+
+
+    public function validateDate(PrivateBoat $privateBoat, TopPrivateBoatDateRequest $request)
+    {
+        if (!InactivePrivateBoatCalender::where('date', $request->date)->where('product_id', $privateBoat->id)->exists()) {
+            return $this->successResponse();
+        }
+
+        if (app()->getLocale() == 'id') {
+            return $this->errorMessage(
+                'Mohon maaf, tanggal yang anda minta tidak aktif. Coba pesan di tanggal lain'
+            );
+        } else {
+            return $this->errorMessage(
+                'Sorry, the date you requested is not active. Try to book on another date'
+            );
+        }
     }
 }

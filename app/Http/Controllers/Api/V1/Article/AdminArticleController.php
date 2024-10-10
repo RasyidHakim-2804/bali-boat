@@ -27,15 +27,6 @@ class AdminArticleController extends Controller
 
     public function index()
     {
-        Article::where('id', '>', 0)->update(['admin_id' => 1]);
-
-        // foreach ($articles as $key => $article) {
-        //     $this->saveArticleTranslation($article->id, 'body', 'en', $article->body);
-        //     $this->saveArticleTranslation($article->id, 'meta', 'en', $article->meta);
-        // }
-
-        // $this->permissionService->check('view');
-
         return AdminArticleResource::collection(Article::latest()->with(['bodyTranslations', 'metaTranslations', 'author'])->paginate(25));
     }
 

@@ -64,6 +64,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->name             = $request->name;
             $privateBoat->is_active        = $request->is_active;
             $privateBoat->max_person       = $request->max_person;
+            $privateBoat->rating           = $request->rating;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
 
@@ -102,6 +103,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->is_active        = $request->is_active;
             $privateBoat->max_person       = $request->max_person;
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
+            $privateBoat->rating           = $request->rating;
             $privateBoat->save();
 
             $privateBoat->includes()->sync($this->generatePosition($request->includes));

@@ -31,6 +31,8 @@ class AdminInactiveActivityCalenderController extends Controller
 
         try {
             if (isset($request->dates)) {
+                InactiveActivityCalender::whereNotIn('date', $request->dates)->delete();
+
                 foreach ($request->dates as $key => $date) {
                     $calender             = InactiveActivityCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();
                     $calender->product_id = $request->product_id;

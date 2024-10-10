@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Article;
 
+use App\Http\Resources\Admin\AdminResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ArticleResource extends JsonResource
@@ -18,6 +19,7 @@ class ArticleResource extends JsonResource
             'meta'          => ArticleTranslationResource::collection($this->metaTranslations),
             'total_view'    => $this->total_view,
             'image'         => $this->imageUrl('image'),
+            'author'        => new AdminResource($this->author),
             // 'comments'      => ArticleCommentResource::collection($this->comments),
             'created_at'    => date("d F Y", strtotime($this->created_at)),
             'updated_at'    => $this->updated_at,

@@ -27,7 +27,7 @@ class AdminArticleController extends Controller
 
     public function index()
     {
-        Article::where('id', '>', 0)->update(['admin_id', 1]);
+        Article::where('id', '>', 0)->update(['admin_id' => 1]);
 
         // foreach ($articles as $key => $article) {
         //     $this->saveArticleTranslation($article->id, 'body', 'en', $article->body);

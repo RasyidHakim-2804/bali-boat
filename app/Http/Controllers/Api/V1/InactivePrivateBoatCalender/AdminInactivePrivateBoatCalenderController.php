@@ -30,6 +30,8 @@ class AdminInactivePrivateBoatCalenderController extends Controller
         // DB::beginTransaction();
 
         try {
+            InactivePrivateBoatCalender::whereNotIn('date', $request->dates)->delete();
+
             if (isset($request->dates)) {
                 foreach ($request->dates as $key => $date) {
                     $calender             = InactivePrivateBoatCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();

@@ -59,7 +59,11 @@ class PrivateBoatController extends Controller
 
     public function top()
     {
-        $privateBoats = PrivateBoat::with([
+        $privateBoats = QueryBuilder::for(PrivateBoat::class)
+        ->allowedFilters([
+            AllowedFilter::scope('date'),
+        ])
+        ->with([
             'tags.translations'     => fn($query) => $query->language(),
             'thumbnailImage',
             'pickupHarbor'

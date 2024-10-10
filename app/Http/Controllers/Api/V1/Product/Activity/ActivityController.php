@@ -62,7 +62,11 @@ class ActivityController extends Controller
 
     public function top()
     {
-        $privateBoats = Activity::with([
+        $activities = QueryBuilder::for(Activity::class)
+        ->allowedFilters([
+            AllowedFilter::scope('date')
+        ])
+        ->with([
             'tags.translations' => fn($query) => $query->language(),
             'thumbnailImage',
             'location'
@@ -72,7 +76,7 @@ class ActivityController extends Controller
         ->limit(3)
         ->get();
 
-        return ActivityResource::collection($privateBoats);
+        return ActivityResource::collection($activities);
     }
 
     public function validateDate(Activity $activity, TopActivityDateRequest $request)

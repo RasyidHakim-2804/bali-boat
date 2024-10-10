@@ -34,6 +34,11 @@ class Article extends Model
         return $this->belongsTo(ArticleCategory::class, 'category_id', 'id');
     }
 
+    public function author()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id', 'id');
+    }
+
     public function titleTranslations()
     {
         return $this->hasMany(ArticleTranslation::class, 'article_id', 'id')->where('field', 'title');

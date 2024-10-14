@@ -42,12 +42,12 @@ class UserRegisterVerificationNotification extends Notification
 
         $subject    = ' - User Registration Verification';
         $button     = 'Verify';
-        $line       = 'Your account has email changes request to this email. Please verify this email by click "Verify" button to make the email changes successful.';
+        $line       = 'Your account registration almost done. Please click "Verify" button to verify your email';
 
         if ($lang == 'id') {
             $subject    = ' - Verifikasi Pendaftaran';
             $button     = 'Verifikasi';
-            $line       = 'Anda melakukan permintaan untuk mengganti email akun anda ke email ini. Mohon melakukan verifikasi email dengan meng-klik tombol "Verifikasi" agar pergantian email berhasil.';
+            $line       = 'Pendaftaran akun anda hampir selesai. Mohon klik tombol "Verifikasi" untuk memverifikasi email anda.';
         }
 
         return (new MailMessage)

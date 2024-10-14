@@ -26,17 +26,23 @@ class OrderPaymentEmailService
         if ($type == 'fast_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/orders/fast-boats/' . $order->uuid;
+
             $user->notify(new FastBoatOrderPaidNotification($data));
         }
 
         if ($type == 'private_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/orders/private-boats/' . $order->uuid;
+
             $user->notify(new PrivateBoatOrderPaidNotification($data));
         }
 
         if ($type == 'activity') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $order->uuid;
+
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/orders/tour/' . $order->uuid;
 
             $user->notify(new ActivityOrderPaidNotification($data));
         }
@@ -76,17 +82,23 @@ class OrderPaymentEmailService
         if ($type == 'fast_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/orders/fast-boats/' . $order->uuid;
+
             $user->notify(new FastBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'private_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/orders/private-boats/' . $order->uuid;
+
             $user->notify(new PrivateBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'activity') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $order->uuid;
+
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/orders/tour/' . $order->uuid;
 
             $user->notify(new ActivityOrderExpiredNotification($data));
         }

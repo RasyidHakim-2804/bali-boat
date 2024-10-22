@@ -101,7 +101,7 @@ class PrivateBoat extends Model
 
     public function scopeDate($query, $date)
     {
-        $query->whereDoesntHave('inactiveCalender', function ($query) use ($date) {
+        $query->with('inactiveCalender', function ($query) use ($date) {
             $query->where('date', $date);
         });
     }

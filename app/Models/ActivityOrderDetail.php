@@ -25,7 +25,7 @@ class ActivityOrderDetail extends Model
     ];
 
     protected $imageSetting = [
-        'folder' => 'product',
+        'folder' => 'activities',
         'field'  => [
             'image',
         ],

@@ -21,7 +21,7 @@ class FastBoatOrderDetailResource extends JsonResource
             'departure_time'            => $this->departure_time,
             'arrival_time'              => $this->arrival_time,
             'name'                      => $this->name,
-            'rating'                    => $this->product?->rating,
+            'rating'                    => $this->product,
             'passenger_type'            => $this->passenger_type,
             'age_type'                  => $this->age_type,
             'quantity'                  => $this->quantity,

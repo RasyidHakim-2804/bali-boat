@@ -25,7 +25,7 @@ class FastBoatOrderDetail extends Model
     ];
 
     protected $imageSetting = [
-        'folder' => 'product',
+        'folder' => 'fast_boats',
         'field'  => [
             'image',
         ],

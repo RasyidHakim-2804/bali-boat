@@ -39,7 +39,7 @@ class AdminPrivateBoatImageController extends Controller
 
             $privateBoatImage   = new PrivateBoatImage();
             $imageService  = new ImageService($privateBoatImage->imagePath(), $request->image);
-            $imageService->save();          
+            $imageService->save();
 
             $privateBoatImage->private_boat_id  = $privateBoat->id;
             $privateBoatImage->image      = $imageService->getImageName();
@@ -53,7 +53,7 @@ class AdminPrivateBoatImageController extends Controller
             );
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
 
             throw $th;
@@ -67,10 +67,8 @@ class AdminPrivateBoatImageController extends Controller
 
             $imagesId       = $request->validated('images_id');
             $savedImages    = $privateBoat->images()->whereIn('id', $imagesId)->get();
-            $unsavedImages  = $privateBoat->images()->whereNotIn('id', $imagesId)->get();                                                                   
+            $unsavedImages  = $privateBoat->images()->whereNotIn('id', $imagesId)->get();
 
-            $privateBoat->images()->whereNotIn('id', $imagesId)->delete(); 
-            
             foreach ($imagesId as $position => $id) {
                 $image           = $savedImages->where('id', '=', $id)->firstOrFail();
                 $image->position = $position + 1;
@@ -78,20 +76,26 @@ class AdminPrivateBoatImageController extends Controller
             }
 
             foreach ($unsavedImages as $unsavedImage) {
-                $imageService = new ImageService($unsavedImage->imagePath());
-                $imageService->delete($unsavedImage->image);
+                if ($unsavedImage->privateBoatOrderDetails()->exists()) {
+                    $unsavedImage->delete();
+                } else {
+                    $unsavedImage->forceDelete();
+                    $imageService = new ImageService($unsavedImage->imagePath());
+                    $imageService->delete($unsavedImage->image);
+                }
+
             }
 
-            DB::commit();            
+            DB::commit();
 
             return $this->successResponse();
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
-            
+
             throw $th;
         }
-            
+
     }
 }

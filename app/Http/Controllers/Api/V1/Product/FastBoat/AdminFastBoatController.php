@@ -117,8 +117,10 @@ class AdminFastBoatController extends Controller
                 $schedule->variants()->delete();
             }
 
-            $imageService = new ImageService($fastBoat->imagePath());
-            $imageService->delete($fastBoat->image);
+            if (!$fastBoat->fastBoatOrderDetailsByImage()->exists()) {
+                $imageService = new ImageService($fastBoat->imagePath());
+                $imageService->delete($fastBoat->image);
+            }
 
             $fastBoat->schedules()->delete();
             $fastBoat->delete();
@@ -140,7 +142,7 @@ class AdminFastBoatController extends Controller
     {
         $image = new ImageService($fastBoat->imagePath());
 
-        if ($fastBoat->image) {
+        if ($fastBoat->image && !$fastBoat->fastBoatOrderDetailsByImage()->exists()) {
             $image->delete($fastBoat->image);
         }
 

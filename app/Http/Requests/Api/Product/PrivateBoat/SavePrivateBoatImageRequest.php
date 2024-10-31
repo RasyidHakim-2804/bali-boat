@@ -24,9 +24,8 @@ class SavePrivateBoatImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images_id'      => 'array|required|max:5',
+            'images_id'      => 'array|nullable|max:4',
             'images_id.*'    => [
-                'required',
                 'numeric',
                 'distinct',
                 'min:1',

@@ -39,7 +39,7 @@ class AdminActivityImageController extends Controller
 
             $activityImage = new ActivityImage();
             $imageService  = new ImageService($activityImage->imagePath(), $request->image);
-            $imageService->save();          
+            $imageService->save();
 
             $activityImage->activity_id  = $activity->id;
             $activityImage->image        = $imageService->getImageName();
@@ -53,7 +53,7 @@ class AdminActivityImageController extends Controller
             );
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
 
             throw $th;
@@ -67,10 +67,8 @@ class AdminActivityImageController extends Controller
 
             $imagesId       = $request->validated('images_id');
             $savedImages    = $activity->images()->whereIn('id', $imagesId)->get();
-            $unsavedImages  = $activity->images()->whereNotIn('id', $imagesId)->get();                                                                   
+            $unsavedImages  = $activity->images()->whereNotIn('id', $imagesId)->get();
 
-            $activity->images()->whereNotIn('id', $imagesId)->delete(); 
-            
             foreach ($imagesId as $position => $id) {
                 $image           = $savedImages->where('id', '=', $id)->firstOrFail();
                 $image->position = $position + 1;
@@ -78,20 +76,25 @@ class AdminActivityImageController extends Controller
             }
 
             foreach ($unsavedImages as $unsavedImage) {
-                $imageService = new ImageService($unsavedImage->imagePath());
-                $imageService->delete($unsavedImage->image);
+                if ($unsavedImage->activityOrderDetailsByImage()->exists()) {
+                    $unsavedImage->delete();
+                } else {
+                    $unsavedImage->forceDelete();
+                    $imageService = new ImageService($unsavedImage->imagePath());
+                    $imageService->delete($unsavedImage->image);
+                }
             }
 
-            DB::commit();            
+            DB::commit();
 
             return $this->successResponse();
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
-            
+
             throw $th;
         }
-            
+
     }
 }

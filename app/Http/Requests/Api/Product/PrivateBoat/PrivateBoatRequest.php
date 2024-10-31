@@ -33,7 +33,7 @@ class PrivateBoatRequest extends FormRequest
 
         $rule = [
             'name'              => 'required|string|max:100',
-            'price'             => 'required|numeric|min:0',
+            'price'             => 'required|integer|min:0',
             'is_active'         => 'required|boolean',
             'rating'            => 'required|integer|min:0|max:5',
             'max_person'        => 'required|integer|min:1',

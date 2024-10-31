@@ -44,4 +44,9 @@ class FastBoat extends Model
     {
         return $query->where('name', 'LIKE','%' . $search . '%');
     }
+
+    public function fastBoatOrderDetailsByImage()
+    {
+        return $this->hasMany(FastBoatOrderDetail::class, 'image', 'image');
+    }
 }

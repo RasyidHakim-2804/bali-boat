@@ -76,7 +76,7 @@ class AdminPrivateBoatImageController extends Controller
             }
 
             foreach ($unsavedImages as $unsavedImage) {
-                if ($unsavedImage->privateBoatOrderDetails()->exists()) {
+                if ($unsavedImage->privateBoatOrderDetailsByImage()->exists()) {
                     $unsavedImage->delete();
                 } else {
                     $unsavedImage->forceDelete();

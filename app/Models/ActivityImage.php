@@ -23,7 +23,7 @@ class ActivityImage extends Model
         $query->where('position', '!=', null);
     }
 
-    public function activityOrderDetails()
+    public function activityOrderDetailsByImage()
     {
         return $this->hasMany(ActivityOrderDetail::class, 'image', 'image');
     }

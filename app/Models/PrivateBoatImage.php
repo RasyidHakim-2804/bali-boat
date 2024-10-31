@@ -24,7 +24,7 @@ class PrivateBoatImage extends Model
         $query->where('position', '!=', null);
     }
 
-    public function privateBoatOrderDetails()
+    public function privateBoatOrderDetailsByImage()
     {
         return $this->hasMany(PrivateBoatOrderDetail::class, 'image', 'image');
     }

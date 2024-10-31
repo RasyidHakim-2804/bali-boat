@@ -76,7 +76,7 @@ class AdminActivityImageController extends Controller
             }
 
             foreach ($unsavedImages as $unsavedImage) {
-                if ($unsavedImage->activityOrderDetails()->exists()) {
+                if ($unsavedImage->activityOrderDetailsByImage()->exists()) {
                     $unsavedImage->delete();
                 } else {
                     $unsavedImage->forceDelete();

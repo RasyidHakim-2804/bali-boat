@@ -22,8 +22,8 @@ class AdminPrivateBoatListResource extends JsonResource
             'name'              => $this->name,
             'price'             => $this->whenLoaded(
                 'defaultVariant',
-                fn() => (int) $this->defaultVariant->price,
-                (int) $this->price
+                fn() => (string) (int) $this->defaultVariant->price,
+                (string) (int) $this->price
             ),
             'slug'              => $this->slug,
             'is_active'         => $this->is_active,

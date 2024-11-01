@@ -24,11 +24,11 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'slug'              => $this->slug,
             'price'         => $this->whenLoaded(
                 'defaultVariant',
-                fn() => $this->defaultVariant->price,
-                $this->price
+                fn() => (int) $this->defaultVariant->price,
+                (int) $this->price
             ),
             'is_active'         => $this->is_active,
-            'rating'            => $this->rating,
+            'rating'            => (int) $this->rating,
             'max_person'        => $this->max_person,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,

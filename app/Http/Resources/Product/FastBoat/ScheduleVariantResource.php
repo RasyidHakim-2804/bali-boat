@@ -19,7 +19,7 @@ class ScheduleVariantResource extends JsonResource
             'fast_boat_schedule_id'  => $this->fast_boat_schedule_id ,
             'passenger_type'         => $this->passenger_type,
             'age_type'               => $this->age_type,
-            'price'                  => $this->price,
+            'price'                  => (int) $this->price,
             'created_at'             => $this->created_at,
             'updated_at'             => $this->updated_at
         ];

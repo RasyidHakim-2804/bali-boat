@@ -29,7 +29,7 @@ class PrivateBoatResource extends JsonResource
 
             'price'     => $this->when(
                 $this->price != null,
-                (int) $this->price
+                (string) (int) $this->price
             ),
             'is_day_off'        => $this->when(
                 $this->relationLoaded('inactiveCalender'),

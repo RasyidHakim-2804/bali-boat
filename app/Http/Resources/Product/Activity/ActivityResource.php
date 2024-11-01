@@ -31,8 +31,8 @@ class ActivityResource extends JsonResource
 
             'price'         => $this->whenLoaded(
                 'defaultVariant',
-                fn() => (int) $this->defaultVariant->price,
-                (int) $this->price
+                fn() => (string) (int) $this->defaultVariant->price,
+                (string) (int) $this->price
             ),
 
             'highlight' => $this->whenLoaded(

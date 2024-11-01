@@ -19,7 +19,7 @@ class FastBoatResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'image'             => $this->imageUrl('image'),
-            'rating'            => (int) $this->rating,
+            'rating'            => (string) (int) $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'schedules'     => ScheduleResource::collection($this->whenLoaded('schedules'))

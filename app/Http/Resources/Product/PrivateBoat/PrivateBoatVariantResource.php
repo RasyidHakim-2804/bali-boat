@@ -18,7 +18,7 @@ class PrivateBoatVariantResource extends JsonResource
             'id'                => $this->id,
             'private_boat_id'   => $this->private_boat_id,
             'is_default'        => $this->is_default,
-            'price'             => (int) $this->price,
+            'price'             => (string) (int) $this->price,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at
         ];

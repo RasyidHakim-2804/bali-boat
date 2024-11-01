@@ -25,14 +25,14 @@ class ActivityResource extends JsonResource
             'slug'              => $this->slug,
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
-            'rating'            => $this->rating,
+            'rating'            => (int) $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
 
             'price'         => $this->whenLoaded(
                 'defaultVariant',
-                fn() => $this->defaultVariant->price,
-                $this->price
+                fn() => (int) $this->defaultVariant->price,
+                (int) $this->price
             ),
 
             'highlight' => $this->whenLoaded(

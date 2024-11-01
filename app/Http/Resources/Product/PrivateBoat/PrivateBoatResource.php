@@ -22,14 +22,14 @@ class PrivateBoatResource extends JsonResource
             'name'              => $this->name,
             'slug'              => $this->slug,
             'is_active'         => $this->is_active,
-            'rating'            => $this->rating,
+            'rating'            => (int) $this->rating,
             'max_person'        => $this->max_person,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
 
             'price'     => $this->when(
                 $this->price != null,
-                $this->price
+                (int) $this->price
             ),
             'is_day_off'        => $this->when(
                 $this->relationLoaded('inactiveCalender'),

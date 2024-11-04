@@ -48,7 +48,6 @@ class UserFastBoatOrderController extends Controller
             'user',
             'details',
             'details.product',
-            'details.product.tags.translations' => fn($query) => $query->language(),
             'payment',
             'forms'
         ]));

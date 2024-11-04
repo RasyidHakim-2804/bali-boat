@@ -34,7 +34,12 @@ class GuestActivityOrderController extends Controller
     
     public function show(ActivityOrder $activityOrder)
     {
-        $order = new ActivityOrderResource($activityOrder);
+        $order = new ActivityOrderResource($activityOrder->load([
+            'details',
+            'details.product',
+            'details.product.tags',
+            'details.product.tags.translations' => fn($query) => $query->language(),
+        ]));
 
         return $this->successGet($order);
     }

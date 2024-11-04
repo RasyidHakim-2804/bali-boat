@@ -34,7 +34,14 @@ class GuestFastBoatOrderController extends Controller
     
     public function show(FastBoatOrder $fastBoatOrder)
     {
-        $order = new FastBoatOrderResource($fastBoatOrder->load('details', 'payment', 'forms'));
+        $order = new FastBoatOrderResource($fastBoatOrder->load([
+            'user',
+            'details',
+            'details.product',
+            'details.product.tags.translations' => fn($query) => $query->language(),
+            'payment',
+            'forms'
+        ]));
 
         return $this->successGet($order);
     }

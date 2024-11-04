@@ -57,7 +57,7 @@
             hr {
                 border-color: #dddddd;
             }
-            
+
             .header {
                 text-align: left;
                 padding-bottom: 10px;
@@ -109,7 +109,7 @@
                 <div class="title font-bold block">E-Ticket Fast Boat</div>
                 <div class="inline-block">
                     <div class="inline opacity-light">Order ID:</div>
-                    <div class="inline font-bold"> {{ $fastBoatOrder['user']['uuid']}}</div>
+                    <div class="inline font-bold"> {{ $fastBoatOrder['uuid']}}</div>
                 </div>
             </div>
 
@@ -120,12 +120,12 @@
                 <div class="card">
                     <div class="font-bold opacity-light">Departure</div>
                     <br>
-                    
+
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Ship Name</div>
                         <div class="font-bold">{{ $fastBoatOrder->details->first()->name}}</div>
                     </div>
-                    
+
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Date</div>
                         <div class="font-bold">{{ $fastBoatOrder->activity_date}}</div>
@@ -140,19 +140,19 @@
                         <div class="font-tiny opacity-light">Destination</div>
                         <div class="font-bold">{{ $fastBoatOrder->details->first()->departure_harbor_name}} - {{ $fastBoatOrder->details->first()->arrival_harbor_name}}</div>
                     </div>
-                                    
+
                 </div>
 
                 @if ($fastBoatOrder->details->count() > 1)
                 <div class="card">
                     <div class="font-bold opacity-light">Return</div>
                     <br>
-                    
+
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Ship Name</div>
                         <div class="font-bold">{{ $fastBoatOrder->details->last()->name}}</div>
                     </div>
-                    
+
                     <div class="mb-1">
                         <div class="font-tiny opacity-light">Date</div>
                         <div class="font-bold">{{ $fastBoatOrder->activity_date }}</div>
@@ -167,7 +167,7 @@
                         <div class="font-tiny opacity-light">Destination</div>
                         <div class="font-bold">{{ $fastBoatOrder->details->last()->departure_harbor_name}} - {{ $fastBoatOrder->details->last()->arrival_harbor_name}}</div>
                     </div>
-                                    
+
                 </div>
                 @endif
             </div>
@@ -185,17 +185,17 @@
                             <div class="card" style="page-break-before:auto;">
                                 <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
-                                
+
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Full Name</div>
                                     <div class="font-bold">{{$forms->name}}</div>
                                 </div>
-        
+
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Nationality</div>
                                     <div class="font-bold">{{$forms->nationality}}</div>
                                 </div>
-        
+
                                 <div>
                                     <div class="font-tiny opacity-light">ITAS Holder</div>
                                     <div class="font-bold">
@@ -213,17 +213,17 @@
                             <div class="card" style="page-break-before:auto;">
                                 <div class="font-bold opacity-light">Passenger {{$loop->index+1}} - {{$forms->age_type}}</div>
                                 <br>
-                                
+
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Full Name</div>
                                     <div class="font-bold">{{$forms->name}}</div>
                                 </div>
-        
+
                                 <div class="mb-1">
                                     <div class="font-tiny opacity-light">Nationality</div>
                                     <div class="font-bold">{{$forms->nationality}}</div>
                                 </div>
-        
+
                                 <div>
                                     <div class="font-tiny opacity-light">ITAS Holder</div>
                                     <div class="font-bold">

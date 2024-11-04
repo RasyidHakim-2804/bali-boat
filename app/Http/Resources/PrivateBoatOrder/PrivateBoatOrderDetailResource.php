@@ -17,6 +17,7 @@ class PrivateBoatOrderDetailResource extends JsonResource
             'price'                     => $this->price,
             'total_price'               => $this->total_price,
             'image'                     => $this->imageUrl('image'),
+            'product_tags'              => $this->product->tags,
             'created_at'                => $this->created_at,
         ];
     }

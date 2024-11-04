@@ -34,7 +34,12 @@ class GuestPrivateBoatOrderController extends Controller
     
     public function show(PrivateBoatOrder $privateBoatOrder)
     {
-        $order = new PrivateBoatOrderResource($privateBoatOrder);
+        $order = new PrivateBoatOrderResource($privateBoatOrder->load([
+            'details',
+            'details.product',
+            'details.product.tags',
+            'details.product.tags.translations' => fn($query) => $query->language(),
+        ]));
 
         return $this->successGet($order);
     }

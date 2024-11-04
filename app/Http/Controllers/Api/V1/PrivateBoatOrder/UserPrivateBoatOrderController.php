@@ -38,7 +38,7 @@ class UserPrivateBoatOrderController extends Controller
     
     public function show(User $user, PrivateBoatOrder $privateBoatOrder)
     {
-        $order = new PrivateBoatOrderResource($privateBoatOrder->load('products', 'product.tags'));
+        $order = new PrivateBoatOrderResource($privateBoatOrder->load('details','details.products', 'details.product.tags'));
 
         return $this->successGet($order);
     }

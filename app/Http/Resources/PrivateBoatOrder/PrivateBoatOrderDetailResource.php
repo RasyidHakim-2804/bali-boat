@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\PrivateBoatOrder;
 
+use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PrivateBoatOrderDetailResource extends JsonResource
@@ -17,7 +18,7 @@ class PrivateBoatOrderDetailResource extends JsonResource
             'price'                     => $this->price,
             'total_price'               => $this->total_price,
             'image'                     => $this->imageUrl('image'),
-            'product_tags'              => $this->product->tags,
+            'product_tags'              => ListTagResource::collection($this->product->tags),
             'created_at'                => $this->created_at,
         ];
     }

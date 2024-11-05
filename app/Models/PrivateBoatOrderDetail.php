@@ -25,7 +25,7 @@ class PrivateBoatOrderDetail extends Model
     ];
 
     protected $imageSetting = [
-        'folder' => 'product',
+        'folder' => 'private_boats',
         'field'  => [
             'image',
         ],

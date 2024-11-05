@@ -44,21 +44,21 @@ class PrivateBoatOrderCreatedNotification extends Notification
     {
         $lang = $this->data['language'];
 
-        $subject    = ' - New Private Boat Order';
-        $button     = 'Payment';
-        $line       = 'Your fast boat order was successfully created. Please complete the payment by clicking the "Payment" button. Thankyou.';
+        $subject    = ' - New Private Boat Inquiry';
+        $button     = 'Inquiry Detail';
+        $line       = 'Your private boat inquiry was successfully created. We will process your order inquiry as soon as possible. Thankyou.';
 
         if ($lang == 'id') {
-            $subject    = ' - Order Private Boat Baru';
-            $button     = 'Pembayaran';
-            $line       = 'Order "Private Boat" anda berhasil terbuat. Mohon untuk menyelesaikan pembayaran dengan meng-klik tombol "Pembayaran". Terimakasih.';
+            $subject    = ' - Permintaan Private Boat Baru';
+            $button     = 'Detil Permintaan';
+            $line       = 'Permintaan "Private Boat" anda berhasil terbuat. Kami akan memproses pesanan anda segera. Terimakasih.';
         }
 
         return (new MailMessage)
             ->subject(env('APP_EMAIL_COMPANY') . $subject)
             ->greeting('Hi ' . $this->data['first_name'] . ',')
             ->line($line)
-            ->action($button, url($this->data['payment_url']));
+            ->action($button, url($this->data['order_url']));
     }
 
     /**

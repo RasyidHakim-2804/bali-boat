@@ -27,23 +27,14 @@ class AdminArticleController extends Controller
 
     public function index()
     {
-        // $articles = Article::all();
-
-        // foreach ($articles as $key => $article) {
-        //     $this->saveArticleTranslation($article->id, 'body', 'en', $article->body);
-        //     $this->saveArticleTranslation($article->id, 'meta', 'en', $article->meta);
-        // }
-
-        // $this->permissionService->check('view');
-
-        return AdminArticleResource::collection(Article::latest()->with(['bodyTranslations', 'metaTranslations'])->paginate(25));
+        return AdminArticleResource::collection(Article::latest()->with(['bodyTranslations', 'metaTranslations', 'author'])->paginate(25));
     }
 
     public function show(Article $article)
     {
         // $this->permissionService->check('view');
 
-        $article = new AdminArticleResource($article);
+        $article = new AdminArticleResource($article->load('titleTranslations', 'tagTranslations', 'bodyTranslations', 'metaTranslations', 'author'));
     
         return $this->successGet($article);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\FastBoatOrder;
 
+use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FastBoatOrderDetailResource extends JsonResource
@@ -21,6 +22,7 @@ class FastBoatOrderDetailResource extends JsonResource
             'departure_time'            => $this->departure_time,
             'arrival_time'              => $this->arrival_time,
             'name'                      => $this->name,
+            'rating'                    => $this->product?->rating,
             'passenger_type'            => $this->passenger_type,
             'age_type'                  => $this->age_type,
             'quantity'                  => $this->quantity,

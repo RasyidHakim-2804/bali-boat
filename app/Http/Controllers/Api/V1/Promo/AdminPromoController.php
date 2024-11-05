@@ -22,6 +22,12 @@ class AdminPromoController extends Controller
         return PromoResource::collection(Promo::orderBy('id', 'DESC')->paginate(25));
     }
 
+    public function list()
+    {
+        return PromoResource::collection(Promo::orderBy('code', 'ASC')->get());
+    }
+
+
     public function show(Promo $promo)
     {
         $promo = new PromoResource($promo->load('days'));
@@ -42,7 +48,7 @@ class AdminPromoController extends Controller
 
             $promo->save();
 
-            $this->saveDays($promo->id, $request->days);
+            if ($request->is_all_day == 0) $this->saveDays($promo->id, $request->days);
 
             DB::commit();
 
@@ -71,7 +77,7 @@ class AdminPromoController extends Controller
 
             $promo->save();
 
-            $this->saveDays($promo->id, $request->days);
+            if ($request->is_all_day == 0) $this->saveDays($promo->id, $request->days);
             
             DB::commit();
 

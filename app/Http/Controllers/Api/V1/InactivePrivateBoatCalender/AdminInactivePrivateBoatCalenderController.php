@@ -29,15 +29,19 @@ class AdminInactivePrivateBoatCalenderController extends Controller
     {
         // DB::beginTransaction();
 
-        InactivePrivateBoatCalender::where('product_id', $request->product_id)->delete();
-
         try {
-            foreach ($request->dates as $key => $date) {
-                $calender             = new InactivePrivateBoatCalender();
-                $calender->product_id = $request->product_id;
-                $calender->date       = $date;
+            InactivePrivateBoatCalender::whereNotIn('date', $request->dates)->delete();
 
-                $calender->save();
+            if (isset($request->dates)) {
+                foreach ($request->dates as $key => $date) {
+                    $calender             = InactivePrivateBoatCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();
+                    $calender->product_id = $request->product_id;
+                    $calender->date       = $date;
+
+                    $calender->save();
+                }
+            } else {
+                InactivePrivateBoatCalender::where('product_id', $request->product_id)->whereMonth('date', $request->month)->whereYear('date', $request->year)->delete();
             }
 
             DB::commit();

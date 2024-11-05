@@ -38,7 +38,12 @@ class UserPrivateBoatOrderController extends Controller
     
     public function show(User $user, PrivateBoatOrder $privateBoatOrder)
     {
-        $order = new PrivateBoatOrderResource($privateBoatOrder);
+        $order = new PrivateBoatOrderResource($privateBoatOrder->load([
+            'details',
+            'details.product',
+            'details.product.tags',
+            'details.product.tags.translations' => fn($query) => $query->language(),
+        ]));
 
         return $this->successGet($order);
     }
@@ -54,7 +59,7 @@ class UserPrivateBoatOrderController extends Controller
 
         $this->checkProductAvailability($request);
 
-        // $this->checkFormValidity($request);
+        $this->checkFormValidity($request);
 
         // $this->checkFormQuantity($request);
 
@@ -65,13 +70,13 @@ class UserPrivateBoatOrderController extends Controller
 
             (new PrivateBoatOrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
 
-            // (new PrivateBoatOrderRegistrationService)->create($order->id, $request->forms);
+            (new PrivateBoatOrderRegistrationService)->create($order->id, $request->forms);
 
             $responseData = ['order_uuid' => $order->uuid];
 
-            (new PaymentService)->prepare()->pay($order, 'private_boat');
+            // (new PaymentService)->prepare()->pay($order, 'private_boat');
 
-            $responseData['payment_url'] = $order->payment->url;
+            // $responseData['payment_url'] = $order->payment->url;
 
             $this->sendEmail($order);
 
@@ -237,7 +242,7 @@ class UserPrivateBoatOrderController extends Controller
         $data['language']       = config('app.locale');
         $data['first_name']     = $user->first_name;
         $data['order_url']      = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
-        $data['payment_url']    = $order->payment->url;
+        // $data['payment_url']    = $order->payment->url;
         
         $user->notify(new PrivateBoatOrderCreatedNotification($data));
     }

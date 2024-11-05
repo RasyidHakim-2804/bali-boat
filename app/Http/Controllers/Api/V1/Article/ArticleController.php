@@ -19,6 +19,7 @@ class ArticleController extends Controller
             'metaTranslations'  => fn($translation) => $translation->where('language', config('app.locale')),
             'titleTranslations' => fn($translation) => $translation->where('language', config('app.locale')),
             'tagTranslations'   => fn($translation) => $translation->where('language', config('app.locale')),
+            'author'
         ])->paginate(15));
     }
 
@@ -28,7 +29,7 @@ class ArticleController extends Controller
 
         $article->save();
 
-        $article = new ArticleResource($article);
+        $article = new ArticleResource($article->load('metaTranslations', 'titleTranslations', 'tagTranslations', 'bodyTranslations', 'author'));
     
         return $this->successGet($article);
     }

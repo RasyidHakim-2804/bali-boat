@@ -25,7 +25,7 @@ class FastBoatOrderDetail extends Model
     ];
 
     protected $imageSetting = [
-        'folder' => 'product',
+        'folder' => 'fast_boats',
         'field'  => [
             'image',
         ],
@@ -40,7 +40,7 @@ class FastBoatOrderDetail extends Model
 
     public function product()
     {
-        return $this->belongsTo(FastBoatSchedule::class, 'fast_boat_id', 'id')->withTrashed();
+        return $this->belongsTo(FastBoat::class, 'fast_boat_id', 'id')->withTrashed();
     }
 
     public function variant()

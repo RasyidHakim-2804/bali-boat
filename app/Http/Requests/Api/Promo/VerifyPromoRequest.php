@@ -30,7 +30,7 @@ class VerifyPromoRequest extends FormRequest
                 'min:1',
                 Rule::exists('promos', 'code')->where('is_active', 1)->where('deleted_at', null)
             ],
-            'email' => ,
+            'email'         => 'required|email:dns,rfc',
             'activity_date' => 'required|date|after_or_equal:today'
         ];
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ActivityOrder\ActivityOrderRefundController;
 use App\Http\Controllers\Api\V1\ActivityOrder\AdminActivityOrderController;
+use App\Http\Controllers\Api\V1\ActivityOrder\GuestActivityOrderController;
 use App\Http\Controllers\Api\V1\ActivityOrder\UserActivityOrderController;
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Api\V1\FaqCategory\AdminFaqCategoryController;
 use App\Http\Controllers\Api\V1\FaqCategory\FaqCategoryController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\AdminFastBoatOrderController;
 use App\Http\Controllers\Api\V1\FastBoatOrder\FastBoatOrderRefundController;
+use App\Http\Controllers\Api\V1\FastBoatOrder\GuestFastBoatOrderController;
 use App\Http\Controllers\Api\V1\Harbor\AdminHarborController;
 use App\Http\Controllers\Api\V1\Harbor\HarborController;
 use App\Http\Controllers\Api\V1\Include\AdminIncludeController;
@@ -32,6 +34,7 @@ use App\Http\Controllers\Api\V1\InactiveActivityCalender\AdminInactiveActivityCa
 use App\Http\Controllers\Api\V1\InactiveFastBoatCalender\AdminInactiveFastBoatCalenderController;
 use App\Http\Controllers\Api\V1\InactivePrivateBoatCalender\AdminInactivePrivateBoatCalenderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\AdminPrivateBoatOrderController;
+use App\Http\Controllers\Api\V1\PrivateBoatOrder\GuestPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\PrivateBoatOrderRefundController;
 use App\Http\Controllers\Api\V1\PrivateBoatOrder\UserPrivateBoatOrderController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\AdminFastBoatController;
@@ -46,6 +49,7 @@ use App\Http\Controllers\Api\V1\Product\Activity\ActivityController;
 use App\Http\Controllers\Api\V1\Product\FastBoat\FastBoatScheduleController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoController;
 use App\Http\Controllers\Api\V1\Promo\AdminPromoHighlightController;
+use App\Http\Controllers\Api\V1\Promo\PromoHighlightController;
 use App\Http\Controllers\Api\V1\Promo\UserPromoController;
 use App\Http\Controllers\Api\V1\Tag\AdminTagController;
 use App\Http\Controllers\Api\V1\Ticket\UserTicketController;
@@ -114,6 +118,28 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     // FastBoat - ticket
     Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf']);
 
+    // FastBoat - ticket
+    Route::get('/fast-boat-orders/{fastBoatOrder}/ticket/', [UserTicketController::class, 'pdf']);
+
+    // Promo Highlight
+    Route::get('/promo-highlight', [PromoHighlightController::class, 'index']);
+    Route::get('/promo-highlight/{promo}', [PromoHighlightController::class, 'show']);
+
+    // Public - Fast Boat Order
+    Route::get('/fast-boat-orders/{fastBoatOrder}', [GuestFastBoatOrderController::class, 'show']);
+    Route::post('/fast-boat-orders', [GuestFastBoatOrderController::class, 'store']);
+    Route::post('/fast-boat-inactive-calenders', [AdminInactiveFastBoatCalenderController::class, 'index']);
+
+    // Public - Private Boat Order
+    Route::get('/private-boat-orders/{privateBoatOrder}', [GuestPrivateBoatOrderController::class, 'show']);
+    Route::post('/private-boat-orders', [GuestPrivateBoatOrderController::class, 'store']);
+    Route::post('/private-boat-inactive-calenders', [AdminInactivePrivateBoatCalenderController::class, 'index']);
+
+    // Public - Activity Order
+    Route::get('/activity-orders/{activityOrder}', [GuestActivityOrderController::class, 'show']);
+    Route::post('/activity-orders', [GuestActivityOrderController::class, 'store']);
+    Route::post('/activity-inactive-calenders', [AdminInactiveActivityCalenderController::class, 'index']);
+
     //Admin routes
     Route::prefix('admins')->middleware('verifyLanguage')->group(function () {
 
@@ -139,6 +165,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
 
             // Admin - Promo
+            Route::get('/list-promos', [AdminPromoController::class, 'list']);
             Route::resource('/promos', AdminPromoController::class);
 
             // Admin - Article

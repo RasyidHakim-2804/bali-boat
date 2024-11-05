@@ -31,7 +31,7 @@ class ActivityOrderService
         $order->status                  = 'waiting_for_payment';
         $order->pic_name                = $request->pic_name;
         $order->pic_email               = $request->pic_email;
-        $order->pic_phone_number        = $request->pic_name;
+        $order->pic_phone_number        = $request->pic_phone_number;
         $order->activity_date           = $request->activity_date;
 
         $order->save();

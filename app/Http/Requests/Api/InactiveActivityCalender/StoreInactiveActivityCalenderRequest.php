@@ -26,8 +26,10 @@ class StoreInactiveActivityCalenderRequest extends FormRequest
     {
         return [
             'product_id'    => 'required|exists:activities,id',
-            'dates'         => 'required|array',
-            'dates.*'       => ['required','date_format:Y-m-d','after_or_equal:today'],
+            'month'         => 'required|numeric|gte:1|lte:12',
+            'year'          => 'required|numeric|digits:4',
+            'dates'         => 'nullable|array',
+            'dates.*'       => ['required','date_format:Y-m-d','after_or_equal:today', 'distinct:strict'],
         ];
     }
 }

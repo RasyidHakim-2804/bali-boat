@@ -28,16 +28,19 @@ class AdminInactiveFastBoatCalenderController extends Controller
     public function store(StoreInactiveFastBoatCalenderRequest $request)
     {
         // DB::beginTransaction();
-
-        InactiveFastBoatCalender::where('product_id', $request->product_id)->delete();
-
         try {
-            foreach ($request->dates as $key => $date) {
-                $calender             = new InactiveFastBoatCalender();
-                $calender->product_id = $request->product_id;
-                $calender->date       = $date;
+            if (isset($request->dates)) {
+                InactiveFastBoatCalender::whereNotIn('date', $request->dates)->delete();
 
-                $calender->save();
+                foreach ($request->dates as $key => $date) {
+                    $calender             = InactiveFastBoatCalender::where('product_id', $request->product_id)->whereDate('date', $date)->firstOrNew();
+                    $calender->product_id = $request->product_id;
+                    $calender->date       = $date;
+
+                    $calender->save();
+                }
+            } else {
+                InactiveFastBoatCalender::where('product_id', $request->product_id)->whereYear('date', $request->year)->whereMonth('date', $request->month)->delete();
             }
 
             DB::commit();

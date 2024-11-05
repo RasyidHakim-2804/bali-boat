@@ -14,7 +14,7 @@ class PrivateBoatOrderFormResource extends JsonResource
             'schedule_id'    => $this->product_id,
             'variant_id'     => $this->variant_id,
             'name'           => $this->name,
-            'nationality'    => $this->date_of_birth,
+            'nationality'    => $this->nationality,
             'passenger_type' => $this->passenger_type,
             'age_type'       => $this->age_type,
             'is_itas_holder' => $this->is_itas_holder,

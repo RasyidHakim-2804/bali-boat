@@ -26,17 +26,23 @@ class OrderPaymentEmailService
         if ($type == 'fast_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/public-orders/fast-boats/' . $order->uuid;
+
             $user->notify(new FastBoatOrderPaidNotification($data));
         }
 
         if ($type == 'private_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/public-orders/private-boats/' . $order->uuid;
+
             $user->notify(new PrivateBoatOrderPaidNotification($data));
         }
 
         if ($type == 'activity') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $order->uuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tours/' . $order->uuid;
+
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/public-orders/tours/' . $order->uuid;
 
             $user->notify(new ActivityOrderPaidNotification($data));
         }
@@ -59,7 +65,7 @@ class OrderPaymentEmailService
         }
 
         if ($type == 'activity') {
-            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/tour/' . $order->uuid;
+            $dataAdmin['order_url'] = env('FRONTEND_URL') . '/admin/orders/tours/' . $order->uuid;
 
             Notification::route('mail', $adminEmail)->notify((new AdminActivityOrderPaidNotification($dataAdmin)));
         }
@@ -76,17 +82,23 @@ class OrderPaymentEmailService
         if ($type == 'fast_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/fast-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/public-orders/fast-boats/' . $order->uuid;
+
             $user->notify(new FastBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'private_boat') {
             $data['order_url']  = env('FRONTEND_URL') . '/user/orders/private-boats/' . $order->uuid;
 
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/public-orders/private-boats/' . $order->uuid;
+
             $user->notify(new PrivateBoatOrderExpiredNotification($data));
         }
 
         if ($type == 'activity') {
-            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tour/' . $order->uuid;
+            $data['order_url']  = env('FRONTEND_URL') . '/user/orders/tours/' . $order->uuid;
+
+            if (!$user->email_verified_at)  $data['order_url']  = env('FRONTEND_URL') . '/public-orders/tours/' . $order->uuid;
 
             $user->notify(new ActivityOrderExpiredNotification($data));
         }

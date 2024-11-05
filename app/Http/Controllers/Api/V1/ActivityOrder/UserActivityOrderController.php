@@ -38,7 +38,12 @@ class UserActivityOrderController extends Controller
     
     public function show(User $user, ActivityOrder $activityOrder)
     {
-        $order = new ActivityOrderResource($activityOrder);
+        $order = new ActivityOrderResource($activityOrder->load([
+            'details',
+            'details.product',
+            'details.product.tags',
+            'details.product.tags.translations' => fn($query) => $query->language(),
+        ]));
 
         return $this->successGet($order);
     }

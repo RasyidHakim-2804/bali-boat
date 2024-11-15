@@ -50,13 +50,15 @@ class ScheduleRequest extends FormRequest
                             ->where('arrival_time', '=', $this->input('arrival_time'))
                             ->first();
 
-                if ($this->isMethod('POST') && $schedule != null) {
+            if ($schedule != null) {
+                if ($this->isMethod('POST')) {
                     $validator->errors()->add('schedule', __('validation.duplicated_data', ['attribute' => 'schedule']));
                 }
 
                 if ($this->isMethod('PUT') && $this->route('schedule')->id != $schedule->id) {
                     $validator->errors()->add('schedule', __('validation.duplicated_data', ['attribute' => 'schedule']));
                 }
+            }
         });
     }
 }

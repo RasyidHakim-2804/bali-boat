@@ -42,8 +42,7 @@ class ScheduleRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if ($this->isMethod('POST')) {
-                $schedule = $this->route('fastBoat')
+            $schedule = $this->route('fastBoat')
                             ->schedules()
                             ->where('departure_harbor_id', '=', $this->input('departure_harbor_id'))
                             ->where('arrival_harbor_id', '=', $this->input('arrival_harbor_id'))
@@ -51,10 +50,13 @@ class ScheduleRequest extends FormRequest
                             ->where('arrival_time', '=', $this->input('arrival_time'))
                             ->first();
 
-                if ($schedule != null) {
+                if ($this->isMethod('POST') && $schedule != null) {
                     $validator->errors()->add('schedule', __('validation.duplicated_data', ['attribute' => 'schedule']));
                 }
-            }
+
+                if ($this->isMethod('PUT') && $this->route('schedule')->id != $schedule->id) {
+                    $validator->errors()->add('schedule', __('validation.duplicated_data', ['attribute' => 'schedule']));
+                }
         });
     }
 }

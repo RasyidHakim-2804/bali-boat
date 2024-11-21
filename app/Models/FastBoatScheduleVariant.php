@@ -13,11 +13,11 @@ class FastBoatScheduleVariant extends Model
     use HasFactory, SoftDeletes;
 
     public const PASSENGER_TYPE =   [
-        'local', 'foreign'
+        'local', 'foreign', 'itas'
     ];
 
     public const AGE_TYPE =   [
-        'adult', 'child'
+        'adult', 'child', 'infant'
     ];
 
     public function scopeType(Builder $query, $passengerType, $ageType)

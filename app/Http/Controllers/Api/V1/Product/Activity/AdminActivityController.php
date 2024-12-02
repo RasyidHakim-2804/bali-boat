@@ -49,6 +49,7 @@ class AdminActivityController extends Controller
             'excludes.translations'     => fn($query) => $query->language('en'),
             'itineraries.translations'  => fn($query) => $query->field('title')->language('en'),
             'defaultVariant',
+            'thumbnailImage',
         ]);
 
         return $this->successGet(

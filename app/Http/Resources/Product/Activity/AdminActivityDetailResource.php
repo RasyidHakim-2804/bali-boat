@@ -33,6 +33,7 @@ class AdminActivityDetailResource extends JsonResource
             'rating'            => (int) $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
+            'thumbnail_image'   => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
             'location'          => new LocationResource($this->location),
 
             'tags'              => ListTagResource::collection($this->tags),

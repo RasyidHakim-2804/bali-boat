@@ -48,6 +48,7 @@ class AdminPrivateBoatController extends Controller
             'includes.translations' => fn($query) => $query->language('en'),
             'specification',
             'defaultVariant',
+            'thumbnailImage',
         ]);
 
         return $this->successGet(

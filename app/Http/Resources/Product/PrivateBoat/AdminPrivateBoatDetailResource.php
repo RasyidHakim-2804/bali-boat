@@ -33,6 +33,7 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
             'pickup_harbor'     => new HarborResource($this->pickupHarbor),
+            'thumbnail_image'   => new PrivateBoatImageResource($this->whenLoaded('thumbnailImage')),
 
             'tags'           => ListTagResource::collection($this->tags),
 

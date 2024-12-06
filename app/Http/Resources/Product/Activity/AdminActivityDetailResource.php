@@ -23,11 +23,6 @@ class AdminActivityDetailResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
-            'price'         => $this->whenLoaded(
-                'defaultVariant',
-                fn() => (string) (int) $this->defaultVariant->price,
-                (string) (int) $this->price
-            ),
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
             'rating'            => (int) $this->rating,
@@ -35,6 +30,7 @@ class AdminActivityDetailResource extends JsonResource
             'updated_at'        => $this->updated_at,
             'thumbnail_image'   => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
             'location'          => new LocationResource($this->location),
+            'variants'          => ActivityVariantResource::collection($this->variants),
 
             'tags'              => ListTagResource::collection($this->tags),
 

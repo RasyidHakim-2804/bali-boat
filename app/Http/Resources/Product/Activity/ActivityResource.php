@@ -42,7 +42,12 @@ class ActivityResource extends JsonResource
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
 
-            'variants'          => ActivityVariantResource::collection($this->whenLoaded('variants')),
+            'variants'          => $this->whenLoaded('variants', function(){
+                return [
+                    'local'   => ActivityVariantResource::collection($this->variants->where('passenger_type', 'local')),
+                    'foreign' => ActivityVariantResource::collection($this->variants->where('passenger_type', 'foreign')),
+                ];
+            }),
             'location'          => new LocationResource($this->whenLoaded('location')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
             'includes'          => ListIncludeResource::collection($this->whenLoaded('includes')),

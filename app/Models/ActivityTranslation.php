@@ -9,4 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityTranslation extends Model
 {
     use HasFactory, IsTranslationTrait;
+
+    public const FIELD = [
+        'highlight',
+        'description',
+        'short_description',
+    ];
 }

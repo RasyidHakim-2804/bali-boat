@@ -220,7 +220,7 @@ class AdminActivityController extends Controller
             foreach (ActivityVariant::NAME as $name) {
                 $variant    = $activity->variants()->type($type, $name)->firstOrNew();
 
-                $variant->price             = $request->variants[$type];
+                $variant->price             = $request->variants[$type][$name];
                 $variant->passenger_type    = $type;
                 $variant->name              = $name;
                 $variant->activity_id       = $activity->id;

@@ -8,7 +8,9 @@ use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\Activity\AdminActivityDetailResource;
 use App\Http\Resources\Product\Activity\AdminActivityListResource;
 use App\Models\Activity;
+use App\Models\ActivityTranslation;
 use App\Models\ActivityVariant;
+use App\Models\Language;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
@@ -60,6 +62,7 @@ class AdminActivityController extends Controller
 
     public function store(ActivityRequest $request)
     {
+        // dd($request->toArray());
         try {
             DB::beginTransaction();
 
@@ -78,14 +81,14 @@ class AdminActivityController extends Controller
 
             // $this->setDefaultVariant($activity, $request);
             $this->setVariants($activity, $request);
+            $this->setTranslations($activity, $request->toArray());
+            // foreach ($request->highlight as $lang => $highlight) {
+            //     $this->setTranslations($activity, $lang, 'highlight', $highlight);
+            // }
 
-            foreach ($request->highlight as $lang => $highlight) {
-                $this->setTranslations($activity, $lang, 'highlight', $highlight);
-            }
-
-            foreach ($request->description as $lang => $description) {
-                $this->setTranslations($activity, $lang, 'description', $description);
-            }
+            // foreach ($request->description as $lang => $description) {
+            //     $this->setTranslations($activity, $lang, 'description', $description);
+            // }
 
             DB::commit();
 
@@ -118,6 +121,7 @@ class AdminActivityController extends Controller
 
             // $this->setDefaultVariant($activity, $request);
             $this->setVariants($activity, $request);
+            $this->setTranslations($activity, $request->toArray());
 
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -194,15 +198,19 @@ class AdminActivityController extends Controller
         return $result;
     }
 
-    protected function setTranslations(Activity $activity, $lang, $field, $translation)
+    protected function setTranslations(Activity $activity, array $request)
     {
-        $rentalTranslation = $activity->translations()->where('language',$lang)->where('field', $field)->firstOrNew();
+        foreach (ActivityTranslation::FIELD as $field) {
+            foreach (Language::code() as $lang) {
+                $rentalTranslation = $activity->translations()->language($lang)->field($field)->firstOrNew();
 
-        $rentalTranslation->activity_id  = $activity->id;
-        $rentalTranslation->language     = $lang;
-        $rentalTranslation->field        = $field;
-        $rentalTranslation->translation  = $translation;
-        $rentalTranslation->save();
+                $rentalTranslation->activity_id  = $activity->id;
+                $rentalTranslation->language     = $lang;
+                $rentalTranslation->field        = $field;
+                $rentalTranslation->translation  = $request[$field][$lang];
+                $rentalTranslation->save();
+            }
+        }
     }
 
     protected function setDefaultVariant(Activity $activity, $request)

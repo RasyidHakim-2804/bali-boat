@@ -11,9 +11,10 @@ class ActivityVariant extends Model
     use HasFactory, SoftDeletes;
 
     public const PASSENGER_TYPE = [
-        'adult_local',
-        'adult_foreign',
-        'child_local',
-        'child_foreign',
+        'local','foreign',
+    ];
+
+    public const NAME = [
+        'adult', 'child'
     ];
 }

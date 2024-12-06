@@ -55,6 +55,9 @@ class ActivityRequest extends FormRequest
             'description'       => ['required', $arrayLanguage],
             'description.*'     => 'required|string',
 
+            'short_description'       => ['required', $arrayLanguage],
+            'short_description.*'     => 'required|string',
+
             'includes'          => 'required|array',
             'includes.*'        => [
                 'required',
@@ -72,8 +75,9 @@ class ActivityRequest extends FormRequest
         ];
 
         foreach (Language::code() as $lang) {
-            $rule['highlight.' . $lang]     = 'required';
-            $rule['description.' . $lang]   = 'required';
+            $rule['highlight.' . $lang]         = 'required';
+            $rule['description.' . $lang]       = 'required';
+            $rule['short_description.' . $lang] = 'required';
         }
 
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {

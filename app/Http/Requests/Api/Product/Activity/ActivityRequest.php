@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Product\Activity;
 
+use App\Models\ActivityTranslation;
 use App\Models\Language;
 use App\Models\ActivityVariant;
 use Illuminate\Foundation\Http\FormRequest;
@@ -49,15 +50,6 @@ class ActivityRequest extends FormRequest
                 Rule::exists('tags', 'id')->where('type', 'activity'),
             ],
 
-            'highlight'         => ['required', $arrayLanguage],
-            'highlight.*'       => 'required|string',
-
-            'description'       => ['required', $arrayLanguage],
-            'description.*'     => 'required|string',
-
-            'short_description'       => ['required', $arrayLanguage],
-            'short_description.*'     => 'required|string',
-
             'includes'          => 'required|array',
             'includes.*'        => [
                 'required',
@@ -75,9 +67,11 @@ class ActivityRequest extends FormRequest
         ];
 
         foreach (Language::code() as $lang) {
-            $rule['highlight.' . $lang]         = 'required';
-            $rule['description.' . $lang]       = 'required';
-            $rule['short_description.' . $lang] = 'required';
+            foreach (ActivityTranslation::FIELD as $field) {
+                $rule[$field]               = ['required', $arrayLanguage];
+                $rule[$field . '.*']        = 'required|string';
+                $rule[$field . '.' . $lang] = 'required';
+            }
         }
 
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {

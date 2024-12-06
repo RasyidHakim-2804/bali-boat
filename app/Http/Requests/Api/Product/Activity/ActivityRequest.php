@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Api\Product\Activity;
 
 use App\Models\Language;
-use App\Models\ActivityItinerary;
+use App\Models\ActivityVariant;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -74,6 +74,10 @@ class ActivityRequest extends FormRequest
         foreach (Language::code() as $lang) {
             $rule['highlight.' . $lang]     = 'required';
             $rule['description.' . $lang]   = 'required';
+        }
+
+        foreach (ActivityVariant::PASSENGER_TYPE as $type) {
+            $rule['variants.' . $type] = 'required|integer|min:0|max:1000000000';
         }
 
         return $rule;

@@ -18,6 +18,7 @@ class ActivityVariantResource extends JsonResource
             'id'                => $this->id,
             'activity_id'       => $this->activity_id,
             'is_default'        => $this->is_default,
+            'name'              => $this->name,
             'passenger_type'    => $this->passenger_type,
             'price'             => (string) (int) $this->price,
             'created_at'        => $this->created_at,

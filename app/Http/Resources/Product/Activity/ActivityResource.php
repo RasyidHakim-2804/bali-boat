@@ -19,6 +19,8 @@ class ActivityResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $price = $this->price? (string) (int) $this->price : null;
+
         return [
             'id'                => $this->id,
             'name'              => $this->name,
@@ -28,12 +30,7 @@ class ActivityResource extends JsonResource
             'rating'            => (int) $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-
-            'price'         => $this->whenLoaded(
-                'defaultVariant',
-                fn() => (string) (int) $this->defaultVariant->price,
-                (string) (int) $this->price
-            ),
+            'price'             => $this->whenNotNull($price),
 
             'highlight' => $this->whenLoaded(
                 'translations',

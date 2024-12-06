@@ -29,6 +29,7 @@ class FastBoatOrderDetailResource extends JsonResource
             'price'                     => $this->price,
             'total_price'               => $this->total_price,
             'image'                     => $this->imageUrl('image'),
+            'message'                   => $this->message,
             'created_at'                => $this->created_at,
         ];
     }

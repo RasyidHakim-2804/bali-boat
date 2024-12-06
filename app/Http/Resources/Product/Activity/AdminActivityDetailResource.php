@@ -30,7 +30,12 @@ class AdminActivityDetailResource extends JsonResource
             'updated_at'        => $this->updated_at,
             'thumbnail_image'   => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
             'location'          => new LocationResource($this->location),
-            'variants'          => ActivityVariantResource::collection($this->variants),
+            'variants'          => $this->whenLoaded('variants', function(){
+                return [
+                    'local'   => ActivityVariantResource::collection($this->variants->where('passenger_type', 'local')),
+                    'foreign' => ActivityVariantResource::collection($this->variants->where('passenger_type', 'foreign')),
+                ];
+            }),
 
             'tags'              => ListTagResource::collection($this->tags),
 

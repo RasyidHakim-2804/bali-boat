@@ -217,7 +217,7 @@ class AdminActivityController extends Controller
     protected function setVariants(Activity $activity, $request)
     {
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {
-            $variant    = ActivityVariant::where('passenger_type', '=', $type)->firstOrNew();
+            $variant    = $activity->variants()->where('passenger_type', '=', $type)->firstOrNew();
 
             $variant->price             = $request->variants[$type];
             $variant->passenger_type    = $type;

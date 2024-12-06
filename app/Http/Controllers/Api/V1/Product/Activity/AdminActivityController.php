@@ -8,6 +8,7 @@ use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\Activity\AdminActivityDetailResource;
 use App\Http\Resources\Product\Activity\AdminActivityListResource;
 use App\Models\Activity;
+use App\Models\ActivityVariant;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
@@ -75,7 +76,8 @@ class AdminActivityController extends Controller
             $activity->excludes()->attach($this->generatePosition($request->excludes));
             $activity->itineraries()->attach($this->generatePosition($request->itineraries));
 
-            $this->setDefaultVariant($activity, $request);
+            // $this->setDefaultVariant($activity, $request);
+            $this->setVariants($activity, $request);
 
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -114,7 +116,8 @@ class AdminActivityController extends Controller
             $activity->excludes()->sync($this->generatePosition($request->excludes));
             $activity->itineraries()->sync($this->generatePosition($request->itineraries));
 
-            $this->setDefaultVariant($activity, $request);
+            // $this->setDefaultVariant($activity, $request);
+            $this->setVariants($activity, $request);
 
             foreach ($request->highlight as $lang => $highlight) {
                 $this->setTranslations($activity, $lang, 'highlight', $highlight);
@@ -209,5 +212,18 @@ class AdminActivityController extends Controller
         $price->activity_id = $activity->id;
         $price->is_default  = 1;
         $price->save();
+    }
+
+    protected function setVariants(Activity $activity, $request)
+    {
+        foreach (ActivityVariant::PASSENGER_TYPE as $type) {
+            $variant    = ActivityVariant::where('passenger_type', '=', $type)->firstOrNew();
+
+            $variant->price             = $request->variants[$type];
+            $variant->passenger_type    = $type;
+            $variant->activity_id       = $activity->id;
+            $variant->is_default        = 0;
+            $variant->save();
+        }
     }
 }

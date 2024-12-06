@@ -33,6 +33,7 @@ class FastBoatOrderDetailService
             $orderDetail->passenger_type        = $variantData->passenger_type;
             $orderDetail->age_type              = $variantData->age_type;
             $orderDetail->quantity              = $productRequest['quantity'];
+            $orderDetail->message               = $productRequest['message'];
             $orderDetail->price                 = $variantData->price;
             $orderDetail->total_price           = $totalProductPrice;
             $orderDetail->image                 = $productImage;

@@ -9,4 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ActivityVariant extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const PASSENGER_TYPE = [
+        'local', 'foreign',
+    ];
 }

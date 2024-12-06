@@ -77,7 +77,9 @@ class ActivityRequest extends FormRequest
         }
 
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {
-            $rule['variants.' . $type] = 'required|integer|min:0|max:1000000000';
+            foreach (ActivityVariant::NAME as $name) {
+                $rule['variants.' . $type . '.' . $name] = 'required|integer|min:0|max:1000000000';
+            }
         }
 
         return $rule;

@@ -62,7 +62,6 @@ class AdminActivityController extends Controller
 
     public function store(ActivityRequest $request)
     {
-        // dd($request->toArray());
         try {
             DB::beginTransaction();
 
@@ -82,13 +81,6 @@ class AdminActivityController extends Controller
             // $this->setDefaultVariant($activity, $request);
             $this->setVariants($activity, $request);
             $this->setTranslations($activity, $request->toArray());
-            // foreach ($request->highlight as $lang => $highlight) {
-            //     $this->setTranslations($activity, $lang, 'highlight', $highlight);
-            // }
-
-            // foreach ($request->description as $lang => $description) {
-            //     $this->setTranslations($activity, $lang, 'description', $description);
-            // }
 
             DB::commit();
 
@@ -122,14 +114,6 @@ class AdminActivityController extends Controller
             // $this->setDefaultVariant($activity, $request);
             $this->setVariants($activity, $request);
             $this->setTranslations($activity, $request->toArray());
-
-            foreach ($request->highlight as $lang => $highlight) {
-                $this->setTranslations($activity, $lang, 'highlight', $highlight);
-            }
-
-            foreach ($request->description as $lang => $description) {
-                $this->setTranslations($activity, $lang, 'description', $description);
-            }
 
             DB::commit();
 

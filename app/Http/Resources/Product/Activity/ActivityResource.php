@@ -42,6 +42,11 @@ class ActivityResource extends JsonResource
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
 
+            'short_description' => $this->whenLoaded(
+                'translations',
+                fn() => $this->translations->where('field','short_description')->first()->translation
+            ),
+
             'variants'          => $this->whenLoaded('variants', function(){
                 return [
                     'local'   => ActivityVariantResource::collection($this->variants->where('passenger_type', 'local')),

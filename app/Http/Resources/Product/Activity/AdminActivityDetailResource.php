@@ -21,7 +21,7 @@ class AdminActivityDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        $resource = [
+        return [
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
@@ -33,32 +33,29 @@ class AdminActivityDetailResource extends JsonResource
             'thumbnail_image'   => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
             'location'          => new LocationResource($this->location),
             'variants'          => $this->whenLoaded('variants', function(){
-                $result = [];
-
-                foreach (ActivityVariant::PASSENGER_TYPE as $field) {
-                    $result[$field] = ActivityVariantResource::collection($this->variants->where('passenger_type', $field));
-                }
-                return $result;
+                return [
+                    'local'     => ActivityVariantResource::collection($this->variants->where('passenger_type', 'local')),
+                    'foreign'   => ActivityVariantResource::collection($this->variants->where('passenger_type', 'foreign')),
+                ];
             }),
 
             'tags'              => ListTagResource::collection($this->tags),
+
+            'highlight'        => ActivityTranslationsResource::collection(
+                $this->translations->where('field', 'highlight')
+            ),
+
+            'description'       => ActivityTranslationsResource::collection(
+                $this->translations->where('field', 'description')
+            ),
+
+            'short_description' => ActivityTranslationsResource::collection(
+                $this->translations->where('field', 'short_description')
+            ),
 
             'excludes'          => ListExcludeResource::collection($this->excludes),
             'includes'          => ListIncludeResource::collection($this->includes),
             'itineraries'       => ListItineraryResource::collection($this->itineraries),
         ];
-
-        return $this->addTranslation($resource);
-    }
-
-    private function addTranslation(array $resource)
-    {
-        foreach (ActivityTranslation::FIELD as $field) {
-            $resource[$field] = ActivityTranslationsResource::collection(
-                $this->translations->where('field', $field)
-            );
-        }
-
-        return $resource;
     }
 }

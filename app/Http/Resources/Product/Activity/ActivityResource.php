@@ -42,9 +42,9 @@ class ActivityResource extends JsonResource
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
 
-            'short_description' => $this->whenLoaded(
+            'meta' => $this->whenLoaded(
                 'translations',
-                fn() => $this->translations->where('field','short_description')->first()->translation
+                fn() => $this->translations->where('field','meta')->first()->translation
             ),
 
             'variants'          => $this->whenLoaded('variants', function(){

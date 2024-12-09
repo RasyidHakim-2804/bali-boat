@@ -13,6 +13,6 @@ class ActivityTranslation extends Model
     public const FIELD = [
         'highlight',
         'description',
-        'short_description',
+        'meta',
     ];
 }

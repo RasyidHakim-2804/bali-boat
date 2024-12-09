@@ -13,6 +13,10 @@ class ProductItinerary extends Model
 {
     use HasFactory, ImageStorageTrait;
 
+    public const TYPE = [
+        'activity', 'private-boat'
+    ];
+
     protected $imageSetting = [
         'folder' => 'itineraries',
         'field'  => [

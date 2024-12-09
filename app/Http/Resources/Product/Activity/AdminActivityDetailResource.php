@@ -49,8 +49,8 @@ class AdminActivityDetailResource extends JsonResource
                 $this->translations->where('field', 'description')
             ),
 
-            'short_description' => ActivityTranslationsResource::collection(
-                $this->translations->where('field', 'short_description')
+            'meta' => ActivityTranslationsResource::collection(
+                $this->translations->where('field', 'meta')
             ),
 
             'excludes'          => ListExcludeResource::collection($this->excludes),

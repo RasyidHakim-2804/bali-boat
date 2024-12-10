@@ -4,6 +4,7 @@ namespace App\Http\Resources\Product\PrivateBoat;
 
 use App\Http\Resources\Habor\HarborResource;
 use App\Http\Resources\Include\ListIncludeResource;
+use App\Http\Resources\Itinerary\ListItineraryResource;
 use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -55,6 +56,7 @@ class PrivateBoatResource extends JsonResource
             'images'            => PrivateBoatImageResource::collection($this->whenLoaded('images')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
             'includes'          => ListIncludeResource::collection($this->whenLoaded('includes')),
+            'itineraries'       => ListItineraryResource::collection($this->whenLoaded('itineraries')),
             'thumbnail_image'   => new PrivateBoatImageResource($this->whenLoaded('thumbnailImage'))
         ];
     }

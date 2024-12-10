@@ -52,6 +52,12 @@ class PrivateBoatRequest extends FormRequest
                 Rule::exists('product_includes', 'id')->where('type', 'private-boat'),
             ],
 
+            'itineraries'       => 'required|array',
+            'itineraries.*'     => [
+                'required',
+                Rule::exists('product_itineraries', 'id')->where('type', 'private-boat'),
+            ],
+
             'highlight'         => ['required',$arrayLanguage],
             'highlight.*'       => ['required','string'],
 

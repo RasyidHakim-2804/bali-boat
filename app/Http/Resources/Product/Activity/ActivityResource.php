@@ -19,6 +19,8 @@ class ActivityResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $price = $this->price? (string) (int) $this->price : null;
+
         return [
             'id'                => $this->id,
             'name'              => $this->name,
@@ -28,12 +30,7 @@ class ActivityResource extends JsonResource
             'rating'            => (int) $this->rating,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-
-            'price'         => $this->whenLoaded(
-                'defaultVariant',
-                fn() => (string) (int) $this->defaultVariant->price,
-                (string) (int) $this->price
-            ),
+            'price'             => $this->whenNotNull($price),
 
             'highlight' => $this->whenLoaded(
                 'translations',
@@ -45,7 +42,17 @@ class ActivityResource extends JsonResource
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
 
-            'variants'          => ActivityVariantResource::collection($this->whenLoaded('variants')),
+            'meta' => $this->whenLoaded(
+                'translations',
+                fn() => $this->translations->where('field','meta')->first()->translation
+            ),
+
+            'variants'          => $this->whenLoaded('variants', function(){
+                return [
+                    'local'   => ActivityVariantResource::collection($this->variants->where('passenger_type', 'local')),
+                    'foreign' => ActivityVariantResource::collection($this->variants->where('passenger_type', 'foreign')),
+                ];
+            }),
             'location'          => new LocationResource($this->whenLoaded('location')),
             'tags'              => ListTagResource::collection($this->whenLoaded('tags')),
             'includes'          => ListIncludeResource::collection($this->whenLoaded('includes')),

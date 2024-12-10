@@ -42,10 +42,12 @@ class PrivateBoatController extends Controller
     public function show(PrivateBoat $privateBoat)
     {
         $privateBoat = $privateBoat->load([
-            'tags.translations'     => fn($query) => $query->language(),
-            'includes'              => fn($query) => $query->orderBy('position', 'ASC'),
-            'translations'          => fn($query) => $query->language(),
-            'includes.translations' => fn($query) => $query->language(),
+            'tags.translations'         => fn($query) => $query->language(),
+            'includes'                  => fn($query) => $query->orderBy('position', 'ASC'),
+            'itineraries'               => fn($query) => $query->orderBy('position', 'ASC'),
+            'translations'              => fn($query) => $query->language(),
+            'includes.translations'     => fn($query) => $query->language(),
+            'itineraries.translations'  => fn($query) => $query->language(),
             'specification',
             'pickupHarbor',
             'images',

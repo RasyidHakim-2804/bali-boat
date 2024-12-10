@@ -8,6 +8,9 @@ use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\Activity\AdminActivityDetailResource;
 use App\Http\Resources\Product\Activity\AdminActivityListResource;
 use App\Models\Activity;
+use App\Models\ActivityTranslation;
+use App\Models\ActivityVariant;
+use App\Models\Language;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
@@ -48,7 +51,7 @@ class AdminActivityController extends Controller
             'includes.translations'     => fn($query) => $query->language('en'),
             'excludes.translations'     => fn($query) => $query->language('en'),
             'itineraries.translations'  => fn($query) => $query->field('title')->language('en'),
-            'defaultVariant',
+            'variants',
             'thumbnailImage',
         ]);
 
@@ -75,15 +78,9 @@ class AdminActivityController extends Controller
             $activity->excludes()->attach($this->generatePosition($request->excludes));
             $activity->itineraries()->attach($this->generatePosition($request->itineraries));
 
-            $this->setDefaultVariant($activity, $request);
-
-            foreach ($request->highlight as $lang => $highlight) {
-                $this->setTranslations($activity, $lang, 'highlight', $highlight);
-            }
-
-            foreach ($request->description as $lang => $description) {
-                $this->setTranslations($activity, $lang, 'description', $description);
-            }
+            // $this->setDefaultVariant($activity, $request);
+            $this->setVariants($activity, $request);
+            $this->setTranslations($activity, $request->toArray());
 
             DB::commit();
 
@@ -114,15 +111,9 @@ class AdminActivityController extends Controller
             $activity->excludes()->sync($this->generatePosition($request->excludes));
             $activity->itineraries()->sync($this->generatePosition($request->itineraries));
 
-            $this->setDefaultVariant($activity, $request);
-
-            foreach ($request->highlight as $lang => $highlight) {
-                $this->setTranslations($activity, $lang, 'highlight', $highlight);
-            }
-
-            foreach ($request->description as $lang => $description) {
-                $this->setTranslations($activity, $lang, 'description', $description);
-            }
+            // $this->setDefaultVariant($activity, $request);
+            $this->setVariants($activity, $request);
+            $this->setTranslations($activity, $request->toArray());
 
             DB::commit();
 
@@ -191,15 +182,19 @@ class AdminActivityController extends Controller
         return $result;
     }
 
-    protected function setTranslations(Activity $activity, $lang, $field, $translation)
+    protected function setTranslations(Activity $activity, array $request)
     {
-        $rentalTranslation = $activity->translations()->where('language',$lang)->where('field', $field)->firstOrNew();
+        foreach (ActivityTranslation::FIELD as $field) {
+            foreach (Language::code() as $lang) {
+                $rentalTranslation = $activity->translations()->language($lang)->field($field)->firstOrNew();
 
-        $rentalTranslation->activity_id  = $activity->id;
-        $rentalTranslation->language     = $lang;
-        $rentalTranslation->field        = $field;
-        $rentalTranslation->translation  = $translation;
-        $rentalTranslation->save();
+                $rentalTranslation->activity_id  = $activity->id;
+                $rentalTranslation->language     = $lang;
+                $rentalTranslation->field        = $field;
+                $rentalTranslation->translation  = $request[$field][$lang];
+                $rentalTranslation->save();
+            }
+        }
     }
 
     protected function setDefaultVariant(Activity $activity, $request)
@@ -209,5 +204,21 @@ class AdminActivityController extends Controller
         $price->activity_id = $activity->id;
         $price->is_default  = 1;
         $price->save();
+    }
+
+    protected function setVariants(Activity $activity, $request)
+    {
+        foreach (ActivityVariant::PASSENGER_TYPE as $type) {
+            foreach (ActivityVariant::NAME as $name) {
+                $variant    = $activity->variants()->type($type, $name)->firstOrNew();
+
+                $variant->price             = $request->variants[$type][$name];
+                $variant->passenger_type    = $type;
+                $variant->name              = $name;
+                $variant->activity_id       = $activity->id;
+                $variant->is_default        = 0;
+                $variant->save();
+            }
+        }
     }
 }

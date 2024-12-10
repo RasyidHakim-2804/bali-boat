@@ -7,6 +7,8 @@ use App\Http\Resources\Include\ListIncludeResource;
 use App\Http\Resources\Itinerary\ListItineraryResource;
 use App\Http\Resources\Location\LocationResource;
 use App\Http\Resources\Tag\ListTagResource;
+use App\Models\ActivityTranslation;
+use App\Models\ActivityVariant;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdminActivityDetailResource extends JsonResource
@@ -23,11 +25,6 @@ class AdminActivityDetailResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'slug'              => $this->slug,
-            'price'         => $this->whenLoaded(
-                'defaultVariant',
-                fn() => (string) (int) $this->defaultVariant->price,
-                (string) (int) $this->price
-            ),
             'max_person'        => $this->max_person,
             'is_active'         => $this->is_active,
             'rating'            => (int) $this->rating,
@@ -35,6 +32,12 @@ class AdminActivityDetailResource extends JsonResource
             'updated_at'        => $this->updated_at,
             'thumbnail_image'   => new ActivityImageResource($this->whenLoaded('thumbnailImage')),
             'location'          => new LocationResource($this->location),
+            'variants'          => $this->whenLoaded('variants', function(){
+                return [
+                    'local'     => ActivityVariantResource::collection($this->variants->where('passenger_type', 'local')),
+                    'foreign'   => ActivityVariantResource::collection($this->variants->where('passenger_type', 'foreign')),
+                ];
+            }),
 
             'tags'              => ListTagResource::collection($this->tags),
 
@@ -44,6 +47,10 @@ class AdminActivityDetailResource extends JsonResource
 
             'description'       => ActivityTranslationsResource::collection(
                 $this->translations->where('field', 'description')
+            ),
+
+            'meta' => ActivityTranslationsResource::collection(
+                $this->translations->where('field', 'meta')
             ),
 
             'excludes'          => ListExcludeResource::collection($this->excludes),

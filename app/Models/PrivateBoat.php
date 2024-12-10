@@ -45,6 +45,12 @@ class PrivateBoat extends Model
                     ->withPivot(['position']);
     }
 
+    public function itineraries(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductItinerary::class, 'pivot_private_boat_itineraries', 'private_boat_id', 'itinerary_id')
+                    ->withPivot(['position']);
+    }
+
     public function specification(): HasOne
     {
         return $this->hasOne(PrivateBoatSpecification::class, 'private_boat_id', 'id');

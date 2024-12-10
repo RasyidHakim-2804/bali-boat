@@ -50,7 +50,7 @@ class AdminItineraryController extends Controller
     public function show(ProductItinerary $itinerary)
     {
         $itinerary = $itinerary->load('translations');
-        
+
         return $this->successGet(
             new AdminDetailItineraryResource($itinerary)
         );
@@ -61,9 +61,10 @@ class AdminItineraryController extends Controller
         DB::transaction(function() use ($request) {
 
             $itinerary        = new ProductItinerary();
+            $itinerary        = $request->type;
             $itinerary->image = $this->setImage($itinerary, $request->image);
             $itinerary->save();
-            
+
             foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($itinerary, $lang, 'description', $description);
             }
@@ -79,13 +80,13 @@ class AdminItineraryController extends Controller
     public function update(ProductItinerary $itinerary, ItineraryRequest $request)
     {
         DB::transaction(function() use ($request, $itinerary) {
-            
+
             if ($request->image != null) {
                 $itinerary->image = $this->setImage($itinerary, $request->image);
             }
-
+            $itinerary        = $request->type;
             $itinerary->save();
-            
+
             foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($itinerary, $lang, 'description', $description);
             }
@@ -103,7 +104,7 @@ class AdminItineraryController extends Controller
         DB::beginTransaction();
 
         try {
-        
+
             $itinerary->activities()->detach();
             $itinerary->delete();
 
@@ -132,7 +133,7 @@ class AdminItineraryController extends Controller
     protected function setImage(ProductItinerary $itinerary, $requestImage)
     {
         $image = new ImageService($itinerary->imagePath());
-        
+
         if ($itinerary->image) {
             $image->delete($itinerary->image);
         }

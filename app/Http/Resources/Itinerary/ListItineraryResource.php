@@ -16,9 +16,10 @@ class ListItineraryResource extends JsonResource
     {
         return [
             'id'            => $this->id,
+            'type'          => $this->type,
+            'image'         => $this->imageUrl('image'),
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
-            'image'         => $this->imageUrl('image'),
 
             'title'         => $this->translations
                                 ->where('field', 'title')

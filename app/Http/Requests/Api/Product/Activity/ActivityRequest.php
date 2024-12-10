@@ -63,7 +63,10 @@ class ActivityRequest extends FormRequest
             ],
 
             'itineraries'       => 'required|array',
-            'itineraries.*'     => 'required|exists:product_itineraries,id',
+            'itineraries.*'     => [
+                'required',
+                Rule::exists('product_itineraries', 'id')->where('type', 'activity'),
+            ],
         ];
 
         foreach (Language::code() as $lang) {

@@ -28,6 +28,7 @@ class AdminItineraryController extends Controller
     {
         $itineraries = QueryBuilder::for(ProductItinerary::class)
                         ->allowedFilters([
+                            AllowedFilter::exact('type'),
                             AllowedFilter::scope('search'),
                         ])
                         ->with([
@@ -40,9 +41,13 @@ class AdminItineraryController extends Controller
 
     public function all()
     {
-        $itineraries = ProductItinerary::with([
-            'translations' => fn($query) => $query->language('en')->field('title')
-        ])->get();
+        $itineraries = QueryBuilder::for(ProductItinerary::class)
+                        ->allowedFilters([
+                            AllowedFilter::exact('type')
+                        ])
+                        ->with([
+                            'translations' => fn($query) => $query->language('en')
+                        ])->get();
 
         return ListItineraryResource::collection($itineraries);
     }

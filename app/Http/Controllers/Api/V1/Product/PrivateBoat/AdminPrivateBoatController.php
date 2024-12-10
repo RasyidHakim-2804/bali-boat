@@ -70,6 +70,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->save();
 
             $privateBoat->includes()->attach($this->generatePosition($request->includes));
+            $privateBoat->itineraries()->attach($this->generatePosition($request->itineraries));
             $privateBoat->tags()->attach($request->tags);
 
             $this->setDefaultVariant($privateBoat, $request);
@@ -108,6 +109,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->save();
 
             $privateBoat->includes()->sync($this->generatePosition($request->includes));
+            $privateBoat->itineraries()->sync($this->generatePosition($request->itineraries));
             $privateBoat->tags()->sync($request->tags);
 
             $this->setDefaultVariant($privateBoat, $request);

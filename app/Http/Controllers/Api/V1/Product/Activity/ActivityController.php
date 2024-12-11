@@ -39,9 +39,9 @@ class ActivityController extends Controller
         return ActivityResource::collection($activities);
     }
 
-    public function show(Activity $activity)
+    public function show($activity)
     {
-        $activity = $activity->load([
+        $activity = Activity::with([
             'tags.translations'         => fn($query) => $query->language(),
             'includes'                  => fn($query) => $query->orderBy('position', 'ASC'),
             'excludes'                  => fn($query) => $query->orderBy('position', 'ASC'),
@@ -53,7 +53,7 @@ class ActivityController extends Controller
             'location',
             'images',
             'variants',
-        ]);
+        ])->where('slug', '=', $activity)->selectThumbnailVariantPrice()->first();
 
         return $this->successGet(
             new ActivityResource($activity)

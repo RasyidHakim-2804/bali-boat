@@ -35,7 +35,6 @@ class ActivityRequest extends FormRequest
 
         $rule = [
             'name'              => 'required|string|max:100',
-            'price'             => 'required|integer|min:0',
             'is_active'         => 'required|boolean',
             'rating'            => 'required|integer|min:0|max:5',
             'location_id'       => [

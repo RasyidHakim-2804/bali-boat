@@ -4,6 +4,7 @@ namespace App\Http\Resources\Product\PrivateBoat;
 
 use App\Http\Resources\Habor\HarborResource;
 use App\Http\Resources\Include\ListIncludeResource;
+use App\Http\Resources\Itinerary\ListItineraryResource;
 use App\Http\Resources\Tag\ListTagResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -48,7 +49,7 @@ class AdminPrivateBoatDetailResource extends JsonResource
             'specifications' => new PrivateBoatSpecificationResource($this->specification),
 
             'includes'       => ListIncludeResource::collection($this->includes),
-
+            'itineraries'    => ListItineraryResource::collection($this->itineraries),
         ];
     }
 }

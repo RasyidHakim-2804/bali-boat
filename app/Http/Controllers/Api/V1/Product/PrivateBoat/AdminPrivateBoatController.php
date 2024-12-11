@@ -44,8 +44,9 @@ class AdminPrivateBoatController extends Controller
         $privateBoat = $privateBoat->load([
             'pickupHarbor',
             'translations',
-            'tags.translations'     => fn($query) => $query->language('en'),
-            'includes.translations' => fn($query) => $query->language('en'),
+            'tags.translations'         => fn($query) => $query->language('en'),
+            'includes.translations'     => fn($query) => $query->language('en'),
+            'itineraries.translations'  => fn($query) => $query->language('en'),
             'specification',
             'defaultVariant',
             'thumbnailImage',

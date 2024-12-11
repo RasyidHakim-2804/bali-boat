@@ -66,7 +66,7 @@ class AdminItineraryController extends Controller
         DB::transaction(function() use ($request) {
 
             $itinerary        = new ProductItinerary();
-            $itinerary        = $request->type;
+            $itinerary->type  = $request->type;
             $itinerary->image = $this->setImage($itinerary, $request->image);
             $itinerary->save();
 
@@ -89,7 +89,7 @@ class AdminItineraryController extends Controller
             if ($request->image != null) {
                 $itinerary->image = $this->setImage($itinerary, $request->image);
             }
-            $itinerary        = $request->type;
+            $itinerary->type      = $request->type;
             $itinerary->save();
 
             foreach ($request->validated('description') as $lang => $description) {

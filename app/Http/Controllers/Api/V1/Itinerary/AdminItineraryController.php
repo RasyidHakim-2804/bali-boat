@@ -28,6 +28,7 @@ class AdminItineraryController extends Controller
     {
         $itineraries = QueryBuilder::for(ProductItinerary::class)
                         ->allowedFilters([
+                            AllowedFilter::exact('type'),
                             AllowedFilter::scope('search'),
                         ])
                         ->with([
@@ -40,9 +41,13 @@ class AdminItineraryController extends Controller
 
     public function all()
     {
-        $itineraries = ProductItinerary::with([
-            'translations' => fn($query) => $query->language('en')->field('title')
-        ])->get();
+        $itineraries = QueryBuilder::for(ProductItinerary::class)
+                        ->allowedFilters([
+                            AllowedFilter::exact('type')
+                        ])
+                        ->with([
+                            'translations' => fn($query) => $query->language('en')
+                        ])->get();
 
         return ListItineraryResource::collection($itineraries);
     }
@@ -61,7 +66,7 @@ class AdminItineraryController extends Controller
         DB::transaction(function() use ($request) {
 
             $itinerary        = new ProductItinerary();
-            $itinerary        = $request->type;
+            $itinerary->type  = $request->type;
             $itinerary->image = $this->setImage($itinerary, $request->image);
             $itinerary->save();
 
@@ -84,7 +89,7 @@ class AdminItineraryController extends Controller
             if ($request->image != null) {
                 $itinerary->image = $this->setImage($itinerary, $request->image);
             }
-            $itinerary        = $request->type;
+            $itinerary->type      = $request->type;
             $itinerary->save();
 
             foreach ($request->validated('description') as $lang => $description) {

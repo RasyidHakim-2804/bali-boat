@@ -15,10 +15,6 @@ class ActivityOrderDetailService
 
             $totalProductPrice = $variantData->price * $productRequest['quantity'];
 
-            $name = $productData->name;
-
-            if (isset($variantData)) $name = $name . ' - ' . $variantData->name;
-
             $orderDetail                        = new ActivityOrderDetail();
             $orderDetail->order_id              = $orderId;
             $orderDetail->product_id            = $productData->id;
@@ -26,7 +22,8 @@ class ActivityOrderDetailService
             $orderDetail->location_id           = $productData->location_id;
             $orderDetail->location_name         = $productData->location->name;
             $orderDetail->passenger_type        = $variantData?->passenger_type;
-            $orderDetail->name                  = $name;
+            $orderDetail->product_name          = $productData->name;
+            $orderDetail->variant_name          = $variantData?->name;
             $orderDetail->quantity              = $productRequest['quantity'];
             $orderDetail->price                 = $variantData->price;
             $orderDetail->total_price           = $totalProductPrice;

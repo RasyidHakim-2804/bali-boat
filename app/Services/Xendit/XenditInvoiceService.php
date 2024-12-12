@@ -102,7 +102,7 @@ class XenditInvoiceService implements PaymentInterface
         
         $data = [
             "external_id"          => $order->uuid,
-            "description"          => 'Bali Boat Invoice',
+            "description"          => 'Bali Boat Invoice - ' . ucfirst(str_replace('_', ' ', $type)) . ' - ' . $order->uuid,
             "amount"               => intval($order->grand_total_purchased),
             "currency"             => "IDR",
             "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,

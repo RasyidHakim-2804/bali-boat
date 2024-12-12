@@ -17,7 +17,7 @@ class ActivityOrderDetailService
 
             $name = $productData->name;
 
-            if (isset($variantData)) $name = $variantData->name;
+            if (isset($variantData)) $name = $name . ' - ' . $variantData->name;
 
             $orderDetail                        = new ActivityOrderDetail();
             $orderDetail->order_id              = $orderId;

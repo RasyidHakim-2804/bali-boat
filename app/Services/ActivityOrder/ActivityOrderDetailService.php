@@ -3,7 +3,6 @@
 namespace App\Services\ActivityOrder;
 
 use App\Models\ActivityOrderDetail;
-use App\Models\OrderDetail;
 
 class ActivityOrderDetailService
 {
@@ -16,13 +15,18 @@ class ActivityOrderDetailService
 
             $totalProductPrice = $variantData->price * $productRequest['quantity'];
 
+            $name = $productData->name;
+
+            if (isset($variantData)) $name = $variantData->name;
+
             $orderDetail                        = new ActivityOrderDetail();
             $orderDetail->order_id              = $orderId;
             $orderDetail->product_id            = $productData->id;
             $orderDetail->variant_id            = $variantData?->id;
             $orderDetail->location_id           = $productData->location_id;
             $orderDetail->location_name         = $productData->location->name;
-            $orderDetail->name                  = $productData->name;
+            $orderDetail->passenger_type        = $variantData?->passenger_type;
+            $orderDetail->name                  = $name;
             $orderDetail->quantity              = $productRequest['quantity'];
             $orderDetail->price                 = $variantData->price;
             $orderDetail->total_price           = $totalProductPrice;

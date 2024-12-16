@@ -70,7 +70,7 @@ class UserPrivateBoatOrderController extends Controller
 
             (new PrivateBoatOrderDetailService)->create($order->id, $request->products, $this->products, $this->variants);
 
-            (new PrivateBoatOrderRegistrationService)->create($order->id, $request->forms);
+            // (new PrivateBoatOrderRegistrationService)->create($order->id, $request->forms);
 
             $responseData = ['order_uuid' => $order->uuid];
 

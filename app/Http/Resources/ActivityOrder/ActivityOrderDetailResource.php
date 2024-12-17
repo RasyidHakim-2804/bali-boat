@@ -22,7 +22,7 @@ class ActivityOrderDetailResource extends JsonResource
             'quantity'      => $this->quantity,
             'price'         => $this->price,
             'total_price'   => $this->total_price,
-            'image'         => $this->image,
+            'image'         => $this->imageUrl('image'),
             'product_tags'  => ListTagResource::collection($this->product->tags),
             'created_at'    => $this->created_at,
         ];

@@ -27,11 +27,12 @@ class StoreAdminRequest extends FormRequest
             'first_name'                => 'required|min:1',
             'last_name'                 => 'required|min:1',
             'email'                     => 'required|unique:admins,email',
+            'profile_picture'           => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2000',
             'password'                  => 'required|min:8',
             'confirm_password'          => 'required|same:password',
-            'permissions'               => 'nullable|array',
-            'permissions.*.feature_id'  => 'required|exists:admin_features,id|distinct',
-            'permissions.*.type'        => 'required|in:full,view',
+            // 'permissions'               => 'nullable|array',
+            // 'permissions.*.feature_id'  => 'required|exists:admin_features,id|distinct',
+            // 'permissions.*.type'        => 'required|in:full,view',
         ];
     }
 }

@@ -1,0 +1,224 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Product\Activity;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Product\Activity\ActivityRequest;
+use App\Http\Resources\Common\SuccessResource;
+use App\Http\Resources\Product\Activity\AdminActivityDetailResource;
+use App\Http\Resources\Product\Activity\AdminActivityListResource;
+use App\Models\Activity;
+use App\Models\ActivityTranslation;
+use App\Models\ActivityVariant;
+use App\Models\Language;
+use App\Services\Admin\AdminPermissionService;
+use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
+use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
+
+class AdminActivityController extends Controller
+{
+    use JsonResponsesTrait;
+
+    protected $permissionService;
+
+    public function __construct()
+    {
+        $this->permissionService = new AdminPermissionService('activity');
+    }
+
+    public function index()
+    {
+        return AdminActivityListResource::collection(
+            QueryBuilder::for(Activity::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search')
+            ])
+            ->selectThumbnailVariantPrice()
+            ->orderBy('id', 'DESC')
+            ->paginate(25)
+        );
+    }
+
+    public function show(Activity $activity)
+    {
+        $activity = $activity->load([
+            'location',
+            'translations',
+            'tags.translations'         => fn($query) => $query->language('en'),
+            'includes.translations'     => fn($query) => $query->language('en'),
+            'excludes.translations'     => fn($query) => $query->language('en'),
+            'itineraries.translations'  => fn($query) => $query->field('title')->language('en'),
+            'variants',
+            'thumbnailImage',
+        ]);
+
+        return $this->successGet(
+            new AdminActivityDetailResource($activity)
+        );
+    }
+
+    public function store(ActivityRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $activity               = new Activity();
+            $activity->name         = $request->name;
+            $activity->is_active    = $request->is_active;
+            $activity->max_person   = $request->max_person;
+            $activity->location_id  = $request->location_id;
+            $activity->rating       = $request->rating;
+            $activity->save();
+
+            $activity->tags()->attach($request->tags);
+            $activity->includes()->attach($this->generatePosition($request->includes));
+            $activity->excludes()->attach($this->generatePosition($request->excludes));
+            $activity->itineraries()->attach($this->generatePosition($request->itineraries));
+
+            // $this->setDefaultVariant($activity, $request);
+            $this->setVariants($activity, $request);
+            $this->setTranslations($activity, $request->toArray());
+
+            DB::commit();
+
+            return $this->successStore();
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+
+    public function update(Activity $activity, ActivityRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $activity->name         = $request->name;
+            $activity->is_active    = $request->is_active;
+            $activity->max_person   = $request->max_person;
+            $activity->location_id  = $request->location_id;
+            $activity->rating       = $request->rating;
+            $activity->save();
+
+            $activity->tags()->sync($request->tags);
+            $activity->includes()->sync($this->generatePosition($request->includes));
+            $activity->excludes()->sync($this->generatePosition($request->excludes));
+            $activity->itineraries()->sync($this->generatePosition($request->itineraries));
+
+            // $this->setDefaultVariant($activity, $request);
+            $this->setVariants($activity, $request);
+            $this->setTranslations($activity, $request->toArray());
+
+            DB::commit();
+
+            return $this->successResponse();
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+
+    public function destroy(Activity $activity)
+    {
+        try {
+            DB::beginTransaction();
+
+            $activity = $activity->load([
+                'images',
+                'variants'
+            ]);
+
+            foreach ($activity->images as $image) {
+                $imageService = new ImageService($image->imagePath());
+                $imageService->delete($image->image);
+                $image->delete();
+            }
+
+            foreach ($activity->variants as $variant) {
+                $variant->delete();
+            }
+
+            $activity->tags()->detach();
+            $activity->includes()->detach();
+            $activity->excludes()->detach();
+            $activity->itineraries()->detach();
+            $activity->translations()->delete();
+            $activity->delete();
+
+            DB::commit();
+
+            return $this->successResponse();
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+
+    ////////////////////////
+    // protected function //
+    ////////////////////////
+
+    private function generatePosition($attributes)
+    {
+        $position = 1;
+
+        foreach ($attributes as $attribute_id) {
+            $result[$attribute_id] = [ 'position' => $position];
+            $position++;
+        }
+
+        return $result;
+    }
+
+    protected function setTranslations(Activity $activity, array $request)
+    {
+        foreach (ActivityTranslation::FIELD as $field) {
+            foreach (Language::code() as $lang) {
+                $rentalTranslation = $activity->translations()->language($lang)->field($field)->firstOrNew();
+
+                $rentalTranslation->activity_id  = $activity->id;
+                $rentalTranslation->language     = $lang;
+                $rentalTranslation->field        = $field;
+                $rentalTranslation->translation  = $request[$field][$lang];
+                $rentalTranslation->save();
+            }
+        }
+    }
+
+    protected function setDefaultVariant(Activity $activity, $request)
+    {
+        $price              = $activity->defaultVariant()->firstOrNew();
+        $price->price       = $request->price;
+        $price->activity_id = $activity->id;
+        $price->is_default  = 1;
+        $price->save();
+    }
+
+    protected function setVariants(Activity $activity, $request)
+    {
+        foreach (ActivityVariant::PASSENGER_TYPE as $type) {
+            foreach (ActivityVariant::NAME as $name) {
+                $variant    = $activity->variants()->type($type, $name)->firstOrNew();
+
+                $variant->price             = $request->variants[$type][$name];
+                $variant->passenger_type    = $type;
+                $variant->name              = $name;
+                $variant->activity_id       = $activity->id;
+                $variant->is_default        = 0;
+                $variant->save();
+            }
+        }
+    }
+}

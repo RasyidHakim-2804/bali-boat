@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\Admin\AdminEmailChangesSuccessMail;
 use App\Models\Admin;
 use App\Models\AdminEmailVerificationToken;
+use App\Notifications\Admin\AdminEmailChangesSuccessNotification;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\Mail;
 
@@ -23,16 +24,20 @@ class AdminEmailChangesVerificationController extends Controller
 
         $token->delete();
 
-        $this->sendEmailAdminEmailChangesSuccess($admin->first_name, $admin->email);
+        // $this->sendEmailAdminEmailChangesSuccess($admin->first_name, $admin->email);
+
+        $admin->notify(new AdminEmailChangesSuccessNotification($admin)); 
 
         return $this->successStore();
     }
 
-    protected function sendEmailAdminEmailChangesSuccess($firstName, $email)
+    protected function sendEmailAdminEmailChangesSuccess($admin)
     {
         $data                = [];
-        $data['first_name']  = $firstName;
+        $data['first_name']  = $admin->first_name;
 
-        Mail::to($email)->send((new AdminEmailChangesSuccessMail($data)));
+        $admin->notify(new AdminEmailChangesSuccessNotification($data));
+
+        // Mail::to($email)->send((new AdminEmailChangesSuccessMail($data)));
     }
 }

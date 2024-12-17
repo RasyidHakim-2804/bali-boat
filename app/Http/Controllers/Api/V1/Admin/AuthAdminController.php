@@ -9,6 +9,8 @@ use App\Mail\Admin\AdminRegisterVerificationMail;
 use App\Mail\Admin\AdminWelcomeMail;
 use App\Models\Admin;
 use App\Models\AdminEmailVerificationToken;
+use App\Notifications\Admin\AdminRegisterVerificationNotification;
+use App\Notifications\Admin\AdminWelcomeNotification;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -83,6 +85,7 @@ class AuthAdminController extends Controller
         try {
             $admin                    = $tokenVerification->admin;
             $admin->email_verified_at = date('Y-m-d H:i:s');
+            $admin->is_active          = 1;
 
             $admin->save();
 
@@ -115,19 +118,25 @@ class AuthAdminController extends Controller
     protected function sendEmail($admin, $token)
     {
         $data                         = [];
+        $data['language']             = 'en';
         $data['first_name']           = $admin->first_name;
         $data['email_validation_url'] = env('FRONTEND_URL') . '/admin/email-verification/' . $token;
 
-        Mail::to($admin->email)->send((new AdminRegisterVerificationMail($data)));
+        // Mail::to($admin->email)->send((new AdminRegisterVerificationMail($data)));
+        
+        $admin->notify(new AdminRegisterVerificationNotification($data));
     }
 
     protected function sendWelcomeEmail($admin)
     {
         $data                        = [];
+        $data['language']            = 'en';
         $data['first_name']          = $admin->first_name;
         $data['login_page_url']      = env('FRONTEND_URL') . '/sign-in';
 
-        Mail::to($admin->email)->send((new AdminWelcomeMail($data)));
+        // Mail::to($admin->email)->send((new AdminWelcomeMail($data)));
+        
+        $admin->notify(new AdminWelcomeNotification($data));
     }
 
     protected function generateUuid()

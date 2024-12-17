@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Resources\Exclude;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ListExcludeResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray($request): array
+    {
+        return [
+            'id'            => $this->id,
+            'type'          => $this->type,
+            'created_at'    => $this->created_at,
+            'updated_at'    => $this->updated_at,
+
+            'description'   => $this->translations
+                                ->where('field', 'description')
+                                ->pluck('translation')
+                                ->first(),
+            $this->mergeWhen(
+                isset($this->pivot),
+                fn() => ['position'  => $this->pivot->position]
+            ),
+        ];
+    }
+}

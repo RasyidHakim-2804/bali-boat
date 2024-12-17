@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\Profile\ResetPasswordAdminProfileRequest;
 use App\Http\Requests\Api\Admin\Profile\UpdateAdminProfileRequest;
-use App\Http\Requests\Api\User\Profile\SetPasswordUserProfileRequest;
 use App\Http\Resources\Admin\AdminProfileResource;
 use App\Mail\Admin\AdminEmailChangesVerificationMail;
 use App\Models\Admin;
 use App\Models\AdminEmailChangesVerificationToken;
+use App\Notifications\Admin\AdminEmailChangesVerificationNotification;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\Hash;
@@ -68,17 +68,6 @@ class AdminProfileController extends Controller
         return $this->successStore();
     }
 
-    public function setPassword(SetPasswordUserProfileRequest $request)
-    {
-        $admin = Admin::where('id', request()->user()->id)->firstOrFail();
-
-        $admin->password = bcrypt($request->password);
-
-        $admin->save();
-
-        return $this->successStore();
-    }
-
     protected function createEmailChangesVerification($admin, $newEmail)
     {
         $lastEmailChanges = AdminEmailChangesVerificationToken::withTrashed()->where('agent_id', $admin->id)->orderBy('id', 'DESC')->first();
@@ -99,18 +88,21 @@ class AdminProfileController extends Controller
 
         $emailChangesVerification->save();
 
-        $this->sendEmailEmailChangesVerification($admin->first_name, $newEmail, $token);
+        $this->sendEmailEmailChangesVerification($admin, $token);
 
         return true;
     }
 
-    protected function sendEmailEmailChangesVerification($firstName, $email, $token)
+    protected function sendEmailEmailChangesVerification($admin, $token)
     {
         $data                                   = [];
-        $data['first_name']                     = $firstName;
+        $data['language']                       = 'en';
+        $data['first_name']                     = $admin->first_name;
         $data['email_changes_verification_url'] = env('FRONTEND_URL') . '/admin/email-change-verification/' . $token;
 
-        Mail::to($email)->send((new AdminEmailChangesVerificationMail($data)));
+        $admin->notify(new AdminEmailChangesVerificationNotification($data));
+
+        // Mail::to($email)->send((new AdminEmailChangesVerificationMail($data)));
     }
 
     protected function saveProfilePicture($user, $uploadedImage)

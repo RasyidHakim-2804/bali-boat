@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Harbor extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    public function scopeSearch( $query, $search)
+    {
+        return $query->where('name', 'LIKE','%' . $search . '%');
+    }
+
+    public function departureSchedules()
+    {
+        return $this->hasMany(FastBoatSchedule::class, 'departure_harbor_id');
+    }
+
+    public function arrivalSchedules()
+    {
+        return $this->hasMany(FastBoatSchedule::class, 'arrival_harbor_id');
+    }
+}

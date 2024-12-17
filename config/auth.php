@@ -50,10 +50,6 @@ return [
             'driver' => 'passport',
             'provider' => 'admins',
         ],
-        'api_agent' => [
-            'driver' => 'passport',
-            'provider' => 'agents',
-        ],
     ],
 
     /*
@@ -81,10 +77,6 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
-        ],
-        'agents' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Agent::class,
         ],
 
         // 'users' => [

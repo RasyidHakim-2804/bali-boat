@@ -217,7 +217,6 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Usps'  => Johnpaulmedina\Usps\Facades\Usps::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
 
 ];

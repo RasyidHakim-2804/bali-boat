@@ -117,6 +117,9 @@ return [
     'url'         => 'Format :attribute tidak valid.',
     'uuid'        => ':attribute harus merupakan UUID yang valid.',
 
+    //custom rule
+    'duplicated_data' => ':attribute dengan data yang sama sudah terdaftar. Silakan periksa lagi.',
+
     /*
     |---------------------------------------------------------------------------------------
     | Baris Bahasa untuk Validasi Kustom

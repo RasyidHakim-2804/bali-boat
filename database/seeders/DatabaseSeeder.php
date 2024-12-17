@@ -14,6 +14,43 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        (new LanguageSeeder)->run();
+        (new AdminSeeder)->run();
+        (new UserSeeder)->run();
+        (new HarborSeeder)->run();
+        (new LocationSeeder)->run();
+        (new TagSeeder)->run();
+        (new PromoSeeder)->run();
+
+        // Product Atribute
+        (new ProductIncludeWithTranslationSeeder)->run();
+        (new ProductExcludeWithTranslationSeeder)->run();
+        (new ProductItineraryWithTranslationSeeder)->run();
+        
+        // FastBoat
+        (new FastBoatSeeder)->run();
+        (new FastBoatScheduleSeeder)->run();
+        (new FastBoatScheduleVariantSeeder)->run();
+
+        // //PrivateBoat
+        (new PrivateBoatSeeder)->run();
+        (new PivotPrivateBoatIncludeSeeder)->run();
+        (new PrivateBoatSpecificationSeeder)->run();
+        (new PrivateBoatTranslationSeeder)->run();
+        (new PrivateBoatVariantSeeder)->run();
+        (new PivotTagPrivateBoatSeeder)->run();
+
+        // //Activity
+        (new ActivitySeeder)->run();
+        (new ActivityVariantSeeder)->run();
+        (new ActivityTranslationSeeder)->run();
+        // (new PivotTagActivitySeeder)->run();
+        (new PivotActivityIncludeSeeder)->run();
+        (new PivotActivityExcludeSeeder)->run();
+        (new PivotActivityItinerarySeeder)->run();
+
+        // (new ArticleCategorySeeder)->run();
+        // (new ArticleSeeder)->run();
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

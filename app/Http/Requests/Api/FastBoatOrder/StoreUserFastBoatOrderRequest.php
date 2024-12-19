@@ -110,7 +110,7 @@ class StoreUserFastBoatOrderRequest extends FormRequest
             ],
             'forms.*.name'              => 'required|string|min:1',
             'forms.*.nationality'       => 'required|min:1',
-            'forms.*.passenger_type'    => 'required|in:local,foreign',
+            'forms.*.passenger_type'    => 'required|in:local,foreign,itas',
             'forms.*.age_type'          => 'required|in:adult,child,infant',
             'forms.*.is_itas_holder'    => 'required|boolean',
         ];

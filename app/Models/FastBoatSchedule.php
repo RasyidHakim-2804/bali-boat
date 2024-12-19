@@ -49,13 +49,22 @@ class FastBoatSchedule extends Model
                       ->where('arrival_harbor_id', '=', $to);
     }
 
-    public function scopeDepartureTime($query, $time = 'morning')
+    public function scopeDepartureTime($query, $time = '')
     {
-        $operator = '<=';
+        if ($time == 'morning') {
+            return $query->whereBetween('departure_time', ['06:00', '11:59']);
+        }
 
-        if ($time == 'afternoon') $operator = '>=';
+        if ($time == 'afternoon') {
+            return $query->whereBetween('departure_time', ['12:00', '17:59']);
+        }
 
-        return $query->where('departure_time', $operator, '12:00');
+        if ($time == 'evening') {
+            return $query->whereBetween('departure_time', ['18:00', '23:59']);
+        }
+
+        // Jika parameter $time tidak valid, kembalikan query tanpa filter
+        return $query;
     }
 
     public function scopeActive($query, bool $active = true)

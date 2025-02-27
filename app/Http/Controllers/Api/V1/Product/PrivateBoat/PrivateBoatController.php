@@ -71,7 +71,7 @@ class PrivateBoatController extends Controller
             'pickupHarbor'
         ])
         ->selectThumbnailVariantPrice()
-        ->orderBy('id', 'DESC')
+        ->orderBy('rating', 'DESC')
         ->limit(3);
 
         if (request('pickup_harbor_id')) {

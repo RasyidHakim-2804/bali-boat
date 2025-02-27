@@ -46,13 +46,13 @@ class PrivateBoatRequest extends FormRequest
                 Rule::exists('tags', 'id')->where('type', 'private-boat'),
             ],
 
-            'includes'          => 'required|array',
+            'includes'          => 'array|nullable',
             'includes.*'        => [
                 'required',
                 Rule::exists('product_includes', 'id')->where('type', 'private-boat'),
             ],
 
-            'itineraries'       => 'required|array',
+            'itineraries'       => 'array|nullable',
             'itineraries.*'     => [
                 'required',
                 Rule::exists('product_itineraries', 'id')->where('type', 'private-boat'),
@@ -64,13 +64,13 @@ class PrivateBoatRequest extends FormRequest
             'meta'              => ['required',$arrayLanguage],
             'meta.*'            => ['required','string'],
 
-            'specification'           => 'required|array',
-            'specification.model'     => 'required|string',
-            'specification.year'      => 'required|integer|digits:4|min:0',
-            'specification.length'    => 'required|string',
-            'specification.cabins'    => 'required|integer|min:1',
-            'specification.heads'     => 'required|integer|min:1',
-            'specification.engine'    => 'required|string',
+            'specification'           => 'array',
+            'specification.model'     => 'nullable|string',
+            'specification.year'      => 'nullable|integer|digits:4|min:0',
+            'specification.length'    => 'nullable|string',
+            'specification.cabins'    => 'nullable|integer|min:1',
+            'specification.heads'     => 'nullable|integer|min:1',
+            'specification.engine'    => 'nullable|string',
         ];
 
         foreach (Language::code() as $lang) {

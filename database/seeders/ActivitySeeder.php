@@ -32,6 +32,7 @@ class ActivitySeeder extends Seeder
                 'pickup_available'    => 1,
                 'max_person'          => rand(5,9),
                 'is_active'           => 1,
+                'rating'              => 5,
                 'created_at'          => now(),
                 'updated_at'          => now(),
             ]);

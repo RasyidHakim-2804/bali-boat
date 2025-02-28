@@ -39,7 +39,7 @@ class PrivateBoatResource extends JsonResource
 
             'highlight' => $this->whenLoaded(
                 'translations',
-                fn() => $this->translations->where('field','highlight')->first()->translation
+                fn() => $this->translations->where('field','highlight')->first()?->translation
             ),
 
             'meta' => $this->whenLoaded(

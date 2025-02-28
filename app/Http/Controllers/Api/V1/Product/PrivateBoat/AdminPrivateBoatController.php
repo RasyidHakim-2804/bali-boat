@@ -86,10 +86,12 @@ class AdminPrivateBoatController extends Controller
 
             $translations = collect([]);
 
-            foreach ($request->highlight as $lang => $highlight) {
-                $translations->add(
-                    $this->setTranslations($privateBoat, $lang, 'highlight', $highlight)
-                );
+            if ($request->highlight) {
+                foreach ($request->highlight as $lang => $highlight) {
+                    $translations->add(
+                        $this->setTranslations($privateBoat, $lang, 'highlight', $highlight)
+                    );
+                }
             }
 
             foreach ($request->meta as $lang => $meta) {
@@ -138,10 +140,12 @@ class AdminPrivateBoatController extends Controller
             $this->setSpecification($privateBoat, $request->specification);
             $translations = collect([]);
 
-            foreach ($request->highlight as $lang => $highlight) {
-                $translations->add(
-                    $this->setTranslations($privateBoat, $lang, 'highlight', $highlight)
-                );
+            if ($request->highlight) {
+                foreach ($request->highlight as $lang => $highlight) {
+                    $translations->add(
+                        $this->setTranslations($privateBoat, $lang, 'highlight', $highlight)
+                    );
+                }
             }
 
             foreach ($request->meta as $lang => $meta) {

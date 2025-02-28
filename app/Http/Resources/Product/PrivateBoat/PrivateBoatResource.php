@@ -44,7 +44,7 @@ class PrivateBoatResource extends JsonResource
 
             'meta' => $this->whenLoaded(
                 'translations',
-                fn() => $this->translations->where('field','meta')->first()->translation
+                fn() => $this->translations->where('field','meta')->first()?->translation
             ),
 
             'specifications' => new PrivateBoatSpecificationResource($this->whenLoaded(

@@ -80,7 +80,7 @@ class AdminActivityController extends Controller
 
             // $this->setDefaultVariant($activity, $request);
             $this->setVariants($activity, $request);
-            $this->setTranslations($activity, $request->toArray());
+            $this->saveTranslations($activity, $request);
 
             DB::commit();
 
@@ -113,7 +113,7 @@ class AdminActivityController extends Controller
 
             // $this->setDefaultVariant($activity, $request);
             $this->setVariants($activity, $request);
-            $this->setTranslations($activity, $request->toArray());
+            $this->saveTranslations($activity, $request);
 
             DB::commit();
 
@@ -180,6 +180,37 @@ class AdminActivityController extends Controller
         }
 
         return $result;
+    }
+
+    private function saveTranslations(Activity $activity, $request)
+    {
+        $old_translations = $activity->translations;
+        $new_translations = collect([]);
+        $request          = $request->validated();
+        $code             = Language::code();
+
+        foreach (ActivityTranslation::FIELD as $field) {
+
+            $translations = collect($old_translations->where('field', '=', $field)->all());
+
+            foreach ($code as $lang) {
+
+                if (!isset($request[$field][$lang])) continue;
+
+                $translation = $translations->where('language', '=', $lang)->first();
+
+                if ($translation == null) $translation = new ActivityTranslation();
+
+                $translation->language    = $lang;
+                $translation->field       = $field;
+                $translation->translation = $request[$field][$lang];
+                $translation->activity_id = $activity->id;
+
+                $new_translations->add($translation);
+            }
+        }
+
+        $activity->translations()->saveMany($new_translations);
     }
 
     protected function setTranslations(Activity $activity, array $request)

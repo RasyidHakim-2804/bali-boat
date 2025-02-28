@@ -204,9 +204,9 @@ class AdminPrivateBoatController extends Controller
         $specification->save();
     }
 
-    private function saveTranslations(PrivateBoat $private_boat, $request)
+    private function saveTranslations(PrivateBoat $privateBoat, $request)
     {
-        $old_translations = $private_boat->translations;
+        $old_translations = $privateBoat->translations;
         $new_translations = collect([]);
         $request          = $request->validated();
         $code             = Language::code();
@@ -226,13 +226,13 @@ class AdminPrivateBoatController extends Controller
                 $translation->language          = $lang;
                 $translation->field             = $field;
                 $translation->translation       = $request[$field][$lang];
-                $translation->private_boat_id   = $private_boat->id;
+                $translation->private_boat_id   = $privateBoat->id;
 
                 $new_translations->add($translation);
             }
         }
 
-        $private_boat->translations()->saveMany($new_translations);
+        $privateBoat->translations()->saveMany($new_translations);
     }
 
     private function setDefaultVariant(PrivateBoat $privateBoat, $request)

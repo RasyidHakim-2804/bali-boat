@@ -23,13 +23,14 @@ class PrivateBoatRequest extends FormRequest
      */
     public function rules(): array
     {
-        $arrayLanguage = 'array:';
+        $in   = 'in:';
+        $code = Language::code();
 
-        foreach (Language::code() as $lang) {
-            $arrayLanguage = $arrayLanguage . $lang . ',';
+        foreach ($code as $lang) {
+            $in = $in . $lang . ',';
         }
 
-        $arrayLanguage = rtrim($arrayLanguage, ',');
+        $in = rtrim($in, ',');
 
         $rule = [
             'name'              => 'required|string|max:100',
@@ -58,11 +59,11 @@ class PrivateBoatRequest extends FormRequest
                 Rule::exists('product_itineraries', 'id')->where('type', 'private-boat'),
             ],
 
-            'highlight'         => ['required',$arrayLanguage],
-            'highlight.*'       => ['required','string'],
+            'highlight'         => ['array'],
+            'highlight.*'       => ['string',$in],
 
-            'meta'              => ['required',$arrayLanguage],
-            'meta.*'            => ['required','string'],
+            'meta'              => ['required', 'array'],
+            'meta.*'            => ['required','string', $in],
 
             'specification'           => 'array',
             'specification.model'     => 'nullable|string',
@@ -73,8 +74,8 @@ class PrivateBoatRequest extends FormRequest
             'specification.engine'    => 'nullable|string',
         ];
 
-        foreach (Language::code() as $lang) {
-            $rule['highlight.' . $lang]     = 'required';
+        foreach ($code as $lang) {
+            $rule['highlight.' . $lang]     = 'nullable';
             $rule['meta.' . $lang]          = 'required';
         }
 

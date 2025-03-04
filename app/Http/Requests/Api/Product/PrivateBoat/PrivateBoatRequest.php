@@ -47,7 +47,7 @@ class PrivateBoatRequest extends FormRequest
                 Rule::exists('tags', 'id')->where('type', 'private-boat'),
             ],
 
-            'includes'          => 'array|nullable',
+            'includes'          => 'array|required',
             'includes.*'        => [
                 'required',
                 Rule::exists('product_includes', 'id')->where('type', 'private-boat'),

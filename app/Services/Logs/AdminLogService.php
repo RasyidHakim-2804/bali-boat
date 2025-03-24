@@ -13,6 +13,7 @@ class AdminLogService
         $logAdmin              = new AdminLog();
         $logAdmin->admin_id    = $admin->id ?? null;
         $logAdmin->description = $action . ' ' . $table . ' with ' . $primaryKey . ' ' . $id;
+        $logAdmin->created_at  = now();
 
         return $logAdmin->save();
     }

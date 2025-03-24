@@ -23,13 +23,14 @@ class PrivateBoatRequest extends FormRequest
      */
     public function rules(): array
     {
-        $arrayLanguage = 'array:';
+        $in   = 'in:';
+        $code = Language::code();
 
-        foreach (Language::code() as $lang) {
-            $arrayLanguage = $arrayLanguage . $lang . ',';
+        foreach ($code as $lang) {
+            $in = $in . $lang . ',';
         }
 
-        $arrayLanguage = rtrim($arrayLanguage, ',');
+        $in = rtrim($in, ',');
 
         $rule = [
             'name'              => 'required|string|max:100',
@@ -46,35 +47,35 @@ class PrivateBoatRequest extends FormRequest
                 Rule::exists('tags', 'id')->where('type', 'private-boat'),
             ],
 
-            'includes'          => 'required|array',
+            'includes'          => 'array|required',
             'includes.*'        => [
                 'required',
                 Rule::exists('product_includes', 'id')->where('type', 'private-boat'),
             ],
 
-            'itineraries'       => 'required|array',
+            'itineraries'       => 'array|nullable',
             'itineraries.*'     => [
                 'required',
                 Rule::exists('product_itineraries', 'id')->where('type', 'private-boat'),
             ],
 
-            'highlight'         => ['required',$arrayLanguage],
-            'highlight.*'       => ['required','string'],
+            'highlight'         => ['array'],
+            'highlight.*'       => ['string',$in],
 
-            'meta'              => ['required',$arrayLanguage],
-            'meta.*'            => ['required','string'],
+            'meta'              => ['required', 'array'],
+            'meta.*'            => ['required','string', $in],
 
-            'specification'           => 'required|array',
-            'specification.model'     => 'required|string',
-            'specification.year'      => 'required|integer|digits:4|min:0',
-            'specification.length'    => 'required|string',
-            'specification.cabins'    => 'required|integer|min:1',
-            'specification.heads'     => 'required|integer|min:1',
-            'specification.engine'    => 'required|string',
+            'specification'           => 'array',
+            'specification.model'     => 'nullable|string',
+            'specification.year'      => 'nullable|integer|digits:4|min:0',
+            'specification.length'    => 'nullable|string',
+            'specification.cabins'    => 'nullable|integer|min:1',
+            'specification.heads'     => 'nullable|integer|min:1',
+            'specification.engine'    => 'nullable|string',
         ];
 
-        foreach (Language::code() as $lang) {
-            $rule['highlight.' . $lang]     = 'required';
+        foreach ($code as $lang) {
+            $rule['highlight.' . $lang]     = 'nullable';
             $rule['meta.' . $lang]          = 'required';
         }
 

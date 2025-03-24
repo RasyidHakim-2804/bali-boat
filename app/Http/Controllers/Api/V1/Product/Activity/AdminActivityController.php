@@ -79,8 +79,8 @@ class AdminActivityController extends Controller
             $activity->itineraries()->attach($this->generatePosition($request->itineraries));
 
             // $this->setDefaultVariant($activity, $request);
-            $this->setVariants($activity, $request);
-            $this->setTranslations($activity, $request->toArray());
+            $this->saveVariants($activity, $request);
+            $this->saveTranslations($activity, $request);
 
             DB::commit();
 
@@ -112,8 +112,8 @@ class AdminActivityController extends Controller
             $activity->itineraries()->sync($this->generatePosition($request->itineraries));
 
             // $this->setDefaultVariant($activity, $request);
-            $this->setVariants($activity, $request);
-            $this->setTranslations($activity, $request->toArray());
+            $this->saveVariants($activity, $request);
+            $this->saveTranslations($activity, $request);
 
             DB::commit();
 
@@ -182,19 +182,35 @@ class AdminActivityController extends Controller
         return $result;
     }
 
-    protected function setTranslations(Activity $activity, array $request)
+    private function saveTranslations(Activity $activity, $request)
     {
-        foreach (ActivityTranslation::FIELD as $field) {
-            foreach (Language::code() as $lang) {
-                $rentalTranslation = $activity->translations()->language($lang)->field($field)->firstOrNew();
+        $old_translations = $activity->translations;
+        $new_translations = collect([]);
+        $request          = $request->validated();
+        $code             = Language::code();
 
-                $rentalTranslation->activity_id  = $activity->id;
-                $rentalTranslation->language     = $lang;
-                $rentalTranslation->field        = $field;
-                $rentalTranslation->translation  = $request[$field][$lang];
-                $rentalTranslation->save();
+        foreach (ActivityTranslation::FIELD as $field) {
+
+            $translations = collect($old_translations->where('field', '=', $field)->all());
+
+            foreach ($code as $lang) {
+
+                if (!isset($request[$field][$lang])) continue;
+
+                $translation = $translations->where('language', '=', $lang)->first();
+
+                if ($translation == null) $translation = new ActivityTranslation();
+
+                $translation->language    = $lang;
+                $translation->field       = $field;
+                $translation->translation = $request[$field][$lang];
+                $translation->activity_id = $activity->id;
+
+                $new_translations->add($translation);
             }
         }
+
+        $activity->translations()->saveMany($new_translations);
     }
 
     protected function setDefaultVariant(Activity $activity, $request)
@@ -206,19 +222,27 @@ class AdminActivityController extends Controller
         $price->save();
     }
 
-    protected function setVariants(Activity $activity, $request)
+    protected function saveVariants(Activity $activity, $request)
     {
+        $variants     = $activity->variants()->get();
+        $new_variants = collect([]);
+
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {
             foreach (ActivityVariant::NAME as $name) {
-                $variant    = $activity->variants()->type($type, $name)->firstOrNew();
+                $variant    = $variants->where('type', '=',$type)->where('name', '=', $name)->first();
+
+                if ($variant == null) $variant = new ActivityVariant();
 
                 $variant->price             = $request->variants[$type][$name];
                 $variant->passenger_type    = $type;
                 $variant->name              = $name;
                 $variant->activity_id       = $activity->id;
                 $variant->is_default        = 0;
-                $variant->save();
+
+                $new_variants->add($variant);
             }
         }
+
+        $activity->variants()->saveMany($new_variants);
     }
 }

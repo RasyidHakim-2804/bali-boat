@@ -25,13 +25,14 @@ class ActivityRequest extends FormRequest
      */
     public function rules(): array
     {
-        $arrayLanguage = 'array:';
+        $in   = 'in:';
+        $code = Language::code();
 
-        foreach (Language::code() as $lang) {
-            $arrayLanguage = $arrayLanguage . $lang . ',';
+        foreach ($code as $lang) {
+            $in = $in . $lang . ',';
         }
 
-        $arrayLanguage = rtrim($arrayLanguage, ',');
+        $in = rtrim($in, ',');
 
         $rule = [
             'name'              => 'required|string|max:100',
@@ -48,6 +49,15 @@ class ActivityRequest extends FormRequest
                 'required',
                 Rule::exists('tags', 'id')->where('type', 'activity'),
             ],
+
+            'highlight'         => ['array'],
+            'highlight.*'       => ['string',$in],
+
+            'description'       => ['array'],
+            'description.*'     => ['string',$in],
+
+            'meta'              => ['required', 'array'],
+            'meta.*'            => ['required','string', $in],
 
             'includes'          => 'required|array',
             'includes.*'        => [
@@ -68,12 +78,10 @@ class ActivityRequest extends FormRequest
             ],
         ];
 
-        foreach (Language::code() as $lang) {
-            foreach (ActivityTranslation::FIELD as $field) {
-                $rule[$field]               = ['required', $arrayLanguage];
-                $rule[$field . '.*']        = 'required|string';
-                $rule[$field . '.' . $lang] = 'required';
-            }
+        foreach ($code as $lang) {
+            $rule['highlight.' . $lang]     = 'nullable';
+            $rule['description.' . $lang]   = 'nullable';
+            $rule['meta.' . $lang]          = 'required';
         }
 
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {

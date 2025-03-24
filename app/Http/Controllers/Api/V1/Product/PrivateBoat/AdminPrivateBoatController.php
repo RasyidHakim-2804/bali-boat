@@ -7,7 +7,9 @@ use App\Http\Requests\Api\Product\PrivateBoat\PrivateBoatRequest;
 use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Product\PrivateBoat\AdminPrivateBoatDetailResource;
 use App\Http\Resources\Product\PrivateBoat\AdminPrivateBoatListResource;
+use App\Models\Language;
 use App\Models\PrivateBoat;
+use App\Models\PrivateBoatTranslation;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
@@ -70,20 +72,19 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->pickup_harbor_id = $request->pickup_harbor_id;
             $privateBoat->save();
 
-            $privateBoat->includes()->attach($this->generatePosition($request->includes));
-            $privateBoat->itineraries()->attach($this->generatePosition($request->itineraries));
+            if ($request->includes) {
+                $privateBoat->includes()->sync($this->generatePosition($request->includes));
+            }
+
+            if ($request->itineraries) {
+                $privateBoat->itineraries()->sync($this->generatePosition($request->itineraries));
+            }
+
             $privateBoat->tags()->attach($request->tags);
 
             $this->setDefaultVariant($privateBoat, $request);
             $this->setSpecification($privateBoat, $request->specification);
-
-            foreach ($request->highlight as $lang => $highlight) {
-                $this->setTranslations($privateBoat, $lang, 'highlight', $highlight);
-            }
-
-            foreach ($request->meta as $lang => $meta) {
-                $this->setTranslations($privateBoat, $lang, 'meta', $meta);
-            }
+            $this->saveTranslations($privateBoat, $request);
 
             DB::commit();
 
@@ -109,20 +110,19 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->rating           = $request->rating;
             $privateBoat->save();
 
-            $privateBoat->includes()->sync($this->generatePosition($request->includes));
-            $privateBoat->itineraries()->sync($this->generatePosition($request->itineraries));
+            if ($request->includes) {
+                $privateBoat->includes()->sync($this->generatePosition($request->includes));
+            }
+
+            if ($request->itineraries) {
+                $privateBoat->itineraries()->sync($this->generatePosition($request->itineraries));
+            }
+
             $privateBoat->tags()->sync($request->tags);
 
             $this->setDefaultVariant($privateBoat, $request);
             $this->setSpecification($privateBoat, $request->specification);
-
-            foreach ($request->highlight as $lang => $highlight) {
-                $this->setTranslations($privateBoat, $lang, 'highlight', $highlight);
-            }
-
-            foreach ($request->meta as $lang => $meta) {
-                $this->setTranslations($privateBoat, $lang, 'meta', $meta);
-            }
+            $this->saveTranslations($privateBoat, $request);
 
             DB::commit();
 
@@ -204,15 +204,35 @@ class AdminPrivateBoatController extends Controller
         $specification->save();
     }
 
-    private function setTranslations(PrivateBoat $privateBoat, $lang, $field, $translation)
+    private function saveTranslations(PrivateBoat $privateBoat, $request)
     {
-        $rentalTranslation = $privateBoat->translations()->language($lang)->field($field)->firstOrNew();
+        $old_translations = $privateBoat->translations;
+        $new_translations = collect([]);
+        $request          = $request->validated();
+        $code             = Language::code();
 
-        $rentalTranslation->private_boat_id = $privateBoat->id;
-        $rentalTranslation->language        = $lang;
-        $rentalTranslation->field           = $field;
-        $rentalTranslation->translation     = $translation;
-        $rentalTranslation->save();
+        foreach (PrivateBoatTranslation::FIELD as $field) {
+
+            $translations = collect($old_translations->where('field', '=', $field)->all());
+
+            foreach ($code as $lang) {
+
+                if (!isset($request[$field][$lang])) continue;
+
+                $translation = $translations->where('language', '=', $lang)->first();
+
+                if ($translation == null) $translation = new PrivateBoatTranslation();
+
+                $translation->language          = $lang;
+                $translation->field             = $field;
+                $translation->translation       = $request[$field][$lang];
+                $translation->private_boat_id   = $privateBoat->id;
+
+                $new_translations->add($translation);
+            }
+        }
+
+        $privateBoat->translations()->saveMany($new_translations);
     }
 
     private function setDefaultVariant(PrivateBoat $privateBoat, $request)

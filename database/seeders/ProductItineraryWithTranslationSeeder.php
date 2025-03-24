@@ -151,10 +151,11 @@ class ProductItineraryWithTranslationSeeder extends Seeder
         $id = 1;
 
         foreach ($itineraries as $itinerary) {
-            
+
             DB::table('product_itineraries')->insert([
                 'id'         => $id,
                 'image'      => 'https://picsum.photos/50/50',
+                'type'       => $id % 2 ? 'activity' : 'private-boat',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -174,6 +175,6 @@ class ProductItineraryWithTranslationSeeder extends Seeder
 
             $id++;
         }
-        
+
     }
 }

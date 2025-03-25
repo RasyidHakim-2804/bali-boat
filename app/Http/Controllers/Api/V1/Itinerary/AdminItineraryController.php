@@ -63,8 +63,6 @@ class AdminItineraryController extends Controller
 
     public function store(ItineraryRequest $request)
     {
-        return $request;
-
         DB::transaction(function() use ($request) {
 
             $itinerary        = new ProductItinerary();
@@ -72,11 +70,11 @@ class AdminItineraryController extends Controller
             $itinerary->image = $this->setImage($itinerary, $request->image);
             $itinerary->save();
 
-            foreach ($request->validated('description') as $lang => $description) {
+            foreach ($request->description as $lang => $description) {
                 $this->setTranslations($itinerary, $lang, 'description', $description);
             }
 
-            foreach ($request->validated('title') as $lang => $title) {
+            foreach ($request->title as $lang => $title) {
                 $this->setTranslations($itinerary, $lang, 'title', $title);
             }
         });

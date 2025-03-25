@@ -63,14 +63,14 @@ class AdminItineraryController extends Controller
 
     public function store(ItineraryRequest $request)
     {
+        return $request->validated();
+        
         DB::transaction(function() use ($request) {
 
             $itinerary        = new ProductItinerary();
             $itinerary->type  = $request->type;
             $itinerary->image = $this->setImage($itinerary, $request->image);
             $itinerary->save();
-
-            return $request->validated();
 
             foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($itinerary, $lang, 'description', $description);

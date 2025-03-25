@@ -70,11 +70,11 @@ class AdminItineraryController extends Controller
             $itinerary->image = $this->setImage($itinerary, $request->image);
             $itinerary->save();
 
-            foreach ($request->description as $lang => $description) {
+            foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($itinerary, $lang, 'description', $description);
             }
 
-            foreach ($request->title as $lang => $title) {
+            foreach ($request->validated('title') as $lang => $title) {
                 $this->setTranslations($itinerary, $lang, 'title', $title);
             }
         });

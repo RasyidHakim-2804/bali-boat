@@ -63,8 +63,8 @@ class AdminItineraryController extends Controller
 
     public function store(ItineraryRequest $request)
     {
-        return $request->validated();
-        
+        return $request;
+
         DB::transaction(function() use ($request) {
 
             $itinerary        = new ProductItinerary();

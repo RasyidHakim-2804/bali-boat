@@ -131,6 +131,7 @@ class AdminPrivateBoatController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
+            throw $e;
 
             return $this->errorServer($e->getMessage());
         }
@@ -204,11 +205,10 @@ class AdminPrivateBoatController extends Controller
         $specification->save();
     }
 
-    private function saveTranslations(PrivateBoat $privateBoat, $request)
+    private function saveTranslations(PrivateBoat $privateBoat, PrivateBoatRequest $request)
     {
         $old_translations = $privateBoat->translations;
         $new_translations = collect([]);
-        $request          = $request->validated();
         $code             = Language::code();
 
         foreach (PrivateBoatTranslation::FIELD as $field) {
@@ -217,7 +217,7 @@ class AdminPrivateBoatController extends Controller
 
             foreach ($code as $lang) {
 
-                if (!isset($request[$field][$lang])) continue;
+                $value = isset($request->$field[$lang]) ? $request->$field[$lang] : '';
 
                 $translation = $translations->where('language', '=', $lang)->first();
 
@@ -225,7 +225,7 @@ class AdminPrivateBoatController extends Controller
 
                 $translation->language          = $lang;
                 $translation->field             = $field;
-                $translation->translation       = $request[$field][$lang];
+                $translation->translation       = $value;
                 $translation->private_boat_id   = $privateBoat->id;
 
                 $new_translations->add($translation);

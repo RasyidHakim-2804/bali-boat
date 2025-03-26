@@ -83,6 +83,7 @@ class AdminPrivateBoatController extends Controller
             $privateBoat->tags()->attach($request->tags);
 
             $this->setDefaultVariant($privateBoat, $request);
+            dd($request->specification);
             $this->setSpecification($privateBoat, $request->specification);
             $this->saveTranslations($privateBoat, $request);
 
@@ -196,12 +197,12 @@ class AdminPrivateBoatController extends Controller
         $specification = $privateBoat->specification()->firstOrNew();
 
         $specification->private_boat_id = $privateBoat->id;
-        $specification->model     = $request['model'];
-        $specification->year      = $request['year'];
-        $specification->length    = $request['length'];
-        $specification->cabins    = $request['cabins'];
-        $specification->heads     = $request['heads'];
-        $specification->engine    = $request['engine'];
+        $specification->model     = $request['model'] ?? null;
+        $specification->year      = $request['year'] ?? null;
+        $specification->length    = $request['length'] ?? null;
+        $specification->cabins    = $request['cabins'] ?? null;
+        $specification->heads     = $request['heads'] ?? null;
+        $specification->engine    = $request['engine'] ?? null;
         $specification->save();
     }
 

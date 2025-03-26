@@ -182,11 +182,10 @@ class AdminActivityController extends Controller
         return $result;
     }
 
-    private function saveTranslations(Activity $activity, $request)
+    private function saveTranslations(Activity $activity, ActivityRequest $request)
     {
         $old_translations = $activity->translations;
         $new_translations = collect([]);
-        $request          = $request->validated();
         $code             = Language::code();
 
         foreach (ActivityTranslation::FIELD as $field) {
@@ -195,7 +194,7 @@ class AdminActivityController extends Controller
 
             foreach ($code as $lang) {
 
-                if (!isset($request[$field][$lang])) continue;
+                $value = isset($request->$field[$lang]) ? $request->$field[$lang] : '';
 
                 $translation = $translations->where('language', '=', $lang)->first();
 
@@ -203,7 +202,7 @@ class AdminActivityController extends Controller
 
                 $translation->language    = $lang;
                 $translation->field       = $field;
-                $translation->translation = $request[$field][$lang];
+                $translation->translation = $value;
                 $translation->activity_id = $activity->id;
 
                 $new_translations->add($translation);

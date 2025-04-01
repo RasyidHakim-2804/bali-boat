@@ -99,14 +99,14 @@ class XenditInvoiceService implements PaymentInterface
     protected function generateRequestData($order, $type)
     {
         $user = $order->user;
-        
+
         $data = [
             "external_id"          => $order->uuid,
             "description"          => 'Bali Boat Invoice - ' . ucfirst(str_replace('_', ' ', $type)) . ' - ' . $order->uuid,
             "amount"               => intval($order->grand_total_purchased),
             "currency"             => "IDR",
-            "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,
-            "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid . '&Type=' . $type,
+            // "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,
+            // "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid . '&Type=' . $type,
             "customer" => [
                 'given_names'   => $user->first_name,
                 'surname'       => $user->last_name,

@@ -33,6 +33,7 @@ class ActivityController extends Controller
             'thumbnailImage',
             'location'
         ])
+        ->active()
         ->selectThumbnailVariantPrice()
         ->paginate(25);
 
@@ -71,6 +72,7 @@ class ActivityController extends Controller
             'thumbnailImage',
             'location'
         ])
+        ->active()
         ->selectThumbnailVariantPrice()
         ->orderBy('id', 'DESC')
         ->limit(3)

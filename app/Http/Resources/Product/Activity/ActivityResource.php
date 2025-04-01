@@ -34,17 +34,17 @@ class ActivityResource extends JsonResource
 
             'highlight' => $this->whenLoaded(
                 'translations',
-                fn() => $this->translations->where('field','highlight')->first()->translation
+                fn() => $this->translations->where('field','highlight')->first()?->translation
             ),
 
             'description' => $this->whenLoaded(
                 'translations',
-                fn() => $this->translations->where('field','description')->first()->translation
+                fn() => $this->translations->where('field','description')->first()?->translation
             ),
 
             'meta' => $this->whenLoaded(
                 'translations',
-                fn() => $this->translations->where('field','meta')->first()->translation
+                fn() => $this->translations->where('field','meta')->first()?->translation
             ),
 
             'variants'          => $this->whenLoaded('variants', function(){

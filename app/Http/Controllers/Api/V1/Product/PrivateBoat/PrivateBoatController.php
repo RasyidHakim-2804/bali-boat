@@ -71,11 +71,14 @@ class PrivateBoatController extends Controller
             'pickupHarbor'
         ])
         ->selectThumbnailVariantPrice()
-        ->orderBy('id', 'DESC')
-        ->limit(3)
-        ->get();
+        ->orderBy('rating', 'DESC')
+        ->limit(3);
 
-        return PrivateBoatResource::collection($privateBoats);
+        if (request('pickup_harbor_id')) {
+            $privateBoats = $privateBoats->where('pickup_harbor_id', '=', request('pickup_harbor_id'));
+        }
+
+        return PrivateBoatResource::collection($privateBoats->get());
     }
 
 

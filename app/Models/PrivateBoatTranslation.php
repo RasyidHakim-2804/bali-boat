@@ -11,6 +11,11 @@ class PrivateBoatTranslation extends Model
 {
     use HasFactory, IsTranslationTrait;
 
+    public const FIELD = [
+        'highlight',
+        'meta',
+    ];
+
     public function rental(): BelongsTo
     {
         return $this->belongsTo(PrivateBoat::class);

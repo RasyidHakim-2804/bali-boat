@@ -125,6 +125,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::get('/promo-highlight', [PromoHighlightController::class, 'index']);
     Route::get('/promo-highlight/{promo}', [PromoHighlightController::class, 'show']);
 
+    // Promo
+    Route::post('/apply-promo', UserPromoController::class);
+
     // Public - Fast Boat Order
     Route::get('/fast-boat-orders/{fastBoatOrder}', [GuestFastBoatOrderController::class, 'show']);
     Route::post('/fast-boat-orders', [GuestFastBoatOrderController::class, 'store']);

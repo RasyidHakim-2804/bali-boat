@@ -49,7 +49,8 @@ class UserFastBoatOrderController extends Controller
             'details',
             'details.product',
             'payment',
-            'forms'
+            'forms',
+            'promo'
         ]));
 
         return $this->successGet($order);

@@ -61,6 +61,13 @@ class PrivateBoatController extends Controller
 
     public function top()
     {
+        $query = "id DESC";
+
+        if (request()->get('pickup_harbor_id')) {
+            $pickup_harbor_id = request()->get('pickup_harbor_id');
+            $query = "pickup_harbor_id = '{$pickup_harbor_id}' DESC";
+        }
+
         $privateBoats = QueryBuilder::for(PrivateBoat::class)
         ->allowedFilters([
             AllowedFilter::scope('date'),
@@ -71,12 +78,8 @@ class PrivateBoatController extends Controller
             'pickupHarbor'
         ])
         ->selectThumbnailVariantPrice()
-        ->orderBy('rating', 'DESC')
+        ->orderByRaw($query)
         ->limit(3);
-
-        if (request('pickup_harbor_id')) {
-            $privateBoats = $privateBoats->where('pickup_harbor_id', '=', request('pickup_harbor_id'));
-        }
 
         return PrivateBoatResource::collection($privateBoats->get());
     }

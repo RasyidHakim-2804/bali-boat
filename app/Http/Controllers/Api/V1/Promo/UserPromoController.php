@@ -16,7 +16,7 @@ class UserPromoController extends Controller
 
     public function __invoke(VerifyPromoRequest $request)
     {
-        return $promo = Promo::where('code', $request->code)->where('uuid', '!=', null)->first();
+        $promo = Promo::where('code', $request->code)->where('uuid', '!=', null)->first();
 
         if (!$promo) return $this->errorValidationResponse('code', 'The promo code is invalid.');
 
@@ -24,9 +24,9 @@ class UserPromoController extends Controller
 
         if ($promo->start_at > now()) return $this->errorValidationResponse('code', 'The promo code is not active.');
 
-        if (($promo->is_all_date == 1) && ($promo->for_start_date >= $request->activity_date)) return $this->errorValidationResponse('code', 'The promo code is invalid.');
+        if (($promo->is_all_date == 0) && ($promo->for_start_date >= $request->activity_date)) return $this->errorValidationResponse('code', 'The promo code is invalid.');
 
-        if (($promo->is_all_date == 1) && ($promo->for_end_date <= $request->activity_date)) return $this->errorValidationResponse('code', 'The promo code is invalid.');
+        if (($promo->is_all_date == 0) && ($promo->for_end_date <= $request->activity_date)) return $this->errorValidationResponse('code', 'The promo code is invalid.');
 
         $orderPromoAppliedCounted = 0;
 

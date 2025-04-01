@@ -11,6 +11,7 @@ class XenditPayoutLogService
         $logXenditPayoutLink                        = new XenditPayoutLog();
         $logXenditPayoutLink->xendit_payout_link_id = $id;
         $logXenditPayoutLink->status                = $status;
+        $logXenditPayoutLink->created_at            = now();
 
         return $logXenditPayoutLink->save();
     }

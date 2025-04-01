@@ -78,6 +78,10 @@ class PrivateBoatController extends Controller
             $privateBoats = $privateBoats->where('pickup_harbor_id', '=', request('pickup_harbor_id'));
         }
 
+        if (request('except_id')) {
+            $privateBoats = $privateBoats->where('id', '!=', request('except_id'));
+        }
+
         return PrivateBoatResource::collection($privateBoats->get());
     }
 

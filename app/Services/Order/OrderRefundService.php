@@ -70,6 +70,7 @@ class OrderRefundService
         $newRefundRequest              = new RefundRequestPin();
         $newRefundRequest->pin         = $this->generatePin($order, $type);
         $newRefundRequest->expired_at  = Carbon::now()->addMinutes(1);
+        $newRefundRequest->created_at  = Carbon::now();
 
         if ($type == 'fast_boat') $newRefundRequest->fast_boat_order_id = $order->id;
 

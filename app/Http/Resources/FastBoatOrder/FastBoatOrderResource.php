@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\FastBoatOrder;
 
+use App\Http\Resources\Promo\PromoResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FastBoatOrderResource extends JsonResource
@@ -16,6 +17,7 @@ class FastBoatOrderResource extends JsonResource
             'pic_email'                     => $this->pic_email,
             'pic_phone_number'              => $this->pic_phone_number,
             'total_purchased'               => $this->total_purchased,
+            'promo'                         => new PromoResource($this->promo),
             'promo_amount'                  => $this->promo_amount,
             'grand_total_purchased'         => $this->grand_total_purchased,
             'payment'                       => $this->payment,

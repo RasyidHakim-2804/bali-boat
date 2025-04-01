@@ -137,9 +137,10 @@ class AdminPromoController extends Controller
         if (isset($promos)) $promos->map->delete();
 
         foreach ($days as $key => $day) {
-            $promoDay           = new PromoDay();
-            $promoDay->promo_id = $promoId;
-            $promoDay->day      = $day;
+            $promoDay               = new PromoDay();
+            $promoDay->promo_id     = $promoId;
+            $promoDay->day          = $day;
+            $promoDay->created_at   = now();
 
             $promoDay->save();
         }

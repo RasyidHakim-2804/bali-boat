@@ -16,7 +16,7 @@ class UserPromoController extends Controller
 
     public function __invoke(VerifyPromoRequest $request)
     {
-        $promo = Promo::where('code', $request->code)->where('uuid', '!=', null)->first();
+        return $promo = Promo::where('code', $request->code)->where('uuid', '!=', null)->first();
 
         if (!$promo) return $this->errorValidationResponse('code', 'The promo code is invalid.');
 

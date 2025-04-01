@@ -5,8 +5,8 @@ namespace App\Services\Xendit;
 use App\Interfaces\PaymentInterface;
 use App\Models\OrderPayment;
 use App\Models\XenditPayment;
-use App\Services\Error\TelegramErrorNotificationService;
 use App\Services\Logs\OrderPaymentLogService;
+use App\Services\Telegram\TelegramErrorNotificationService;
 use Illuminate\Support\Facades\Log;
 use Xendit\Configuration;
 use Xendit\Invoice\InvoiceApi;
@@ -99,10 +99,10 @@ class XenditInvoiceService implements PaymentInterface
     protected function generateRequestData($order, $type)
     {
         $user = $order->user;
-        
+
         $data = [
             "external_id"          => $order->uuid,
-            "description"          => 'Bali Boat Invoice - ' . ucfirst(str_replace('_', ' ', $type)) . ' - ' . $order->uuid,
+            "description"          => 'Bali Boat Invoice',
             "amount"               => intval($order->grand_total_purchased),
             "currency"             => "IDR",
             "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,
@@ -111,7 +111,7 @@ class XenditInvoiceService implements PaymentInterface
                 'given_names'   => $user->first_name,
                 'surname'       => $user->last_name,
                 'email'         => $user->email,
-                'mobile_number' => $user->first_name,
+                'mobile_number' => $user->mobile_number,
             ]
         ];
 

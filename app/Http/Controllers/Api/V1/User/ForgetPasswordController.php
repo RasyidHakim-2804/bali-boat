@@ -42,6 +42,7 @@ class ForgetPasswordController extends Controller
             $forgetPasswordReset->user_id    = $user->id;
             // $forgetPasswordReset->expired_at = Carbon::now()->addMinutes(5);
             $forgetPasswordReset->pin        = $pin;
+            $forgetPasswordReset->created_at = now();
 
             $forgetPasswordReset->save();
 

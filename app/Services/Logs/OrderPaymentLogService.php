@@ -13,6 +13,7 @@ class OrderPaymentLogService
         $paymentLog->type               = $type;
         $paymentLog->payment_vendor     = $paymentVendor;
         $paymentLog->status             = $status;
+        $paymentLog->created_at         = now();
 
         return $paymentLog->save();
     }

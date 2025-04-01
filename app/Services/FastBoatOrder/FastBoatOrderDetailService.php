@@ -36,6 +36,7 @@ class FastBoatOrderDetailService
             $orderDetail->price                 = $variantData->price;
             $orderDetail->total_price           = $totalProductPrice;
             $orderDetail->image                 = $productImage;
+            $orderDetail->created_at            = now();
             
             $orderDetail->save();
         }

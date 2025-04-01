@@ -105,17 +105,17 @@ class XenditInvoiceService implements PaymentInterface
             "description"          => 'Bali Boat Invoice',
             "amount"               => intval($order->grand_total_purchased),
             "currency"             => "IDR",
-            // "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,
-            // "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid . '&Type=' . $type,
+            "success_redirect_url" => env('FRONTEND_URL') . '/payment-successfull?order=' . $order->uuid . '&type=' . $type,
+            "failed_redirect_url"  => env('FRONTEND_URL') . '/payment-failed?order=' . $order->uuid . '&Type=' . $type,
             "customer" => [
                 'given_names'   => $user->first_name,
-                // 'surname'       => $user->last_name,
+                'surname'       => $user->last_name,
                 'email'         => $user->email,
-                // 'mobile_number' => $user->mobile_number,
+                'mobile_number' => $user->mobile_number,
             ]
         ];
 
-        // if (!isset($user->mobile_number)) unset($data['customer']['mobile_number']);
+        if (!isset($user->mobile_number)) unset($data['customer']['mobile_number']);
 
         return $data;
     }

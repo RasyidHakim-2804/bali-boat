@@ -111,7 +111,7 @@ class XenditInvoiceService implements PaymentInterface
                 'given_names'   => $user->first_name,
                 'surname'       => $user->last_name,
                 'email'         => $user->email,
-                'mobile_number' => $user->first_name,
+                'mobile_number' => $user->mobile_number,
             ]
         ];
 

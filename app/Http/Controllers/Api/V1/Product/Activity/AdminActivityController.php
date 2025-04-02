@@ -228,7 +228,7 @@ class AdminActivityController extends Controller
 
         foreach (ActivityVariant::PASSENGER_TYPE as $type) {
             foreach (ActivityVariant::NAME as $name) {
-                $variant    = $variants->where('type', '=',$type)->where('name', '=', $name)->first();
+                $variant    = $variants->where('passenger_type', '=',$type)->where('name', '=', $name)->first();
 
                 if ($variant == null) $variant = new ActivityVariant();
 

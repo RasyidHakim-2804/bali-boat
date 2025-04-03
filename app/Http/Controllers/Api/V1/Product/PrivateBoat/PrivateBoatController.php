@@ -81,10 +81,6 @@ class PrivateBoatController extends Controller
         ->orderByRaw($query)
         ->limit(3);
 
-        if (request('pickup_harbor_id')) {
-            $privateBoats = $privateBoats->where('pickup_harbor_id', '=', request('pickup_harbor_id'));
-        }
-
         if (request('except_id')) {
             $privateBoats = $privateBoats->where('id', '!=', request('except_id'));
         }

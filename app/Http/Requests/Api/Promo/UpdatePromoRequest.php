@@ -28,6 +28,9 @@ class UpdatePromoRequest extends FormRequest
         return [
             'is_active'         => 'required|boolean',
             'duration'          => 'required|in:once,repeat',
+            'is_active'         => 'required|boolean',
+            'is_all_date'       => 'required|boolean',
+            'is_all_day'        => 'required|boolean',
             'start_at'          => 'required|date',
             'expired_at'        => 'required|date|after:today',
             'for_start_date'    => 'required_if:is_all_date,0|date|after_or_equal:today',

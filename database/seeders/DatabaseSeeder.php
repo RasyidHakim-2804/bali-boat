@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\OrderSeeder\OrderSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -48,6 +49,9 @@ class DatabaseSeeder extends Seeder
         (new PivotActivityIncludeSeeder)->run();
         (new PivotActivityExcludeSeeder)->run();
         (new PivotActivityItinerarySeeder)->run();
+
+        // Orders
+        (new OrderSeeder)->run();
 
         // (new ArticleCategorySeeder)->run();
         // (new ArticleSeeder)->run();
